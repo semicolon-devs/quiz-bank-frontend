@@ -1,69 +1,50 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-	name: "Next.js + NextUI",
-	description: "Make beautiful websites regardless of your design experience.",
-	navItems: [
-		{
-			label: "Home",
-			href: "/",
-		},
+  name: "QBank",
+  description: "Quiz Website",
+  sidebarItems: [
     {
-      label: "Docs",
-      href: "/docs",
+      label: "Home",
+      href: "/",
+      icon: "HomeIcon",
     },
     {
-      label: "Pricing",
-      href: "/pricing",
+      label: "Create Q Pack",
+      href: "/create-q-pack",
+      icon: "CreateQBankIcon",
     },
     {
-      label: "Blog",
-      href: "/blog",
+      label: "Manage Questions",
+      href: "/manage-questions",
+      icon: "ManageQuestionsIcon",
     },
     {
-      label: "About",
-      href: "/about",
-    }
-	],
-	navMenuItems: [
-		{
-			label: "Profile",
-			href: "/profile",
-		},
-		{
-			label: "Dashboard",
-			href: "/dashboard",
-		},
-		{
-			label: "Projects",
-			href: "/projects",
-		},
-		{
-			label: "Team",
-			href: "/team",
-		},
-		{
-			label: "Calendar",
-			href: "/calendar",
-		},
-		{
-			label: "Settings",
-			href: "/settings",
-		},
-		{
-			label: "Help & Feedback",
-			href: "/help-feedback",
-		},
-		{
-			label: "Logout",
-			href: "/logout",
-		},
-	],
-	links: {
-		github: "https://github.com/nextui-org/nextui",
-		twitter: "https://twitter.com/getnextui",
-		docs: "https://nextui.org",
-		discord: "https://discord.gg/9b6yyZKmH4",
-    sponsor: "https://patreon.com/jrgarciadev"
-	},
+      label: "Add Questions",
+      href: "/add-question",
+      icon: "AddQuestionIcon",
+    },
+    {
+      label: "Manage Users",
+      href: "/manage-users",
+      icon: "ManageUsersIcon",
+    },
+    {
+      label: "Subscriptions",
+      href: "/subscriptions",
+      icon: "SubscriptionIcon",
+    },
+    {
+      label: "Profile",
+      href: "/profile",
+      icon: "ProfileIcon",
+    },
+  ],
+  links: {
+    github: "https://github.com/nextui-org/nextui",
+    twitter: "https://twitter.com/getnextui",
+    docs: "https://nextui.org",
+    discord: "https://discord.gg/9b6yyZKmH4",
+    sponsor: "https://patreon.com/jrgarciadev",
+  },
 };
