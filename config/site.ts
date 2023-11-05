@@ -1,62 +1,43 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: "Next.js + NextUI",
-  description: "Make beautiful websites regardless of your design experience.",
-  navItems: [
+  name: "QBank",
+  description: "Quiz Website",
+  sidebarItems: [
     {
       label: "Home",
       href: "/",
+      icon: "HomeIcon",
     },
     {
-      label: "Docs",
-      href: "/docs",
+      label: "Create Q Pack",
+      href: "/create-q-pack",
+      icon: "CreateQBankIcon",
     },
     {
-      label: "Pricing",
-      href: "/pricing",
+      label: "Manage Questions",
+      href: "/manage-questions",
+      icon: "ManageQuestionsIcon",
     },
     {
-      label: "Blog",
-      href: "/blog",
+      label: "Add Questions",
+      href: "/add-question",
+      icon: "AddQuestionIcon",
     },
     {
-      label: "About",
-      href: "/about",
+      label: "Manage Users",
+      href: "/manage-users",
+      icon: "ManageUsersIcon",
     },
-  ],
-  navMenuItems: [
+    {
+      label: "Subscriptions",
+      href: "/subscriptions",
+      icon: "SubscriptionIcon",
+    },
     {
       label: "Profile",
       href: "/profile",
-    },
-    {
-      label: "Dashboard",
-      href: "/dashboard",
-    },
-    {
-      label: "Projects",
-      href: "/projects",
-    },
-    {
-      label: "Team",
-      href: "/team",
-    },
-    {
-      label: "Calendar",
-      href: "/calendar",
-    },
-    {
-      label: "Settings",
-      href: "/settings",
-    },
-    {
-      label: "Help & Feedback",
-      href: "/help-feedback",
-    },
-    {
-      label: "Logout",
-      href: "/logout",
+      icon: "ProfileIcon",
     },
   ],
   links: {
