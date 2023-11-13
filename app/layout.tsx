@@ -40,11 +40,11 @@ export default function RootLayout({
         )}
       >
         <Providers>
-          <div className="flex h-screen">
+          <div className="flex h-screen ">
             <Sidebar />
             <div className="relative flex flex-col flex-grow">
               <Navbar />
-              <main className="container mx-auto max-w-7xl pt-16 px-6 flex-grow">
+              <main className="container mx-auto max-w-7xl p-6 flex-grow">
                 {children}
               </main>
             </div>
