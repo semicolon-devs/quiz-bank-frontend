@@ -8,7 +8,7 @@ import clsx from "clsx";
 const renderIconComponent = (icon: string) => {
   const IconComponent = Icons[icon];
   if (IconComponent) {
-    return <IconComponent className="text-white" />;
+    return <IconComponent />;
   }
   return null;
 };
@@ -21,7 +21,7 @@ export const Sidebar = (props: Props) => {
       {siteConfig.sidebarItems.map((item) => (
         <NextLink
           href={item.href}
-          className={clsx("w-max px-5 flex gap-5 items-center")}
+          className="w-max px-5 flex gap-5 items-center"
           key={item.href}
         >
           {renderIconComponent(item.icon)}
