@@ -25,6 +25,11 @@ export const siteConfig = {
       icon: "AddQuestionIcon",
     },
     {
+      label: "Manage Courses",
+      href: "/manage-courses",
+      icon: "ManageCoursesIcon",
+    },
+    {
       label: "Manage Users",
       href: "/manage-users",
       icon: "ManageUsersIcon",
