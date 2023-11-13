@@ -55,7 +55,7 @@ const columns = [
 export default function ManageQuestionsPage() {
   return (
     <div>
-      <h1 className={title()}>Manage Questions</h1>
+      <h1 className={title({ size: "md" })}>Manage Questions</h1>
       <Table aria-label="Example table with dynamic content" className="mt-5">
         <TableHeader columns={columns}>
           {(column) => (

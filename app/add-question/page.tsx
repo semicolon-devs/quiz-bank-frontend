@@ -57,7 +57,7 @@ export default function AddQuestionPage() {
 
   return (
     <div>
-      <h1 className={title()}>Add Question</h1>
+      <h1 className={title({ size: "md" })}>Add Question</h1>
       <Formik
         initialValues={{
           difficultyLevel: "",

@@ -37,7 +37,7 @@ const courses = [
 export default function ManageUsersPage() {
   return (
     <div>
-      <h1 className={title()}>Manage Courses</h1>
+      <h1 className={title({ size: "md" })}>Manage Courses</h1>
       <Accordion selectionMode="multiple" variant="splitted" className="mt-5">
         {courses &&
           courses.map((item) => (
