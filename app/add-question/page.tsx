@@ -46,6 +46,14 @@ export default function AddQuestionPage() {
   const [answer02, setAnswer02] = useState<string>("");
   const [answer03, setAnswer03] = useState<string>("");
   const [answer04, setAnswer04] = useState<string>("");
+  const [answerExplaination, setAnswerExplaination] = useState<string>("");
+
+  const answers = [
+    { label: "Answer 01", state: answer01, setState: setAnswer01 },
+    { label: "Answer 02", state: answer02, setState: setAnswer02 },
+    { label: "Answer 03", state: answer03, setState: setAnswer03 },
+    { label: "Answer 04", state: answer04, setState: setAnswer04 },
+  ];
 
   return (
     <div>
@@ -108,62 +116,37 @@ export default function AddQuestionPage() {
       </div>
       <div className="">
         <p className="font-semibold text-lg">Answers</p>
-        <div className="grid grid-cols-6">
-          <p className="">Correct Answer</p>
-          <p className="col-span-5">Answer Content</p>
+        <div className="grid grid-cols-6 mt-5">
+          <p className="font-semibold">Correct Answer</p>
+          <p className="col-span-5 font-semibold">Answer Content</p>
         </div>
-        <div className="grid grid-cols-6">
-          <div></div>
-          <div className="col-span-5">
-            <p className="">Answer 01</p>
-            <ReactQuill
-              modules={modules}
-              theme="snow"
-              onChange={setAnswer01}
-              placeholder="Answer content goes here..."
-              className="bg-white"
-            />
-          </div>
+        <div className="flex flex-col gap-6 mt-6">
+          {answers.map((item) => (
+            <div className="grid grid-cols-6">
+              <div></div>
+              <div className="col-span-5">
+                <p className="mb-3 font-semibold">{item.label}</p>
+                <ReactQuill
+                  modules={modules}
+                  theme="snow"
+                  onChange={item.setState}
+                  placeholder="Answer content goes here..."
+                  className="bg-white"
+                />
+              </div>
+            </div>
+          ))}
         </div>
-        <div className="grid grid-cols-6">
-          <div></div>
-          <div className="col-span-5">
-            <p className="">Answer 02</p>
-            <ReactQuill
-              modules={modules}
-              theme="snow"
-              onChange={setAnswer02}
-              placeholder="Answer content goes here..."
-              className="bg-white"
-            />
-          </div>
-        </div>
-        <div className="grid grid-cols-6">
-          <div></div>
-          <div className="col-span-5">
-            <p className="">Answer 03</p>
-            <ReactQuill
-              modules={modules}
-              theme="snow"
-              onChange={setAnswer03}
-              placeholder="Answer content goes here..."
-              className="bg-white"
-            />
-          </div>
-        </div>
-        <div className="grid grid-cols-6">
-          <div></div>
-          <div className="col-span-5">
-            <p className="">Answer 04</p>
-            <ReactQuill
-              modules={modules}
-              theme="snow"
-              onChange={setAnswer04}
-              placeholder="Answer content goes here..."
-              className="bg-white"
-            />
-          </div>
-        </div>
+      </div>
+      <div className="mt-10">
+        <p className="font-semibold text-lg">Answer explaination</p>
+        <ReactQuill
+          modules={modules}
+          theme="snow"
+          onChange={setAnswerExplaination}
+          placeholder="Answer content goes here..."
+          className="bg-white"
+        />
       </div>
     </div>
   );
