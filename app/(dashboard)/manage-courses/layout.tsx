@@ -1,4 +1,4 @@
-export default function ManageUsersLayout({
+export default function ManageCoursesLayout({
   children,
 }: {
   children: React.ReactNode;

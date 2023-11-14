@@ -3,9 +3,6 @@ import { Metadata } from "next";
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
 import { Providers } from "./providers";
-import { Navbar } from "@/components/navbar";
-import { Sidebar } from "@/components/sidebar";
-import { Link } from "@nextui-org/link";
 import clsx from "clsx";
 
 export const metadata: Metadata = {
@@ -39,15 +36,7 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
-        <Providers>
-          <div className="flex h-screen">
-            <Sidebar />
-            <div className="relative flex flex-col flex-grow">
-              <Navbar />
-              <main className="p-6 overflow-y-auto">{children}</main>
-            </div>
-          </div>
-        </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

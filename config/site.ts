@@ -6,7 +6,7 @@ export const siteConfig = {
   sidebarItems: [
     {
       label: "Home",
-      href: "/",
+      href: "/home",
       icon: "HomeIcon",
     },
     {
