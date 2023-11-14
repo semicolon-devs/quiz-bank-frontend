@@ -1,8 +1,16 @@
 "use client";
 
-import { Accordion, AccordionItem } from "@nextui-org/accordion";
+import { useState } from "react";
+
+import { Tabs, Tab } from "@nextui-org/tabs";
+import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card";
+import { Button, ButtonGroup } from "@nextui-org/button";
 
 import { title } from "@/components/primitives";
+import { EditIcon, DeleteIcon } from "@/components/icons";
+
+import AddSubjectModal from "@/components/modals/addSubjectModal";
+import AddSubjectCategoryModal from "@/components/modals/addSubjectCategoryModal";
 
 const courses = [
   {
@@ -34,26 +42,48 @@ const courses = [
   },
 ];
 
-export default function ManageUsersPage() {
+export default function ManageCoursesPage() {
+  const [selectedSubject, setSelectedSubject] = useState("photos");
+
   return (
     <div>
       <h1 className={title({ size: "md" })}>Manage Courses</h1>
-      <Accordion selectionMode="multiple" variant="splitted" className="mt-5">
-        {courses &&
-          courses.map((item) => (
-            <AccordionItem
-              key={item.id}
-              aria-label={item.subject}
-              title={item.subject}
-            >
-              {item.subject_category.map((category) => (
-                <div className="" key={category.id}>
-                  {category.category}
+      <div className="mt-5 flex items-center justify-end gap-5">
+        <AddSubjectModal />
+        <AddSubjectCategoryModal />
+      </div>
+      <div className="flex w-full flex-col">
+        <Tabs
+          aria-label="Subjects"
+          selectedKey={selectedSubject}
+          onSelectionChange={(e) => setSelectedSubject(e)}
+        >
+          {courses &&
+            courses.map((course) => (
+              <Tab key={course.subject} title={course.subject}>
+                <div className="flex flex-col gap-2">
+                  {course.subject_category.map((category) => (
+                    <Card>
+                      <CardBody>
+                        <div className="flex justify-between items-center">
+                          <p className="">{category.category}</p>
+                          <div className="flex gap-5">
+                            <Button color="primary" variant="bordered">
+                              <EditIcon />
+                            </Button>
+                            <Button color="primary" variant="bordered">
+                              <DeleteIcon />
+                            </Button>
+                          </div>
+                        </div>
+                      </CardBody>
+                    </Card>
+                  ))}
                 </div>
-              ))}
-            </AccordionItem>
-          ))}
-      </Accordion>
+              </Tab>
+            ))}
+        </Tabs>
+      </div>
     </div>
   );
 }
