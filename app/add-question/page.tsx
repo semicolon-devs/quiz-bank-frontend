@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Formik, Form, useField } from "formik";
-import * as Yup from "yup";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { Checkbox } from "@nextui-org/checkbox";
+import { Button, ButtonGroup } from "@nextui-org/button";
 
 import { title } from "@/components/primitives";
 
@@ -23,87 +23,97 @@ const modules = {
   ],
 };
 
-const difficultyLevel = ["Easy", "Medium", "Hard"];
-const subject = ["Biology", "Chemistry", "Mathematics"];
-const subjectCategory = ["Anatomy", "Epidomology", "Physiology"];
-
-const Select = ({ label, ...props }) => {
-  const [field, meta] = useField(props);
-  return (
-    <div className="flex flex-col gap-3">
-      <label htmlFor={props.id || props.name}>{label}</label>
-      <select {...field} {...props} className="max-w-xs" />
-      {meta.touched && meta.error ? (
-        <div className="text-red font-semibold">{meta.error}</div>
-      ) : null}
-    </div>
-  );
-};
+const difficultyLevelArr = ["Easy", "Medium", "Hard"];
+const subjectArr = ["Biology", "Chemistry", "Mathematics"];
+const subjectCategoryArr = ["Anatomy", "Epidomology", "Physiology"];
 
 export default function AddQuestionPage() {
+  const [difficultyLevel, setDifficultyLevel] = useState<string>(
+    difficultyLevelArr[0]
+  );
+  const [subject, setSubject] = useState<string>("");
+  const [subjectCategory, setSubjectCategory] = useState<string>("");
   const [question, setQuestion] = useState<string>("");
   const [answer01, setAnswer01] = useState<string>("");
+  const [isA01Selected, setIsA01Selected] = useState<boolean>(false);
   const [answer02, setAnswer02] = useState<string>("");
+  const [isA02Selected, setIsA02Selected] = useState<boolean>(false);
   const [answer03, setAnswer03] = useState<string>("");
+  const [isA03Selected, setIsA03Selected] = useState<boolean>(false);
   const [answer04, setAnswer04] = useState<string>("");
+  const [isA04Selected, setIsA04Selected] = useState<boolean>(false);
   const [answerExplaination, setAnswerExplaination] = useState<string>("");
 
   const answers = [
-    { label: "Answer 01", state: answer01, setState: setAnswer01 },
-    { label: "Answer 02", state: answer02, setState: setAnswer02 },
-    { label: "Answer 03", state: answer03, setState: setAnswer03 },
-    { label: "Answer 04", state: answer04, setState: setAnswer04 },
+    {
+      label: "Answer 01",
+      selectedState: isA01Selected,
+      setSelectedState: setIsA01Selected,
+      state: answer01,
+      setState: setAnswer01,
+    },
+    {
+      label: "Answer 02",
+      selectedState: isA02Selected,
+      setSelectedState: setIsA02Selected,
+      state: answer02,
+      setState: setAnswer02,
+    },
+    {
+      label: "Answer 03",
+      selectedState: isA03Selected,
+      setSelectedState: setIsA03Selected,
+      state: answer03,
+      setState: setAnswer03,
+    },
+    {
+      label: "Answer 04",
+      selectedState: isA04Selected,
+      setSelectedState: setIsA04Selected,
+      state: answer04,
+      setState: setAnswer04,
+    },
   ];
+
+  const handleAddQuestionButtonClick = () => {
+    console.log("btn click");
+  };
 
   return (
     <div>
       <h1 className={title({ size: "md" })}>Add Question</h1>
-      <Formik
-        initialValues={{
-          difficultyLevel: "",
-          subject: "",
-          subjectCategory: "",
-        }}
-        validationSchema={Yup.object({
-          difficultyLevel: Yup.string()
-            .oneOf(difficultyLevel, "Invalid difficulty level")
-            .required("Required"),
-          subject: Yup.string()
-            .oneOf(subject, "Invalid Subject")
-            .required("Required"),
-          subjectCategory: Yup.string()
-            .oneOf(subjectCategory, "Invalid Subject Category")
-            .required("Required"),
-        })}
-        onSubmit={(values, { setSubmitting }) => {
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-            setSubmitting(false);
-          }, 400);
-        }}
-      >
-        <Form className="mt-10 flex flex-col gap-5">
-          <Select label="Difficulty Level" name="difficultyLevel">
-            <option value="">Select difficulty level</option>
-            {difficultyLevel &&
-              difficultyLevel.map((item) => (
-                <option value={item}>{item}</option>
-              ))}
-          </Select>
-          <Select label="Subject" name="subject">
-            <option value="">Select subject</option>
-            {subject &&
-              subject.map((item) => <option value={item}>{item}</option>)}
-          </Select>
-          <Select label="Subject Cateogory" name="subjectCategory">
-            <option value="">Select subject category</option>
-            {subjectCategory &&
-              subjectCategory.map((item) => (
-                <option value={item}>{item}</option>
-              ))}
-          </Select>
-        </Form>
-      </Formik>
+      <div className="flex flex-col gap-5 mt-10">
+        <p className="font-semibold">Select Difficulty Level</p>
+        <select
+          value={difficultyLevel}
+          onChange={(e) => setDifficultyLevel(e.target.value)}
+        >
+          {difficultyLevelArr.map((item) => (
+            <option value={item} key={item}>
+              {item}
+            </option>
+          ))}
+        </select>
+        <p className="font-semibold">Select Subject</p>
+        <select value={subject} onChange={(e) => setSubject(e.target.value)}>
+          {subjectArr.map((item) => (
+            <option value={item} key={item}>
+              {item}
+            </option>
+          ))}
+        </select>
+        <p className="font-semibold">Select Subject Category</p>
+        <select
+          value={subjectCategory}
+          onChange={(e) => setSubjectCategory(e.target.value)}
+        >
+          {subjectCategoryArr.map((item) => (
+            <option value={item} key={item}>
+              {item}
+            </option>
+          ))}
+        </select>
+      </div>
       <div className="my-10">
         <p className="font-semibold text-lg">Question</p>
         <ReactQuill
@@ -122,8 +132,13 @@ export default function AddQuestionPage() {
         </div>
         <div className="flex flex-col gap-6 mt-6">
           {answers.map((item) => (
-            <div className="grid grid-cols-6">
-              <div></div>
+            <div className="grid grid-cols-6" key={item.label}>
+              <div>
+                <Checkbox
+                  isSelected={item.selectedState}
+                  onValueChange={item.setSelectedState}
+                ></Checkbox>
+              </div>
               <div className="col-span-5">
                 <p className="mb-3 font-semibold">{item.label}</p>
                 <ReactQuill
@@ -148,6 +163,13 @@ export default function AddQuestionPage() {
           className="bg-white"
         />
       </div>
+      <Button
+        color="primary"
+        className="mt-5"
+        onPress={() => handleAddQuestionButtonClick()}
+      >
+        Add Question
+      </Button>
     </div>
   );
 }
