@@ -11,6 +11,7 @@ import { Button } from "@nextui-org/button";
 import { Kbd } from "@nextui-org/kbd";
 import { Link } from "@nextui-org/link";
 import { Input } from "@nextui-org/input";
+import { Avatar, AvatarGroup, AvatarIcon } from "@nextui-org/avatar";
 
 import { link as linkStyles } from "@nextui-org/theme";
 
@@ -49,7 +50,6 @@ export const Navbar = () => {
         <NavbarBrand as="li" className="gap-3 max-w-fit">
           <NextLink className="flex justify-start items-center gap-1" href="/">
             {/* <Logo /> */}
-            <p className="font-bold text-blue">SMIT Academy</p>
           </NextLink>
         </NavbarBrand>
         {/* <ul className="hidden lg:flex gap-4 justify-start ml-2">
@@ -99,6 +99,19 @@ export const Navbar = () => {
             Sponsor
           </Button>
         </NavbarItem> */}
+      </NavbarContent>
+
+      <NavbarContent justify="end" className="flex">
+        <Avatar
+          // isBordered
+          radius="sm"
+          size="md"
+          src="https://i.pravatar.cc/150?u=a04258a2462d826712d"
+        />
+        <div className="">
+          <p className="font-semibold text-blue text-sm">Viraj Pattapola</p>
+          <p className="text-blue text-sm">Admin</p>
+        </div>
       </NavbarContent>
 
       {/* <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
