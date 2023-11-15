@@ -23,7 +23,7 @@ interface Course {
 }
 
 export default function ManageCoursesPage() {
-  const [selectedSubject, setSelectedSubject] = useState<string>("photos");
+  const [selectedSubject, setSelectedSubject] = useState<string>();
   const [courses, setCourses] = useState<Course[]>([]);
   // const [subjects, setSubjects] = useState<{ _id: string; name: string }[]>([]);
   const [loading, setLoading] = useState<boolean>(false);

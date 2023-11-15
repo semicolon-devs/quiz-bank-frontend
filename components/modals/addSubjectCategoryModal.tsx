@@ -32,6 +32,8 @@ const AddSubjectCategoryModal: React.FC<AddSubjectCategoryModalProps> = ({
   const [subjectCategory, setSubjectCategory] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
 
+  console.log(subject);
+
   const addNewSubjectCategory = () => {
     setLoading(true);
     const axiosConfig = {
