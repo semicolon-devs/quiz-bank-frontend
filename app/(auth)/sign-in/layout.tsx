@@ -4,10 +4,15 @@ export default function SigninLayout({
   children: React.ReactNode;
 }) {
   return (
-    <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-      <div className="inline-block max-w-lg text-center justify-center">
-        {children}
+    <section className="flex h-screen w-screen">
+      <div className="w-72 bg-blue p-10 flex flex-col justify-between">
+        <p className="font-bold text-white text-xl">SMIT ACADEMY</p>
+        <p className="text-white font-semibold">
+          SMIT Academy provide professional services for recruiting Sri Lankan
+          students to universities in Italy.
+        </p>
       </div>
+      <div className="w-full">{children}</div>
     </section>
   );
 }
