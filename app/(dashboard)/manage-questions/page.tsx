@@ -16,23 +16,6 @@ import {
 import { title } from "@/components/primitives";
 import { BASE_URL } from "@/config/apiConfig";
 
-// const rows = [
-//   {
-//     key: "1",
-//     question: "Question 01",
-//     subject: "Biology",
-//     subject_category: "Anatomy",
-//     difficulty_level: "easy",
-//   },
-//   {
-//     key: "2",
-//     question: "Question 02",
-//     subject: "Chemistry",
-//     subject_category: "Organic Chemistry",
-//     difficulty_level: "medium",
-//   },
-// ];
-
 const columns = [
   {
     key: "question",
@@ -61,8 +44,12 @@ interface Question {
   correctAnswer: number[];
   explaination: string;
   question: string;
-  subCategory: string;
-  subject: { _id: string; name: string; subCategories: any[]; __v: number };
+  subCategory: {
+    name: string;
+    __v: number;
+    _id: string;
+  };
+  subject: { _id: string; name: string; subCategories: string[]; __v: number };
   type: string;
   __v: number;
   _id: string;
@@ -72,8 +59,8 @@ interface Question {
 interface QuestionRow {
   _id: string;
   question: string;
-  // subject: any;
-  // subCategory: any;
+  subject: string;
+  subCategory: string;
   difficulty: string;
 }
 
@@ -81,8 +68,6 @@ export default function ManageQuestionsPage() {
   const [loading, setLoading] = useState<boolean>(false);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [questionRow, setQuestionRow] = useState<QuestionRow[]>([]);
-
-  console.log(questions);
 
   useEffect(() => {
     getQuestions();
@@ -110,14 +95,18 @@ export default function ManageQuestionsPage() {
       });
   };
 
+  const regex: RegExp = /(<([^>]+)>)/gi;
+
   const extractQuestionRows = (questions: Question[]): QuestionRow[] => {
-    return questions.map(({ _id, question, difficulty }) => ({
-      _id,
-      question,
-      difficulty,
-      // subject,
-      // subCategory,
-    }));
+    return questions.map(
+      ({ _id, question, difficulty, subject, subCategory }) => ({
+        _id,
+        question: question.replace(regex, ""),
+        difficulty,
+        subject: subject.name,
+        subCategory: subCategory.name,
+      })
+    );
   };
 
   return (
