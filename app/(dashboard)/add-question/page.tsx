@@ -6,6 +6,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { Checkbox } from "@nextui-org/checkbox";
 import { Button, ButtonGroup } from "@nextui-org/button";
+import { Select, SelectSection, SelectItem } from "@nextui-org/select";
 
 import { title } from "@/components/primitives";
 
@@ -27,8 +28,6 @@ const modules = {
 };
 
 const difficultyLevelArr = ["Easy", "Medium", "Hard"];
-// const subjectArr = ["Biology", "Chemistry", "Mathematics"];
-// const subjectCategoryArr = ["Anatomy", "Epidomology", "Physiology"];
 
 interface Course {
   _id: string;
@@ -43,11 +42,11 @@ interface SubCategory {
 }
 
 export default function AddQuestionPage() {
-  const [difficultyLevel, setDifficultyLevel] = useState<string>(
-    difficultyLevelArr[0]
-  );
-  const [subject, setSubject] = useState<string>("");
-  const [subjectCategory, setSubjectCategory] = useState<string>("");
+  const [difficultyLevelSelected, setDifficultyLevelSelected] =
+    useState<string>(difficultyLevelArr[0]);
+  const [subjectSelected, setSubjectSelected] = useState<string>("");
+  const [subjectCategorySelected, setSubjectCategorySelected] =
+    useState<string>("");
   const [question, setQuestion] = useState<string>("");
   const [answer01, setAnswer01] = useState<string>("");
   const [isA01Selected, setIsA01Selected] = useState<boolean>(false);
@@ -57,6 +56,8 @@ export default function AddQuestionPage() {
   const [isA03Selected, setIsA03Selected] = useState<boolean>(false);
   const [answer04, setAnswer04] = useState<string>("");
   const [isA04Selected, setIsA04Selected] = useState<boolean>(false);
+  const [answer05, setAnswer05] = useState<string>("");
+  const [isA05Selected, setIsA05Selected] = useState<boolean>(false);
   const [answerExplaination, setAnswerExplaination] = useState<string>("");
   const [courses, setCourses] = useState<Course[]>([]);
   const [subjects, setSubjects] = useState<{ _id: string; name: string }[]>([]);
@@ -98,6 +99,14 @@ export default function AddQuestionPage() {
       state: answer04,
       setState: setAnswer04,
     },
+    {
+      number: 5,
+      label: "Answer 05",
+      selectedState: isA05Selected,
+      setSelectedState: setIsA05Selected,
+      state: answer05,
+      setState: setAnswer05,
+    },
   ];
 
   useEffect(() => {
@@ -109,8 +118,8 @@ export default function AddQuestionPage() {
   }, [courses]);
 
   useEffect(() => {
-    setSubjectCategories(getSubCategories(subject));
-  }, [subject]);
+    setSubjectCategories(getSubCategories(subjectSelected));
+  }, [subjectSelected]);
 
   const extractSubjects = () => {
     setSubjects(courses.map(({ _id, name }) => ({ _id, name })));
@@ -160,8 +169,8 @@ export default function AddQuestionPage() {
       method: "POST",
       url: `${BASE_URL}questions`,
       data: {
-        subject: subject,
-        subCategory: subjectCategory,
+        subject: subjectSelected,
+        subCategory: subjectCategorySelected,
         type: "MCQ",
         question: question,
         answers: [
@@ -172,7 +181,7 @@ export default function AddQuestionPage() {
         ],
         correctAnswer: getCorrectAnswer(),
         explaination: answerExplaination,
-        difficulty: difficultyLevel,
+        difficulty: difficultyLevelSelected,
       },
     };
     axios(axiosConfig)
@@ -193,8 +202,8 @@ export default function AddQuestionPage() {
       <div className="flex flex-col gap-5 mt-10">
         <p className="font-semibold">Select Difficulty Level</p>
         <select
-          value={difficultyLevel}
-          onChange={(e) => setDifficultyLevel(e.target.value)}
+          value={difficultyLevelSelected}
+          onChange={(e) => setDifficultyLevelSelected(e.target.value)}
         >
           {difficultyLevelArr.map((item) => (
             <option value={item} key={item}>
@@ -203,7 +212,24 @@ export default function AddQuestionPage() {
           ))}
         </select>
         <p className="font-semibold">Select Subject</p>
-        <select value={subject} onChange={(e) => setSubject(e.target.value)}>
+        {/* <Select
+          label="Favorite Animal"
+          variant="bordered"
+          placeholder="Select an animal"
+          selectedKeys={subjectSelected}
+          className="max-w-xs"
+          onSelectionChange={(e) => setSubjectSelected(e)}
+        >
+          {subjects.map((subject) => (
+            <SelectItem key={subject._id} value={subject._id}>
+              {subject.name}
+            </SelectItem>
+          ))}
+        </Select> */}
+        <select
+          value={subjectSelected}
+          onChange={(e) => setSubjectSelected(e.target.value)}
+        >
           {subjects.map((item) => (
             <option value={item._id} key={item._id}>
               {item.name}
@@ -212,8 +238,8 @@ export default function AddQuestionPage() {
         </select>
         <p className="font-semibold">Select Subject Category</p>
         <select
-          value={subjectCategory}
-          onChange={(e) => setSubjectCategory(e.target.value)}
+          value={subjectCategorySelected}
+          onChange={(e) => setSubjectCategorySelected(e.target.value)}
         >
           {subjectCategories &&
             subjectCategories.map((item) => (
