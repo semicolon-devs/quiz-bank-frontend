@@ -80,10 +80,10 @@ export default function ManageCoursesPage() {
                           <p className="text-blue">{category.name}</p>
                           <div className="flex gap-5">
                             <Button color="primary" variant="bordered">
-                              <EditIcon />
+                              <EditIcon classes="h-3 w-3"/>
                             </Button>
                             <Button color="primary" variant="bordered">
-                              <DeleteIcon />
+                              <DeleteIcon classes="h-3 w-3"/>
                             </Button>
                           </div>
                         </div>

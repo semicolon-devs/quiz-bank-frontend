@@ -172,6 +172,7 @@ export default function AddQuestionPage() {
         ],
         correctAnswer: getCorrectAnswer(),
         explaination: answerExplaination,
+        difficulty: difficultyLevel,
       },
     };
     axios(axiosConfig)
