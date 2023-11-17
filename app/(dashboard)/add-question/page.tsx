@@ -7,6 +7,7 @@ import "react-quill/dist/quill.snow.css";
 import { Checkbox } from "@nextui-org/checkbox";
 import { Button, ButtonGroup } from "@nextui-org/button";
 import { Select, SelectSection, SelectItem } from "@nextui-org/select";
+import { Spinner } from "@nextui-org/spinner";
 
 import { title } from "@/components/primitives";
 
@@ -230,6 +231,7 @@ export default function AddQuestionPage() {
           value={subjectSelected}
           onChange={(e) => setSubjectSelected(e.target.value)}
         >
+          <option value="">Select a subject</option>
           {subjects.map((item) => (
             <option value={item._id} key={item._id}>
               {item.name}
@@ -241,6 +243,7 @@ export default function AddQuestionPage() {
           value={subjectCategorySelected}
           onChange={(e) => setSubjectCategorySelected(e.target.value)}
         >
+          <option value="">Select a subject category</option>
           {subjectCategories &&
             subjectCategories.map((item) => (
               <option value={item._id} key={item._id}>
@@ -303,7 +306,7 @@ export default function AddQuestionPage() {
         className="mt-5"
         onPress={() => handleAddQuestionButtonClick()}
       >
-        Add Question
+        {loading ? <Spinner /> : "Add Question"}
       </Button>
     </div>
   );
