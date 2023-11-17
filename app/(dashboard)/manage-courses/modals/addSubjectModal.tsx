@@ -60,9 +60,6 @@ const AddSubjectModal = (props: Props) => {
               <ModalBody>
                 <Input
                   autoFocus
-                  // endContent={
-                  //   <MailIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
-                  // }
                   label="Subject Name"
                   placeholder="Enter subject name"
                   variant="bordered"
@@ -71,7 +68,7 @@ const AddSubjectModal = (props: Props) => {
                 />
               </ModalBody>
               <ModalFooter>
-                <Button color="danger" variant="flat" onPress={onClose}>
+                <Button color="secondary" variant="flat" onPress={onClose}>
                   Close
                 </Button>
                 <Button

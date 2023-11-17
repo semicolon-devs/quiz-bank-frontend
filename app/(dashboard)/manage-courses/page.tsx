@@ -5,20 +5,22 @@ import axios from "axios";
 
 import { Tabs, Tab } from "@nextui-org/tabs";
 import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card";
-import { Button, ButtonGroup } from "@nextui-org/button";
 
 import { title } from "@/components/primitives";
-import { EditIcon, DeleteIcon } from "@/components/icons";
 
-import AddSubjectModal from "@/components/modals/addSubjectModal";
-import AddSubjectCategoryModal from "@/components/modals/addSubjectCategoryModal";
+import AddSubjectModal from "./modals/addSubjectModal";
+import AddSubjectCategoryModal from "./modals/addSubjectCategoryModal";
+import DeleteSubjectModal from "./modals/deleteSubjectModal";
+import EditSubjectModal from "./modals/editSubjectModal";
+import DeleteSubjectCategoryModal from "./modals/deleteSubjectCategoryModal";
+import EditSubjectCategoryModal from "./modals/editSubjectCategoryModal";
 
 import { BASE_URL } from "@/config/apiConfig";
 
 interface Course {
   _id: string;
   name: string;
-  subCategories: any[];
+  subCategories: { _id: string; name: string; __v: number }[];
   __v: number;
 }
 
@@ -72,19 +74,38 @@ export default function ManageCoursesPage() {
           {courses &&
             courses.map((course) => (
               <Tab key={course._id} title={course.name}>
+                <Card className="bg-blue/75 mb-3">
+                  <CardBody>
+                    <div className="flex justify-between items-center">
+                      <div className="">
+                        <p className="text-white capitalize text-sm">
+                          subject name
+                        </p>
+                        <p className="text-white font-semibold text-3xl">
+                          {course.name}
+                        </p>
+                      </div>
+                      <div className="flex gap-5">
+                        <EditSubjectModal subject={course} />
+                        <DeleteSubjectModal subject={course} />
+                      </div>
+                    </div>
+                  </CardBody>
+                </Card>
                 <div className="flex flex-col gap-2">
                   {course.subCategories.map((category) => (
-                    <Card>
+                    <Card key={category._id}>
                       <CardBody>
                         <div className="flex justify-between items-center">
                           <p className="text-blue">{category.name}</p>
                           <div className="flex gap-5">
-                            <Button color="primary" variant="bordered">
-                              <EditIcon classes="h-3 w-3"/>
-                            </Button>
-                            <Button color="primary" variant="bordered">
-                              <DeleteIcon classes="h-3 w-3"/>
-                            </Button>
+                            <EditSubjectCategoryModal
+                              subCategory={category}
+                              />
+                            <DeleteSubjectCategoryModal
+                              subCategory={category}
+                              subjectId={course._id}
+                            />
                           </div>
                         </div>
                       </CardBody>

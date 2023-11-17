@@ -37,6 +37,10 @@ module.exports = {
               DEFAULT: "#F01513",
               foreground: "#ffffff",
             },
+            secondary: {
+              DEFAULT: "#202020",
+              foreground: "#ffffff",
+            },
             focus: "#1F2F3A",
           },
         },
