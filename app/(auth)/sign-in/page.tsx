@@ -1,19 +1,43 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card";
 import { Input } from "@nextui-org/input";
 import { Button, ButtonGroup } from "@nextui-org/button";
 
 import { EyeOpenIcon, EyeCloseIcon } from "@/components/icons";
+import axios from "axios";
+import { BASE_URL } from "@/config/apiConfig";
+import { setAuthToken, setRefreshToken } from "@/helpers/token";
 
 export default function SigninPage() {
-  const [username, setUsername] = useState<string>();
+  const [email, setEmail] = useState<string>();
   const [password, setPassword] = useState<string>();
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   const toggleVisibility = () => setIsVisible(!isVisible);
+
+  const signIn = () => {
+    const axiosConfig = {
+      method: "POST",
+      url: `${BASE_URL}auth/login`,
+      data: {
+        email: email,
+        password: password
+      }
+    };
+    axios(axiosConfig)
+      .then((response) => {
+        setAuthToken(response.data.accessToken);
+        setRefreshToken(response.data.refreshToken);
+      })
+      .catch((err) => {
+        console.log(err);
+      }).finally(() => {
+        window.location.href = "/home";
+      })
+  };
 
   return (
     <div className="flex w-full h-full items-center justify-center">
@@ -21,10 +45,10 @@ export default function SigninPage() {
         <CardBody className="flex flex-col gap-5">
           <p className="text-blue capitalize font-bold">sign in</p>
           <Input
-            label="username"
-            placeholder="Enter username"
-            value={username}
-            onValueChange={setUsername}
+            label="email"
+            placeholder="Enter email"
+            value={email}
+            onValueChange={setEmail}
             className="w-64"
             variant="bordered"
           />
@@ -50,7 +74,7 @@ export default function SigninPage() {
             className="w-64"
             variant="bordered"
           />
-          <Button color="primary">
+          <Button color="primary" onClick={signIn}>
             <p className="capitalize font-semibold">sign in</p>
           </Button>
         </CardBody>
