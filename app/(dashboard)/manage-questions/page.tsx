@@ -1,6 +1,7 @@
 "use client";
+import { useRouter } from "next/navigation";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 
 import {
@@ -13,31 +14,10 @@ import {
   getKeyValue,
 } from "@nextui-org/table";
 
+import { EyeIcon, EditIcon, DeleteIcon } from "@/components/icons";
+
 import { title } from "@/components/primitives";
 import { BASE_URL } from "@/config/apiConfig";
-
-const columns = [
-  {
-    key: "question",
-    label: "QUESTION",
-  },
-  {
-    key: "subject",
-    label: "SUBJECT",
-  },
-  {
-    key: "subCategory",
-    label: "SUBJECT CATEGORY",
-  },
-  {
-    key: "difficulty",
-    label: "DIFFICULTY",
-  },
-  {
-    key: "actions",
-    label: "ACTIONS",
-  },
-];
 
 interface Question {
   answers: any[];
@@ -64,18 +44,28 @@ interface QuestionRow {
   difficulty: string;
 }
 
+const columns = [
+  { name: "QUESTION", uid: "question" },
+  { name: "SUBJECT", uid: "subject" },
+  { name: "SUBJECT CATEGORY", uid: "subCategory" },
+  { name: "DIFFICULTY LEVEL", uid: "difficulty" },
+  { name: "ACTIONS", uid: "actions" },
+];
+
 export default function ManageQuestionsPage() {
   const [loading, setLoading] = useState<boolean>(false);
-  const [questions, setQuestions] = useState<Question[]>([]);
+  const [questionList, setQuestionList] = useState<Question[]>([]);
   const [questionRow, setQuestionRow] = useState<QuestionRow[]>([]);
+
+  const router = useRouter();
 
   useEffect(() => {
     getQuestions();
   }, []);
 
   useEffect(() => {
-    setQuestionRow(extractQuestionRows(questions));
-  }, [questions]);
+    setQuestionRow(extractQuestionRows(questionList));
+  }, [questionList]);
 
   const getQuestions = () => {
     setLoading(true);
@@ -85,7 +75,7 @@ export default function ManageQuestionsPage() {
     };
     axios(axiosConfig)
       .then((response) => {
-        setQuestions(response.data);
+        setQuestionList(response.data);
       })
       .catch((err) => {
         console.log(err);
@@ -109,20 +99,64 @@ export default function ManageQuestionsPage() {
     );
   };
 
+  const renderCell = useCallback(
+    (question: QuestionRow, columnKey: React.Key) => {
+      const cellValue = question[columnKey as keyof QuestionRow];
+
+      switch (columnKey) {
+        case "question":
+          return <div className="">{cellValue}</div>;
+        case "subject":
+          return (
+            <div className="flex flex-col">
+              <p className="text-bold text-sm capitalize">{cellValue}</p>
+            </div>
+          );
+        case "subCategory":
+          return <div className="">{cellValue}</div>;
+        case "actions":
+          return (
+            <div className="relative flex items-center gap-2">
+              <span
+                className="text-lg text-blue cursor-pointer active:opacity-50"
+                onClick={() => router.push(`/preview/${question._id}`)}
+              >
+                <EyeIcon classes="w-4 h-4" />
+              </span>
+              <span className="text-lg text-blue cursor-pointer active:opacity-50">
+                <EditIcon classes="w-4 h-4" />
+              </span>
+              <span className="text-lg text-red cursor-pointer active:opacity-50">
+                <DeleteIcon classes="w-4 h-4" />
+              </span>
+            </div>
+          );
+        default:
+          return cellValue;
+      }
+    },
+    []
+  );
+
   return (
     <div>
       <h1 className={title({ size: "md" })}>Manage Questions</h1>
-      <Table aria-label="Example table with dynamic content" className="mt-5">
+      <Table aria-label="Example table with custom cells" className="mt-5">
         <TableHeader columns={columns}>
           {(column) => (
-            <TableColumn key={column.key}>{column.label}</TableColumn>
+            <TableColumn
+              key={column.uid}
+              align={column.uid === "actions" ? "center" : "start"}
+            >
+              {column.name}
+            </TableColumn>
           )}
         </TableHeader>
         <TableBody items={questionRow}>
           {(item) => (
             <TableRow key={item._id}>
               {(columnKey) => (
-                <TableCell>{getKeyValue(item, columnKey)}</TableCell>
+                <TableCell>{renderCell(item, columnKey)}</TableCell>
               )}
             </TableRow>
           )}
