@@ -15,6 +15,7 @@ import {
 
 import { title } from "@/components/primitives";
 import { BASE_URL } from "@/config/apiConfig";
+import { getAccess } from "@/helpers/token";
 
 const columns = [
   {
@@ -86,6 +87,7 @@ export default function ManageQuestionsPage() {
     axios(axiosConfig)
       .then((response) => {
         setQuestions(response.data);
+        getAccess();
       })
       .catch((err) => {
         console.log(err);
