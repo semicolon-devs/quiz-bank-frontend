@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 import { Checkbox } from "@nextui-org/checkbox";
+import { Button, ButtonGroup } from "@nextui-org/button";
 
 import { BASE_URL } from "@/config/apiConfig";
 
@@ -83,6 +84,12 @@ export default function Page({ params }: { params: { id: string } }) {
             </div>
           ))}
       </div>
+      {question && (
+        <div
+          className="border border-blue p-3 rounded-xl w-full mt-5"
+          dangerouslySetInnerHTML={{ __html: question.explaination }}
+        />
+      )}
     </div>
   );
 }
