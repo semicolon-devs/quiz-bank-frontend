@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 import {
@@ -31,8 +31,6 @@ const AddSubjectCategoryModal: React.FC<AddSubjectCategoryModalProps> = ({
   const [subject, setSubject] = useState<string>();
   const [subjectCategory, setSubjectCategory] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
-
-  console.log(subject);
 
   const addNewSubjectCategory = () => {
     setLoading(true);
@@ -76,6 +74,7 @@ const AddSubjectCategoryModal: React.FC<AddSubjectCategoryModalProps> = ({
                   onChange={(e) => setSubject(e.target.value)}
                   className="border border-dark p-3 rounded-xl"
                 >
+                  <option value="">Select subject</option>
                   {subjects.map((item) => (
                     <option value={item._id} key={item._id}>
                       {item.name}
@@ -95,7 +94,7 @@ const AddSubjectCategoryModal: React.FC<AddSubjectCategoryModalProps> = ({
                 />
               </ModalBody>
               <ModalFooter>
-                <Button color="danger" variant="flat" onPress={onClose}>
+                <Button color="secondary" variant="flat" onPress={onClose}>
                   Close
                 </Button>
                 <Button color="primary" onPress={addNewSubjectCategory}>
