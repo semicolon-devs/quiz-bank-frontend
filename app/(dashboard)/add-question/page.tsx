@@ -111,48 +111,48 @@ export default function AddQuestionPage() {
   ];
 
   useEffect(() => {
+    const getCourses = () => {
+      setLoading(true);
+      const axiosConfig = {
+        method: "GET",
+        url: `${BASE_URL}subjects`,
+      };
+      axios(axiosConfig)
+        .then((response) => {
+          setCourses(response.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    };
+
     getCourses();
   }, []);
 
   useEffect(() => {
+    const extractSubjects = () => {
+      setSubjects(courses.map(({ _id, name }) => ({ _id, name })));
+    };
+
     extractSubjects();
   }, [courses]);
 
   useEffect(() => {
-    setSubjectCategories(getSubCategories(subjectSelected));
-  }, [subjectSelected]);
+    const getSubCategories = (subjectId: string): SubCategory[] | null => {
+      const subject = courses.find((s) => s._id === subjectId);
 
-  const extractSubjects = () => {
-    setSubjects(courses.map(({ _id, name }) => ({ _id, name })));
-  };
+      if (subject) {
+        return subject.subCategories.map(({ _id, name }) => ({ _id, name }));
+      }
 
-  const getSubCategories = (subjectId: string): SubCategory[] | null => {
-    const subject = courses.find((s) => s._id === subjectId);
-
-    if (subject) {
-      return subject.subCategories.map(({ _id, name }) => ({ _id, name }));
-    }
-
-    return null;
-  };
-
-  const getCourses = () => {
-    setLoading(true);
-    const axiosConfig = {
-      method: "GET",
-      url: `${BASE_URL}subjects`,
+      return null;
     };
-    axios(axiosConfig)
-      .then((response) => {
-        setCourses(response.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  };
+
+    setSubjectCategories(getSubCategories(subjectSelected));
+  }, [subjectSelected, courses]);
 
   const handleAddQuestionButtonClick = () => {
     const getCorrectAnswer = () => {
@@ -213,20 +213,6 @@ export default function AddQuestionPage() {
           ))}
         </select>
         <p className="font-semibold">Select Subject</p>
-        {/* <Select
-          label="Favorite Animal"
-          variant="bordered"
-          placeholder="Select an animal"
-          selectedKeys={subjectSelected}
-          className="max-w-xs"
-          onSelectionChange={(e) => setSubjectSelected(e)}
-        >
-          {subjects.map((subject) => (
-            <SelectItem key={subject._id} value={subject._id}>
-              {subject.name}
-            </SelectItem>
-          ))}
-        </Select> */}
         <select
           value={subjectSelected}
           onChange={(e) => setSubjectSelected(e.target.value)}
@@ -254,13 +240,13 @@ export default function AddQuestionPage() {
       </div>
       <div className="my-10">
         <p className="font-semibold text-lg">Question</p>
-        <ReactQuill
+        {/* <ReactQuill
           modules={modules}
           theme="snow"
           onChange={setQuestion}
           placeholder="Question goes here..."
           className="bg-white"
-        />
+        /> */}
       </div>
       <div className="">
         <p className="font-semibold text-lg">Answers</p>
@@ -279,13 +265,13 @@ export default function AddQuestionPage() {
               </div>
               <div className="col-span-5">
                 <p className="mb-3 font-semibold">{item.label}</p>
-                <ReactQuill
+                {/* <ReactQuill
                   modules={modules}
                   theme="snow"
                   onChange={item.setState}
                   placeholder="Answer content goes here..."
                   className="bg-white"
-                />
+                /> */}
               </div>
             </div>
           ))}
@@ -293,13 +279,13 @@ export default function AddQuestionPage() {
       </div>
       <div className="mt-10">
         <p className="font-semibold text-lg">Answer explaination</p>
-        <ReactQuill
+        {/* <ReactQuill
           modules={modules}
           theme="snow"
           onChange={setAnswerExplaination}
           placeholder="Answer content goes here..."
           className="bg-white"
-        />
+        /> */}
       </div>
       <Button
         color="primary"

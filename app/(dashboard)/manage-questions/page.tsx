@@ -60,44 +60,44 @@ export default function ManageQuestionsPage() {
   const router = useRouter();
 
   useEffect(() => {
+    const getQuestions = () => {
+      setLoading(true);
+      const axiosConfig = {
+        method: "GET",
+        url: `${BASE_URL}questions`,
+      };
+      axios(axiosConfig)
+        .then((response) => {
+          setQuestionList(response.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    };
+
     getQuestions();
   }, []);
 
   useEffect(() => {
+    const regex: RegExp = /(<([^>]+)>)/gi;
+
+    const extractQuestionRows = (questions: Question[]): QuestionRow[] => {
+      return questions.map(
+        ({ _id, question, difficulty, subject, subCategory }) => ({
+          _id,
+          question: question.replace(regex, ""),
+          difficulty,
+          subject: subject.name,
+          subCategory: subCategory.name,
+        })
+      );
+    };
+
     setQuestionRow(extractQuestionRows(questionList));
   }, [questionList]);
-
-  const getQuestions = () => {
-    setLoading(true);
-    const axiosConfig = {
-      method: "GET",
-      url: `${BASE_URL}questions`,
-    };
-    axios(axiosConfig)
-      .then((response) => {
-        setQuestionList(response.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  };
-
-  const regex: RegExp = /(<([^>]+)>)/gi;
-
-  const extractQuestionRows = (questions: Question[]): QuestionRow[] => {
-    return questions.map(
-      ({ _id, question, difficulty, subject, subCategory }) => ({
-        _id,
-        question: question.replace(regex, ""),
-        difficulty,
-        subject: subject.name,
-        subCategory: subCategory.name,
-      })
-    );
-  };
 
   const renderCell = useCallback(
     (question: QuestionRow, columnKey: React.Key) => {
@@ -135,7 +135,7 @@ export default function ManageQuestionsPage() {
           return cellValue;
       }
     },
-    []
+    [router]
   );
 
   return (

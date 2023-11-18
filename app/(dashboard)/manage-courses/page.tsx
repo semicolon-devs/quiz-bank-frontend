@@ -30,33 +30,32 @@ export default function ManageCoursesPage() {
   // const [subjects, setSubjects] = useState<{ _id: string; name: string }[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
-  useEffect(() => {
-    getCourses();
-  }, []);
-
   const extractSubjects = (
     courses: Course[]
   ): { _id: string; name: string }[] => {
     return courses.map(({ _id, name }) => ({ _id, name }));
   };
 
-  const getCourses = () => {
-    setLoading(true);
-    const axiosConfig = {
-      method: "GET",
-      url: `${BASE_URL}subjects`,
+  useEffect(() => {
+    const getCourses = () => {
+      setLoading(true);
+      const axiosConfig = {
+        method: "GET",
+        url: `${BASE_URL}subjects`,
+      };
+      axios(axiosConfig)
+        .then((response) => {
+          setCourses(response.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     };
-    axios(axiosConfig)
-      .then((response) => {
-        setCourses(response.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  };
+    getCourses();
+  }, []);
 
   return (
     <div>
@@ -99,9 +98,7 @@ export default function ManageCoursesPage() {
                         <div className="flex justify-between items-center">
                           <p className="text-blue">{category.name}</p>
                           <div className="flex gap-5">
-                            <EditSubjectCategoryModal
-                              subCategory={category}
-                              />
+                            <EditSubjectCategoryModal subCategory={category} />
                             <DeleteSubjectCategoryModal
                               subCategory={category}
                               subjectId={course._id}

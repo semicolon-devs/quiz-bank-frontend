@@ -9,13 +9,13 @@ import { usePathname } from "next/navigation";
 
 import clsx from "clsx";
 
-const renderIconComponent = (icon: any) => {
-  const IconComponent = Icons[icon];
-  if (IconComponent) {
-    return <IconComponent />;
-  }
-  return null;
-};
+// const renderIconComponent = (icon: any) => {
+//   const IconComponent = Icons[icon];
+//   if (IconComponent) {
+//     return <IconComponent />;
+//   }
+//   return null;
+// };
 
 type Props = {};
 
@@ -32,7 +32,7 @@ export const Sidebar = (props: Props) => {
           }  px-5 flex gap-5 items-center py-2 w-64`}
           key={item.href}
         >
-          {renderIconComponent(item.icon)}
+          {/* {renderIconComponent(item.icon)} */}
           <p className="text-white font-semibold uppercase">{item.label}</p>
         </NextLink>
       ))}

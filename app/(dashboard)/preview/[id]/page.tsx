@@ -36,26 +36,26 @@ export default function Page({ params }: { params: { id: string } }) {
   ]);
 
   useEffect(() => {
-    getQuestion();
-  }, []);
-
-  const getQuestion = () => {
-    setLoading(true);
-    const axiosConfig = {
-      method: "GET",
-      url: `${BASE_URL}questions/${params.id}`,
+    const getQuestion = () => {
+      setLoading(true);
+      const axiosConfig = {
+        method: "GET",
+        url: `${BASE_URL}questions/${params.id}`,
+      };
+      axios(axiosConfig)
+        .then((response) => {
+          setQuestion(response.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     };
-    axios(axiosConfig)
-      .then((response) => {
-        setQuestion(response.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  };
+
+    getQuestion();
+  }, [params.id]);
 
   return (
     <div>
