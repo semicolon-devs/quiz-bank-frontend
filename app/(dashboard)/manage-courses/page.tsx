@@ -69,7 +69,7 @@ export default function ManageCoursesPage() {
         <Tabs
           aria-label="Subjects"
           selectedKey={selectedSubject}
-          onSelectionChange={(e) => setSelectedSubject(e)}
+          onSelectionChange={(e) => setSelectedSubject(String(e))}
         >
           {courses &&
             courses.map((course) => (
