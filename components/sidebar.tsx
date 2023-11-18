@@ -9,7 +9,7 @@ import { usePathname } from "next/navigation";
 
 import clsx from "clsx";
 
-const renderIconComponent = (icon: string) => {
+const renderIconComponent = (icon: any) => {
   const IconComponent = Icons[icon];
   if (IconComponent) {
     return <IconComponent />;
