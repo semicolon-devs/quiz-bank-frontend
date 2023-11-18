@@ -15,7 +15,7 @@ import { title } from "@/components/primitives";
 
 import { BASE_URL } from "@/config/apiConfig";
 
-const ReactQuill = dynamic(import("react-quill"), { ssr: false });
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 const modules = {
   toolbar: [
