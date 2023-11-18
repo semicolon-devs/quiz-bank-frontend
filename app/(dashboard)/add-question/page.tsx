@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
+
 import axios from "axios";
-import ReactQuill from "react-quill";
+// import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { Checkbox } from "@nextui-org/checkbox";
 import { Button, ButtonGroup } from "@nextui-org/button";
@@ -12,6 +14,8 @@ import { Spinner } from "@nextui-org/spinner";
 import { title } from "@/components/primitives";
 
 import { BASE_URL } from "@/config/apiConfig";
+
+const ReactQuill = dynamic(import("react-quill"), { ssr: false });
 
 const modules = {
   toolbar: [
@@ -240,13 +244,13 @@ export default function AddQuestionPage() {
       </div>
       <div className="my-10">
         <p className="font-semibold text-lg">Question</p>
-        {/* <ReactQuill
+        <ReactQuill
           modules={modules}
           theme="snow"
           onChange={setQuestion}
           placeholder="Question goes here..."
           className="bg-white"
-        /> */}
+        />
       </div>
       <div className="">
         <p className="font-semibold text-lg">Answers</p>
@@ -265,13 +269,13 @@ export default function AddQuestionPage() {
               </div>
               <div className="col-span-5">
                 <p className="mb-3 font-semibold">{item.label}</p>
-                {/* <ReactQuill
+                <ReactQuill
                   modules={modules}
                   theme="snow"
                   onChange={item.setState}
                   placeholder="Answer content goes here..."
                   className="bg-white"
-                /> */}
+                />
               </div>
             </div>
           ))}
@@ -279,13 +283,13 @@ export default function AddQuestionPage() {
       </div>
       <div className="mt-10">
         <p className="font-semibold text-lg">Answer explaination</p>
-        {/* <ReactQuill
+        <ReactQuill
           modules={modules}
           theme="snow"
           onChange={setAnswerExplaination}
           placeholder="Answer content goes here..."
           className="bg-white"
-        /> */}
+        />
       </div>
       <Button
         color="primary"
