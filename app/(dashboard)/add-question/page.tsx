@@ -179,6 +179,7 @@ export default function AddQuestionPage() {
           { number: 2, answer: answer02 },
           { number: 3, answer: answer03 },
           { number: 4, answer: answer04 },
+          { number: 5, answer: answer05 },
         ],
         correctAnswer: getCorrectAnswer(),
         explaination: answerExplaination,
