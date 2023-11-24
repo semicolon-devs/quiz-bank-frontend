@@ -16,40 +16,40 @@ import { BASE_URL } from "@/config/apiConfig";
 
 type Props = {};
 
-interface DeleteSubjectCategoryModalProps {
-  subCategory: { _id: string; name: string; __v: number };
+interface DeleteModuleModalProps {
+  module: { _id: string; name: string; __v: number };
   subjectId: string;
 }
 
-const DeleteSubjectCategoryModal: React.FC<DeleteSubjectCategoryModalProps> = ({
-  subCategory,
+const DeleteModuleModal: React.FC<DeleteModuleModalProps> = ({
+  module,
   subjectId,
 }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [subjectCategoryName, setSubjectCategoryName] = useState<string>(
-    subCategory.name
+  const [moduleName, setModuleName] = useState<string>(
+    module.name
   );
   const [loading, setLoading] = useState<boolean>(false);
 
-  const deleteSubjectCategory = () => {
-    setLoading(true);
-    const axiosConfig = {
-      method: "DELETE",
-      url: `${BASE_URL}subjects/${subjectId}/${subCategory._id}`,
-      // headers: {
-      //   Authorization: `Bearer ${token}`,
-      // },
-    };
-    axios(axiosConfig)
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+  const deleteModule = () => {
+    // setLoading(true);
+    // const axiosConfig = {
+    //   method: "DELETE",
+    //   url: `${BASE_URL}subjects/${subjectId}/${module._id}`,
+    //   // headers: {
+    //   //   Authorization: `Bearer ${token}`,
+    //   // },
+    // };
+    // axios(axiosConfig)
+    //   .then((response) => {
+    //     console.log(response);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   })
+    //   .finally(() => {
+    //     setLoading(false);
+    //   });
   };
 
   return (
@@ -62,13 +62,13 @@ const DeleteSubjectCategoryModal: React.FC<DeleteSubjectCategoryModalProps> = ({
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-                Delete Subject Category
+                Delete Module
               </ModalHeader>
               <ModalBody>
                 <p className="">
                   Are you sure want to delete{" "}
-                  <span className="font-semibold">{subjectCategoryName}</span>{" "}
-                  subject category from the system?
+                  <span className="font-semibold">{moduleName}</span>{" "}
+                  module from the system?
                 </p>
               </ModalBody>
               <ModalFooter>
@@ -78,7 +78,7 @@ const DeleteSubjectCategoryModal: React.FC<DeleteSubjectCategoryModalProps> = ({
                 <Button
                   color="danger"
                   onPress={() => {
-                    deleteSubjectCategory();
+                    deleteModule();
                     onClose();
                   }}
                   className="capitalize"
@@ -94,4 +94,4 @@ const DeleteSubjectCategoryModal: React.FC<DeleteSubjectCategoryModalProps> = ({
   );
 };
 
-export default DeleteSubjectCategoryModal;
+export default DeleteModuleModal;

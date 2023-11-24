@@ -97,7 +97,13 @@ const AddSubjectCategoryModal: React.FC<AddSubjectCategoryModalProps> = ({
                 <Button color="secondary" variant="flat" onPress={onClose}>
                   Close
                 </Button>
-                <Button color="primary" onPress={addNewSubjectCategory}>
+                <Button
+                  color="primary"
+                  onPress={() => {
+                    addNewSubjectCategory();
+                    onClose();
+                  }}
+                >
                   Add
                 </Button>
               </ModalFooter>

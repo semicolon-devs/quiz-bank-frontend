@@ -137,7 +137,13 @@ const AddModuleModal: React.FC<AddModuleModalProps> = ({ subjects }) => {
                 <Button color="secondary" variant="flat" onPress={onClose}>
                   Close
                 </Button>
-                <Button color="primary" onPress={addNewModule}>
+                <Button
+                  color="primary"
+                  onPress={() => {
+                    addNewModule();
+                    onClose();
+                  }}
+                >
                   Add
                 </Button>
               </ModalFooter>
