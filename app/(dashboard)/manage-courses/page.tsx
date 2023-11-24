@@ -36,6 +36,8 @@ interface Course {
 
 export default function ManageCoursesPage() {
   const [selectedSubject, setSelectedSubject] = useState<string>();
+  const [selectedSubjectCategory, setSelectedSubjectCategory] =
+    useState<string>();
   const [courses, setCourses] = useState<Course[]>([]);
   // const [subjects, setSubjects] = useState<{ _id: string; name: string }[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -92,7 +94,7 @@ export default function ManageCoursesPage() {
         <AddSubjectCategoryModal subjects={extractSubjects(courses)} />
         <AddModuleModal subjects={extractSubjectsAndSubCategories(courses)} />
       </div>
-      <div className="flex w-full flex-col">
+      <div className="flex w-full flex-col border-2 border-blue/25 p-3 rounded-3xl">
         <Tabs
           aria-label="Subjects"
           selectedKey={selectedSubject}
@@ -119,34 +121,67 @@ export default function ManageCoursesPage() {
                     </div>
                   </CardBody>
                 </Card>
-                <div className="flex flex-col gap-2">
-                  {course.subCategories.map((category) => (
-                    <Card key={category._id}>
-                      <CardBody>
-                        <div className="flex flex-col">
-                          <div className="flex justify-between items-center">
-                            <p className="text-blue">{category.name}</p>
-                            <div className="flex gap-5">
-                              <EditSubjectCategoryModal
-                                subCategory={category}
-                              />
-                              <DeleteSubjectCategoryModal
-                                subCategory={category}
-                                subjectId={course._id}
-                              />
-                            </div>
-                          </div>
-                          <div className="flex flex-col">
-                            {category.moduleList.map((module) => (
-                              <div className="" key={module._id}>
-                                {module.name}
+
+                <div className="flex w-full flex-col border-2 border-blue/25 p-3 rounded-3xl">
+                  <Tabs
+                    aria-label="Subject Category List"
+                    selectedKey={selectedSubjectCategory}
+                    onSelectionChange={(e) =>
+                      setSelectedSubjectCategory(String(e))
+                    }
+                  >
+                    {course.subCategories &&
+                      course.subCategories.map((category) => (
+                        <Tab key={category._id} title={category.name}>
+                          <Card className="bg-blue/75 mb-3">
+                            <CardBody>
+                              <div className="flex justify-between items-center">
+                                <div className="">
+                                  <p className="text-white capitalize text-sm">
+                                    subject category name
+                                  </p>
+                                  <p className="text-white font-semibold text-3xl">
+                                    {category.name}
+                                  </p>
+                                </div>
+                                <div className="flex gap-5">
+                                  <EditSubjectCategoryModal
+                                    subCategory={category}
+                                  />
+                                  <DeleteSubjectCategoryModal
+                                    subCategory={category}
+                                    subjectId={course._id}
+                                  />
+                                </div>
                               </div>
+                            </CardBody>
+                          </Card>
+
+                          <div className="flex flex-col gap-2">
+                            {category.moduleList.map((module) => (
+                              <Card key={module._id}>
+                                <CardBody>
+                                  <div className="flex flex-col">
+                                    <div className="flex justify-between items-center">
+                                      <p className="text-blue">{module.name}</p>
+                                      <div className="flex gap-5">
+                                        <EditSubjectCategoryModal
+                                          subCategory={category}
+                                        />
+                                        <DeleteSubjectCategoryModal
+                                          subCategory={category}
+                                          subjectId={course._id}
+                                        />
+                                      </div>
+                                    </div>
+                                  </div>
+                                </CardBody>
+                              </Card>
                             ))}
                           </div>
-                        </div>
-                      </CardBody>
-                    </Card>
-                  ))}
+                        </Tab>
+                      ))}
+                  </Tabs>
                 </div>
               </Tab>
             ))}
