@@ -10,6 +10,7 @@ import { title } from "@/components/primitives";
 
 import AddSubjectModal from "./modals/addSubjectModal";
 import AddSubjectCategoryModal from "./modals/addSubjectCategoryModal";
+import AddModuleModal from "./modals/addModuleModal";
 import DeleteSubjectModal from "./modals/deleteSubjectModal";
 import EditSubjectModal from "./modals/editSubjectModal";
 import DeleteSubjectCategoryModal from "./modals/deleteSubjectCategoryModal";
@@ -20,7 +21,16 @@ import { BASE_URL } from "@/config/apiConfig";
 interface Course {
   _id: string;
   name: string;
-  subCategories: { _id: string; name: string; __v: number }[];
+  subCategories: {
+    _id: string;
+    name: string;
+    __v: number;
+    moduleList: {
+      _id: string;
+      name: string;
+      __v: number;
+    }[];
+  }[];
   __v: number;
 }
 
@@ -34,6 +44,23 @@ export default function ManageCoursesPage() {
     courses: Course[]
   ): { _id: string; name: string }[] => {
     return courses.map(({ _id, name }) => ({ _id, name }));
+  };
+
+  const extractSubjectsAndSubCategories = (
+    courses: Course[]
+  ): {
+    _id: string;
+    name: string;
+    subCategories: {
+      _id: string;
+      name: string;
+    }[];
+  }[] => {
+    return courses.map(({ _id, name, subCategories }) => ({
+      _id,
+      name,
+      subCategories: subCategories.map(({ _id, name }) => ({ _id, name })),
+    }));
   };
 
   useEffect(() => {
@@ -60,9 +87,10 @@ export default function ManageCoursesPage() {
   return (
     <div>
       <h1 className={title({ size: "md" })}>Manage Courses</h1>
-      <div className="mt-5 flex items-center justify-end gap-5">
+      <div className="my-5 flex items-center justify-end gap-5">
         <AddSubjectModal />
         <AddSubjectCategoryModal subjects={extractSubjects(courses)} />
+        <AddModuleModal subjects={extractSubjectsAndSubCategories(courses)} />
       </div>
       <div className="flex w-full flex-col">
         <Tabs
@@ -95,14 +123,25 @@ export default function ManageCoursesPage() {
                   {course.subCategories.map((category) => (
                     <Card key={category._id}>
                       <CardBody>
-                        <div className="flex justify-between items-center">
-                          <p className="text-blue">{category.name}</p>
-                          <div className="flex gap-5">
-                            <EditSubjectCategoryModal subCategory={category} />
-                            <DeleteSubjectCategoryModal
-                              subCategory={category}
-                              subjectId={course._id}
-                            />
+                        <div className="flex flex-col">
+                          <div className="flex justify-between items-center">
+                            <p className="text-blue">{category.name}</p>
+                            <div className="flex gap-5">
+                              <EditSubjectCategoryModal
+                                subCategory={category}
+                              />
+                              <DeleteSubjectCategoryModal
+                                subCategory={category}
+                                subjectId={course._id}
+                              />
+                            </div>
+                          </div>
+                          <div className="flex flex-col">
+                            {category.moduleList.map((module) => (
+                              <div className="" key={module._id}>
+                                {module.name}
+                              </div>
+                            ))}
                           </div>
                         </div>
                       </CardBody>
