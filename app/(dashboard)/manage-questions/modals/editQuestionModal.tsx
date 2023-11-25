@@ -106,22 +106,22 @@ const EditQuestionModal: React.FC<EditQuestionModalProps> = ({
   const [moduleList, setModuleList] = useState<Module[] | undefined>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const handleSetAnswerList = (
-    answers: { answer: string; number: number; _id: string }[],
-    correctAnswer: number[]
-  ) => {
-    const updatedAnswerList = answerList.map((answer, index) => ({
-      content: answers[index]?.answer || "",
-      isSelected: correctAnswer.includes(index + 1),
-    }));
-
-    // Update the state with the new answerList
-    setAnswerList(updatedAnswerList);
-  };
-
   // get question
   // get all courses
   useEffect(() => {
+    const handleSetAnswerList = (
+      answers: { answer: string; number: number; _id: string }[],
+      correctAnswer: number[]
+    ) => {
+      const updatedAnswerList = answerList.map((answer, index) => ({
+        content: answers[index]?.answer || "",
+        isSelected: correctAnswer.includes(index),
+      }));
+
+      // Update the state with the new answerList
+      setAnswerList(updatedAnswerList);
+    };
+
     const getQuestion = () => {
       const axiosConfig = {
         method: "GET",
@@ -139,13 +139,16 @@ const EditQuestionModal: React.FC<EditQuestionModalProps> = ({
           const correctAnswer = response.data.correctAnswer;
           const answers = response.data.answers;
           handleSetAnswerList(answers, correctAnswer);
-          // setAnswerList(()=> (response.data.answers.map((answerContent) => ())))
         })
         .catch((err) => {
           console.log(err);
         });
     };
 
+    getQuestion();
+  }, [questionId, answerList]);
+
+  useEffect(() => {
     const getCourses = () => {
       const axiosConfig = {
         method: "GET",
@@ -161,7 +164,6 @@ const EditQuestionModal: React.FC<EditQuestionModalProps> = ({
     };
 
     getCourses();
-    getQuestion();
   }, []);
 
   const editQuestion = () => {
@@ -256,7 +258,7 @@ const EditQuestionModal: React.FC<EditQuestionModalProps> = ({
     };
 
     setModuleList(filterAndMapModules(subjectCategoryList));
-  }, [subjectCategoryList, subjectCategorySelected]);
+  }, [subjectCategoryList, subjectCategorySelected, moduleList]);
 
   const handleCheckboxChange = (index: number) => {
     setAnswerList((prev) =>
