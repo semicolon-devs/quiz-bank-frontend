@@ -15,6 +15,8 @@ import DeleteSubjectModal from "./modals/deleteSubjectModal";
 import EditSubjectModal from "./modals/editSubjectModal";
 import DeleteSubjectCategoryModal from "./modals/deleteSubjectCategoryModal";
 import EditSubjectCategoryModal from "./modals/editSubjectCategoryModal";
+import DeleteModuleModal from "./modals/deleteModuleModal";
+import EditModuleModal from "./modals/editModuleModal";
 
 import { BASE_URL } from "@/config/apiConfig";
 
@@ -165,12 +167,10 @@ export default function ManageCoursesPage() {
                                     <div className="flex justify-between items-center">
                                       <p className="text-blue">{module.name}</p>
                                       <div className="flex gap-5">
-                                        <EditSubjectCategoryModal
-                                          subCategory={category}
-                                        />
-                                        <DeleteSubjectCategoryModal
-                                          subCategory={category}
-                                          subjectId={course._id}
+                                        <EditModuleModal module={module} />
+                                        <DeleteModuleModal
+                                          module={module}
+                                          subCategoryId={category._id}
                                         />
                                       </div>
                                     </div>
