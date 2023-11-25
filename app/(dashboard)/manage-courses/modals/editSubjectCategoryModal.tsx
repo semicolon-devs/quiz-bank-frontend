@@ -30,27 +30,27 @@ const EditSubjectCategoryModal: React.FC<EditSubjectCategoryModalProps> = ({
   const [loading, setLoading] = useState<boolean>(false);
 
   const editSubjectCategory = () => {
-    // setLoading(true);
-    // const axiosConfig = {
-    //   method: "POST",
-    //   url: `${BASE_URL}subjects`,
-    //   // headers: {
-    //   //   Authorization: `Bearer ${token}`,
-    //   // },
-    //   data: {
-    //     name: subject,
-    //   },
-    // };
-    // axios(axiosConfig)
-    //   .then((response) => {
-    //     console.log(response);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   })
-    //   .finally(() => {
-    //     setLoading(false);
-    //   });
+    setLoading(true);
+    const axiosConfig = {
+      method: "PATCH",
+      url: `${BASE_URL}subjects/courses/${subCategory._id}`,
+      // headers: {
+      //   Authorization: `Bearer ${token}`,
+      // },
+      data: {
+        name: subjectCategoryName,
+      },
+    };
+    axios(axiosConfig)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (

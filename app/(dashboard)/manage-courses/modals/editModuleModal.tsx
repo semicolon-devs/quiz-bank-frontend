@@ -20,37 +20,33 @@ interface EditModuleModalProps {
   module: { _id: string; name: string; __v: number };
 }
 
-const EditModuleModal: React.FC<EditModuleModalProps> = ({
-  module,
-}) => {
+const EditModuleModal: React.FC<EditModuleModalProps> = ({ module }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [moduleName, setModuleName] = useState<string>(
-    module.name
-  );
+  const [moduleName, setModuleName] = useState<string>(module.name);
   const [loading, setLoading] = useState<boolean>(false);
 
   const editModule = () => {
-    // setLoading(true);
-    // const axiosConfig = {
-    //   method: "POST",
-    //   url: `${BASE_URL}subjects`,
-    //   // headers: {
-    //   //   Authorization: `Bearer ${token}`,
-    //   // },
-    //   data: {
-    //     name: subject,
-    //   },
-    // };
-    // axios(axiosConfig)
-    //   .then((response) => {
-    //     console.log(response);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   })
-    //   .finally(() => {
-    //     setLoading(false);
-    //   });
+    setLoading(true);
+    const axiosConfig = {
+      method: "PATCH",
+      url: `${BASE_URL}subjects/module/${module._id}`,
+      // headers: {
+      //   Authorization: `Bearer ${token}`,
+      // },
+      data: {
+        name: moduleName,
+      },
+    };
+    axios(axiosConfig)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (

@@ -18,38 +18,36 @@ type Props = {};
 
 interface DeleteModuleModalProps {
   module: { _id: string; name: string; __v: number };
-  subjectId: string;
+  subCategoryId: string;
 }
 
 const DeleteModuleModal: React.FC<DeleteModuleModalProps> = ({
   module,
-  subjectId,
+  subCategoryId,
 }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [moduleName, setModuleName] = useState<string>(
-    module.name
-  );
+  const [moduleName, setModuleName] = useState<string>(module.name);
   const [loading, setLoading] = useState<boolean>(false);
 
   const deleteModule = () => {
-    // setLoading(true);
-    // const axiosConfig = {
-    //   method: "DELETE",
-    //   url: `${BASE_URL}subjects/${subjectId}/${module._id}`,
-    //   // headers: {
-    //   //   Authorization: `Bearer ${token}`,
-    //   // },
-    // };
-    // axios(axiosConfig)
-    //   .then((response) => {
-    //     console.log(response);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   })
-    //   .finally(() => {
-    //     setLoading(false);
-    //   });
+    setLoading(true);
+    const axiosConfig = {
+      method: "DELETE",
+      url: `${BASE_URL}subjects/module/${subCategoryId}/${module._id}`,
+      // headers: {
+      //   Authorization: `Bearer ${token}`,
+      // },
+    };
+    axios(axiosConfig)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
@@ -67,8 +65,8 @@ const DeleteModuleModal: React.FC<DeleteModuleModalProps> = ({
               <ModalBody>
                 <p className="">
                   Are you sure want to delete{" "}
-                  <span className="font-semibold">{moduleName}</span>{" "}
-                  module from the system?
+                  <span className="font-semibold">{moduleName}</span> module
+                  from the system?
                 </p>
               </ModalBody>
               <ModalFooter>
