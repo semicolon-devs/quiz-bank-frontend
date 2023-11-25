@@ -33,6 +33,7 @@ export default function Page({ params }: { params: { id: string } }) {
     false,
     false,
     false,
+    false,
   ]);
 
   useEffect(() => {

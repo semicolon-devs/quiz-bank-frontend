@@ -57,7 +57,7 @@ const AddModuleModal: React.FC<AddModuleModalProps> = ({ subjects }) => {
     };
 
     setSubjectCategoryList(filterAndMapSubCategories(subjects));
-  }, [subject]);
+  }, [subject, subjects]);
 
   const addNewModule = () => {
     setLoading(true);

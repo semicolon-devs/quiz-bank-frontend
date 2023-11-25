@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 
 import axios from "axios";
-// import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { Checkbox } from "@nextui-org/checkbox";
 import { Button, ButtonGroup } from "@nextui-org/button";
@@ -37,11 +36,16 @@ const difficultyLevelArr = ["Easy", "Medium", "Hard"];
 interface Course {
   _id: string;
   name: string;
-  subCategories: any[];
-  __v: number;
+  subCategories: SubCategory[];
 }
 
 interface SubCategory {
+  _id: string;
+  name: string;
+  moduleList: Module[];
+}
+
+interface Module {
   _id: string;
   name: string;
 }
@@ -52,68 +56,27 @@ export default function AddQuestionPage() {
   const [subjectSelected, setSubjectSelected] = useState<string>("");
   const [subjectCategorySelected, setSubjectCategorySelected] =
     useState<string>("");
+  const [moduleSelected, setModuleSelected] = useState<string>("");
   const [question, setQuestion] = useState<string>("");
-  const [answer01, setAnswer01] = useState<string>("");
-  const [isA01Selected, setIsA01Selected] = useState<boolean>(false);
-  const [answer02, setAnswer02] = useState<string>("");
-  const [isA02Selected, setIsA02Selected] = useState<boolean>(false);
-  const [answer03, setAnswer03] = useState<string>("");
-  const [isA03Selected, setIsA03Selected] = useState<boolean>(false);
-  const [answer04, setAnswer04] = useState<string>("");
-  const [isA04Selected, setIsA04Selected] = useState<boolean>(false);
-  const [answer05, setAnswer05] = useState<string>("");
-  const [isA05Selected, setIsA05Selected] = useState<boolean>(false);
+  const [answerList, setAnswerList] = useState<
+    { content: string; isSelected: boolean }[]
+  >([
+    { content: "", isSelected: false },
+    { content: "", isSelected: false },
+    { content: "", isSelected: false },
+    { content: "", isSelected: false },
+    { content: "", isSelected: false },
+  ]);
   const [answerExplaination, setAnswerExplaination] = useState<string>("");
   const [courses, setCourses] = useState<Course[]>([]);
-  const [subjects, setSubjects] = useState<{ _id: string; name: string }[]>([]);
-  const [subjectCategories, setSubjectCategories] = useState<
-    { _id: string; name: string }[] | null
+  // const [subjectList, setSubjectList] = useState<Course[]>([]);
+  const [subjectCategoryList, setSubjectCategoryList] = useState<
+    SubCategory[] | undefined
   >([]);
+  const [moduleList, setModuleList] = useState<Module[] | undefined>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const answers = [
-    {
-      number: 1,
-      label: "Answer 01",
-      selectedState: isA01Selected,
-      setSelectedState: setIsA01Selected,
-      state: answer01,
-      setState: setAnswer01,
-    },
-    {
-      number: 2,
-      label: "Answer 02",
-      selectedState: isA02Selected,
-      setSelectedState: setIsA02Selected,
-      state: answer02,
-      setState: setAnswer02,
-    },
-    {
-      number: 3,
-      label: "Answer 03",
-      selectedState: isA03Selected,
-      setSelectedState: setIsA03Selected,
-      state: answer03,
-      setState: setAnswer03,
-    },
-    {
-      number: 4,
-      label: "Answer 04",
-      selectedState: isA04Selected,
-      setSelectedState: setIsA04Selected,
-      state: answer04,
-      setState: setAnswer04,
-    },
-    {
-      number: 5,
-      label: "Answer 05",
-      selectedState: isA05Selected,
-      setSelectedState: setIsA05Selected,
-      state: answer05,
-      setState: setAnswer05,
-    },
-  ];
-
+  // get all courses
   useEffect(() => {
     const getCourses = () => {
       setLoading(true);
@@ -136,34 +99,13 @@ export default function AddQuestionPage() {
     getCourses();
   }, []);
 
-  useEffect(() => {
-    const extractSubjects = () => {
-      setSubjects(courses.map(({ _id, name }) => ({ _id, name })));
-    };
-
-    extractSubjects();
-  }, [courses]);
-
-  useEffect(() => {
-    const getSubCategories = (subjectId: string): SubCategory[] | null => {
-      const subject = courses.find((s) => s._id === subjectId);
-
-      if (subject) {
-        return subject.subCategories.map(({ _id, name }) => ({ _id, name }));
-      }
-
-      return null;
-    };
-
-    setSubjectCategories(getSubCategories(subjectSelected));
-  }, [subjectSelected, courses]);
-
+  // add new quetion
   const handleAddQuestionButtonClick = () => {
     const getCorrectAnswer = () => {
       const correctAnswerArr: number[] = [];
-      answers.map((answer) => {
-        if (answer.selectedState) {
-          correctAnswerArr.push(answer.number);
+      answerList.map((answer, index) => {
+        if (answerList[index].isSelected) {
+          correctAnswerArr.push(index);
         }
       });
       return correctAnswerArr;
@@ -176,14 +118,15 @@ export default function AddQuestionPage() {
       data: {
         subject: subjectSelected,
         subCategory: subjectCategorySelected,
+        module: moduleSelected,
         type: "MCQ",
         question: question,
         answers: [
-          { number: 1, answer: answer01 },
-          { number: 2, answer: answer02 },
-          { number: 3, answer: answer03 },
-          { number: 4, answer: answer04 },
-          { number: 5, answer: answer05 },
+          { number: 1, answer: answerList[0].content },
+          { number: 2, answer: answerList[1].content },
+          { number: 3, answer: answerList[2].content },
+          { number: 4, answer: answerList[3].content },
+          { number: 5, answer: answerList[4].content },
         ],
         correctAnswer: getCorrectAnswer(),
         explaination: answerExplaination,
@@ -200,6 +143,66 @@ export default function AddQuestionPage() {
       .finally(() => {
         setLoading(false);
       });
+  };
+
+  useEffect(() => {
+    const filterAndMapSubCategories = (
+      courses: Course[]
+    ): SubCategory[] | undefined => {
+      const targetSubject = courses.find(
+        (subjectFind) => subjectFind._id === subjectSelected
+      );
+
+      if (!targetSubject) {
+        return undefined;
+      }
+
+      return targetSubject.subCategories.map(({ _id, name, moduleList }) => ({
+        _id,
+        name,
+        moduleList,
+      }));
+    };
+
+    setSubjectCategoryList(filterAndMapSubCategories(courses));
+  }, [courses, subjectSelected]);
+
+  useEffect(() => {
+    const filterAndMapModules = (
+      subjectCategoryList: SubCategory[] | undefined
+    ): Module[] | undefined => {
+      const targetSubjectCategory =
+        subjectCategoryList &&
+        subjectCategoryList.find(
+          (subjectCategoryFind) =>
+            subjectCategoryFind._id === subjectCategorySelected
+        );
+
+      if (!targetSubjectCategory) {
+        return undefined;
+      }
+
+      return targetSubjectCategory.moduleList.map(({ _id, name }) => ({
+        _id,
+        name,
+      }));
+    };
+
+    setModuleList(filterAndMapModules(subjectCategoryList));
+  }, [subjectCategoryList, subjectCategorySelected]);
+
+  const handleCheckboxChange = (index: number) => {
+    setAnswerList((prev) =>
+      prev.map((item, i) =>
+        i === index ? { ...item, isSelected: !item.isSelected } : item
+      )
+    );
+  };
+
+  const handleQuillChange = (index: number, value: string) => {
+    setAnswerList((prev) =>
+      prev.map((item, i) => (i === index ? { ...item, content: value } : item))
+    );
   };
 
   return (
@@ -223,11 +226,12 @@ export default function AddQuestionPage() {
           onChange={(e) => setSubjectSelected(e.target.value)}
         >
           <option value="">Select a subject</option>
-          {subjects.map((item) => (
-            <option value={item._id} key={item._id}>
-              {item.name}
-            </option>
-          ))}
+          {courses &&
+            courses.map((item) => (
+              <option value={item._id} key={item._id}>
+                {item.name}
+              </option>
+            ))}
         </select>
         <p className="font-semibold">Select Subject Category</p>
         <select
@@ -235,8 +239,21 @@ export default function AddQuestionPage() {
           onChange={(e) => setSubjectCategorySelected(e.target.value)}
         >
           <option value="">Select a subject category</option>
-          {subjectCategories &&
-            subjectCategories.map((item) => (
+          {subjectCategoryList &&
+            subjectCategoryList.map((item) => (
+              <option value={item._id} key={item._id}>
+                {item.name}
+              </option>
+            ))}
+        </select>
+        <p className="font-semibold">Select Module</p>
+        <select
+          value={moduleSelected}
+          onChange={(e) => setModuleSelected(e.target.value)}
+        >
+          <option value="">Select a module</option>
+          {moduleList &&
+            moduleList.map((item) => (
               <option value={item._id} key={item._id}>
                 {item.name}
               </option>
@@ -260,20 +277,21 @@ export default function AddQuestionPage() {
           <p className="col-span-5 font-semibold">Answer Content</p>
         </div>
         <div className="flex flex-col gap-6 mt-6">
-          {answers.map((item) => (
-            <div className="grid grid-cols-6" key={item.label}>
+          {answerList.map((item, index) => (
+            <div className="grid grid-cols-6" key={index}>
               <div>
                 <Checkbox
-                  isSelected={item.selectedState}
-                  onValueChange={item.setSelectedState}
+                  isSelected={item.isSelected}
+                  onValueChange={() => handleCheckboxChange(index)}
                 ></Checkbox>
               </div>
               <div className="col-span-5">
-                <p className="mb-3 font-semibold">{item.label}</p>
+                <p className="mb-3 font-semibold">Question no {index + 1}</p>
                 <ReactQuill
                   modules={modules}
                   theme="snow"
-                  onChange={item.setState}
+                  value={item.content}
+                  onChange={(value) => handleQuillChange(index, value)}
                   placeholder="Answer content goes here..."
                   className="bg-white"
                 />
