@@ -109,18 +109,17 @@ const EditQuestionModal: React.FC<EditQuestionModalProps> = ({
   // get question
   // get all courses
   useEffect(() => {
-    // const handleSetAnswerList = (
-    //   answers: { answer: string; number: number; _id: string }[],
-    //   correctAnswer: number[]
-    // ) => {
-    //   const updatedAnswerList = answerList.map((answer, index) => ({
-    //     content: answers[index]?.answer || "",
-    //     isSelected: correctAnswer.includes(index),
-    //   }));
-
-    //   // Update the state with the new answerList
-    //   setAnswerList(updatedAnswerList);
-    // };
+    const handleSetAnswerList = (
+      answers: { answer: string; number: number; _id: string }[],
+      correctAnswer: number[]
+    ) => {
+      setAnswerList((prevAnswerList) =>
+        prevAnswerList.map((answer, index) => ({
+          content: answers[index]?.answer || "",
+          isSelected: correctAnswer.includes(index),
+        }))
+      );
+    };
 
     const getQuestion = () => {
       const axiosConfig = {
@@ -138,7 +137,7 @@ const EditQuestionModal: React.FC<EditQuestionModalProps> = ({
           setAnswerExplaination(response.data.explaination);
           const correctAnswer = response.data.correctAnswer;
           const answers = response.data.answers;
-          // handleSetAnswerList(answers, correctAnswer);
+          handleSetAnswerList(answers, correctAnswer);
         })
         .catch((err) => {
           console.log(err);
@@ -235,8 +234,7 @@ const EditQuestionModal: React.FC<EditQuestionModalProps> = ({
   }, [courses, subjectSelected]);
 
   useEffect(() => {
-    const filterAndMapModules = (
-    ): Module[] | undefined => {
+    const filterAndMapModules = (): Module[] | undefined => {
       const targetSubjectCategory =
         subjectCategoryList &&
         subjectCategoryList.find(

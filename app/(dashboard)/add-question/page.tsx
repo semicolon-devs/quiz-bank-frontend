@@ -315,7 +315,7 @@ export default function AddQuestionPage() {
         className="mt-5"
         onPress={() => handleAddQuestionButtonClick()}
       >
-        {loading ? <Spinner /> : "Add Question"}
+        {loading ? <Spinner color="default"/> : "Add Question"}
       </Button>
     </div>
   );

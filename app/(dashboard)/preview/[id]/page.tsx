@@ -38,6 +38,14 @@ export default function Page({ params }: { params: { id: string } }) {
 
   useEffect(() => {
     const getQuestion = () => {
+      const handleSetAnswersSelected = (correctAnswer: number[]) => {
+        setAnswersSelected((prevAnswerList) =>
+          prevAnswerList.map((answer, index) =>
+            correctAnswer.includes(index)
+          )
+        );
+      };
+
       setLoading(true);
       const axiosConfig = {
         method: "GET",
@@ -46,6 +54,8 @@ export default function Page({ params }: { params: { id: string } }) {
       axios(axiosConfig)
         .then((response) => {
           setQuestion(response.data);
+          const correctAnswer = response.data.correctAnswer;
+          handleSetAnswersSelected(correctAnswer);
         })
         .catch((err) => {
           console.log(err);
@@ -69,14 +79,14 @@ export default function Page({ params }: { params: { id: string } }) {
           question.answers.map((answer, index) => (
             <div className="flex gap-5" key={answer._id}>
               <Checkbox
-                isSelected={answersSelected[index + 1]}
-                onValueChange={() =>
-                  setAnswersSelected((prev) => [
-                    ...prev.slice(0, index + 1),
-                    !prev[index + 1],
-                    ...prev.slice(index + 2),
-                  ])
-                }
+                isSelected={answersSelected[index]}
+                // onValueChange={() =>
+                //   setAnswersSelected((prev) => [
+                //     ...prev.slice(0, index + 1),
+                //     !prev[index + 1],
+                //     ...prev.slice(index + 2),
+                //   ])
+                // }
               ></Checkbox>
               <div
                 className="bg-white p-3 rounded-xl w-full"
