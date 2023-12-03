@@ -1,4 +1,5 @@
 import { title } from "@/components/primitives";
+import { getAccess } from "@/helpers/token";
 
 export default function ProfilePage() {
   return (

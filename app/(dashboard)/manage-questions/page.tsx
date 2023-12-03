@@ -17,10 +17,11 @@ import {
   getKeyValue,
 } from "@nextui-org/table";
 
-import { EyeIcon, EditIcon, DeleteIcon } from "@/components/icons";
+import { EyeOpenIcon, EditIcon, DeleteIcon } from "@/components/icons";
 
 import { title } from "@/components/primitives";
 import { BASE_URL } from "@/config/apiConfig";
+import { getAccess } from "@/helpers/token";
 
 interface Question {
   answers: any[];
@@ -126,7 +127,7 @@ export default function ManageQuestionsPage() {
                 className="text-lg text-blue cursor-pointer active:opacity-50"
                 onClick={() => router.push(`/preview/${question._id}`)}
               >
-                <EyeIcon classes="w-4 h-4" />
+                <EyeOpenIcon classes="w-4 h-4" />
               </span>
               <span className="text-lg text-blue cursor-pointer active:opacity-50">
                 <EditQuestionModal questionId={question._id} />

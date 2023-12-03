@@ -13,20 +13,15 @@ import axios from "axios";
 import { BASE_URL } from "@/config/apiConfig";
 import { setAuthToken, setRefreshToken } from "@/helpers/token";
 
-export default function SigninPage() {
+export default function ForgotPasswordPage() {
   const [email, setEmail] = useState<string>();
-  const [password, setPassword] = useState<string>();
-  const [isVisible, setIsVisible] = useState<boolean>(false);
 
-  const toggleVisibility = () => setIsVisible(!isVisible);
-
-  const signIn = () => {
+  const forgotPassword = () => {
     const axiosConfig = {
       method: "POST",
       url: `${BASE_URL}auth/login`,
       data: {
         email: email,
-        password: password,
       },
     };
     axios(axiosConfig)
@@ -46,7 +41,13 @@ export default function SigninPage() {
     <div className="flex flex-col w-full h-full items-center justify-center">
       <Card className="bg-white w-96">
         <CardBody className="flex flex-col gap-3">
-          <p className="text-blue capitalize font-bold text-xl">sign in</p>
+          <p className="text-blue capitalize font-bold text-xl">
+            forgot password?
+          </p>
+          <p className="text-blue text-sm">
+            No worries! Just enter your email and we'll send you a reset
+            password link.
+          </p>
           <Input
             label="Email"
             placeholder="Enter email"
@@ -55,40 +56,18 @@ export default function SigninPage() {
             className="w-full"
             variant="bordered"
           />
-          <Input
-            label="Password"
-            placeholder="Enter password"
-            value={password}
-            onValueChange={setPassword}
-            endContent={
-              <button
-                className="focus:outline-none"
-                type="button"
-                onClick={toggleVisibility}
-              >
-                {isVisible ? (
-                  <EyeCloseIcon classes="text-2xl text-default-400 pointer-events-none h-5 w-5" />
-                ) : (
-                  <EyeOpenIcon classes="text-2xl text-default-400 pointer-events-none h-5 w-5" />
-                )}
-              </button>
-            }
-            type={isVisible ? "text" : "password"}
-            className="w-full"
-            variant="bordered"
-          />
-          <Button color="primary" onClick={signIn}>
-            <p className="capitalize font-semibold">sign in</p>
+          <Button color="primary" onClick={forgotPassword}>
+            <p className="capitalize font-semibold">send recovery email</p>
           </Button>
         </CardBody>
       </Card>
       <p className="mt-5 text-sm text-dark">
-        Don't have an account?{" "}
+        Just remebered the password?{" "}
         <NextLink
           className="capitalize font-semibold text-blue"
-          href="/sign-up"
+          href="/sign-in"
         >
-          sign up
+          sign in
         </NextLink>
       </p>
     </div>

@@ -13,20 +13,20 @@ import axios from "axios";
 import { BASE_URL } from "@/config/apiConfig";
 import { setAuthToken, setRefreshToken } from "@/helpers/token";
 
-export default function SigninPage() {
-  const [email, setEmail] = useState<string>();
+export default function ResetPasswordPage() {
   const [password, setPassword] = useState<string>();
+  const [confirmPassword, setConfirmPassword] = useState<string>();
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   const toggleVisibility = () => setIsVisible(!isVisible);
 
-  const signIn = () => {
+  const resetPassword = () => {
     const axiosConfig = {
       method: "POST",
       url: `${BASE_URL}auth/login`,
       data: {
-        email: email,
-        password: password,
+        // email: email,
+        // password: password,
       },
     };
     axios(axiosConfig)
@@ -46,15 +46,12 @@ export default function SigninPage() {
     <div className="flex flex-col w-full h-full items-center justify-center">
       <Card className="bg-white w-96">
         <CardBody className="flex flex-col gap-3">
-          <p className="text-blue capitalize font-bold text-xl">sign in</p>
-          <Input
-            label="Email"
-            placeholder="Enter email"
-            value={email}
-            onValueChange={setEmail}
-            className="w-full"
-            variant="bordered"
-          />
+          <p className="text-blue capitalize font-bold text-xl">
+            new password
+          </p>
+          <p className="text-blue text-sm">
+            Please create a new password for your account
+          </p>
           <Input
             label="Password"
             placeholder="Enter password"
@@ -77,18 +74,40 @@ export default function SigninPage() {
             className="w-full"
             variant="bordered"
           />
-          <Button color="primary" onClick={signIn}>
-            <p className="capitalize font-semibold">sign in</p>
+          <Input
+            label="Confirm Password"
+            placeholder="Confirm password"
+            value={confirmPassword}
+            onValueChange={setConfirmPassword}
+            endContent={
+              <button
+                className="focus:outline-none"
+                type="button"
+                onClick={toggleVisibility}
+              >
+                {isVisible ? (
+                  <EyeCloseIcon classes="text-2xl text-default-400 pointer-events-none h-5 w-5" />
+                ) : (
+                  <EyeOpenIcon classes="text-2xl text-default-400 pointer-events-none h-5 w-5" />
+                )}
+              </button>
+            }
+            type={isVisible ? "text" : "password"}
+            className="w-full"
+            variant="bordered"
+          />
+          <Button color="primary" onClick={resetPassword}>
+            <p className="capitalize font-semibold">send recovery email</p>
           </Button>
         </CardBody>
       </Card>
       <p className="mt-5 text-sm text-dark">
-        Don't have an account?{" "}
+        Just remebered the password?{" "}
         <NextLink
           className="capitalize font-semibold text-blue"
-          href="/sign-up"
+          href="/sign-in"
         >
-          sign up
+          sign in
         </NextLink>
       </p>
     </div>
