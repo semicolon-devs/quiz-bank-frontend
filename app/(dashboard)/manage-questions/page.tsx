@@ -78,7 +78,7 @@ export default function ManageQuestionsPage() {
     setQuestionRow(extractQuestionRows(questions));
   }, [questions]);
 
-  const getQuestions = () => {
+  const getQuestions = async () => {
     setLoading(true);
     const axiosConfig = {
       method: "GET",

@@ -6,7 +6,7 @@ import Cookies from "js-cookie";
 export const getAuthToken = (): string | null => Cookies.get("session") ?? null;
 export const getRefreshToken = (): string | null =>
   Cookies.get("refreshToken") ?? null;
-const domain = window.location.hostname;
+const domain = typeof window !== "undefined" ? window.location.hostname : "";
 
 export const setAuthToken = (token: string) =>
   Cookies.set("session", token, {
