@@ -49,7 +49,7 @@ export default function SignUpPage() {
     <div className="flex flex-col w-full h-full items-center justify-center">
       <Card className="bg-white w-96">
         <CardBody className="flex flex-col gap-3">
-          <p className="text-blue capitalize font-bold  text-xl pl-3">sign up</p>
+          <p className="text-blue capitalize font-bold  text-xl">sign up</p>
           <Input
             label="Email"
             placeholder="Enter email"
