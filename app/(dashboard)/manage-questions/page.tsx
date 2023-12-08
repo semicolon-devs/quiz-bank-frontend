@@ -68,6 +68,9 @@ export default function ManageQuestionsPage() {
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}questions`,
+        headers: {
+          Authorization: `Bearer ${getAccess()}`,
+        },
       };
       axios(axiosConfig)
         .then((response) => {

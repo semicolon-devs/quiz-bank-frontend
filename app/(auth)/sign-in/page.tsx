@@ -33,13 +33,12 @@ export default function SigninPage() {
       .then((response) => {
         setAuthToken(response.data.accessToken);
         setRefreshToken(response.data.refreshToken);
+        window.location.href = "/home";
       })
       .catch((err) => {
         console.log(err);
       })
-      .finally(() => {
-        window.location.href = "/home";
-      });
+      .finally(() => {});
   };
 
   return (

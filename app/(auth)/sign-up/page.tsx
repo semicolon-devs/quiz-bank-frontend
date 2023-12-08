@@ -21,27 +21,32 @@ export default function SignUpPage() {
   const [confirmPassword, setConfirmPassword] = useState<string>();
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
+  console.log(firstName);
+
   const toggleVisibility = () => setIsVisible(!isVisible);
 
   const signUp = () => {
     const axiosConfig = {
       method: "POST",
-      url: `${BASE_URL}auth/login`,
+      url: `${BASE_URL}auth/register`,
       data: {
+        firstname: firstName,
+        lastname: lastName,
         email: email,
         password: password,
       },
     };
     axios(axiosConfig)
       .then((response) => {
-        setAuthToken(response.data.accessToken);
-        setRefreshToken(response.data.refreshToken);
+        // setAuthToken(response.data.accessToken);
+        // setRefreshToken(response.data.refreshToken);
+        console.log(response);
       })
       .catch((err) => {
         console.log(err);
       })
       .finally(() => {
-        window.location.href = "/home";
+        // window.location.href = "/home";
       });
   };
 
