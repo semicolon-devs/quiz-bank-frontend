@@ -1,3 +1,5 @@
+import QuitQuizModal from "./modals/QuitQuizModal";
+
 export default function QuizLayout({
   children,
   params,
@@ -45,8 +47,11 @@ export default function QuizLayout({
 
   return (
     <section className="w-full h-full">
-      <div className="border-b border-dark/25 h-10">
-        <p className="font-semibold text-lg">Bio Chemistry Quiz - #{params.quizId}</p>
+      <div className="border-b border-dark/25 p-3 flex justify-between items-center">
+        <p className="font-semibold text-lg">
+          Bio Chemistry Quiz - #{params.quizId}
+        </p>
+        <QuitQuizModal />
       </div>
       <div className="flex">
         <div className="p-6 grid grid-cols-5 gap-2 h-max">
@@ -62,7 +67,9 @@ export default function QuizLayout({
               </div>
             ))}
         </div>
-        <div className="p-6 flex flex-grow border-l border-dark/25 ">{children}</div>
+        <div className="p-6 flex flex-grow border-l border-dark/25 ">
+          {children}
+        </div>
       </div>
     </section>
   );

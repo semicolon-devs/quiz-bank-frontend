@@ -69,7 +69,10 @@ export default function QuizDetailsPage({
   return (
     <div className="w-full">
       {question && (
-        <div dangerouslySetInnerHTML={{ __html: question.question }} className="font-semibold"/>
+        <div
+          dangerouslySetInnerHTML={{ __html: question.question }}
+          className="font-semibold"
+        />
       )}
       <div className="flex flex-col gap-2 mt-5">
         {question &&
