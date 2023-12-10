@@ -22,6 +22,7 @@ import { Spinner } from "@nextui-org/spinner";
 import { BASE_URL } from "@/config/apiConfig";
 
 import { EditIcon } from "@/components/icons";
+import { getAccess } from "@/helpers/token";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
@@ -125,6 +126,9 @@ const EditQuestionModal: React.FC<EditQuestionModalProps> = ({
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}questions/${questionId}`,
+        headers: {
+          Authorization: `Bearer ${getAccess()}`,
+        },
       };
       axios(axiosConfig)
         .then((response) => {
@@ -152,6 +156,9 @@ const EditQuestionModal: React.FC<EditQuestionModalProps> = ({
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}subjects`,
+        headers: {
+          Authorization: `Bearer ${getAccess()}`,
+        },
       };
       axios(axiosConfig)
         .then((response) => {
@@ -180,9 +187,9 @@ const EditQuestionModal: React.FC<EditQuestionModalProps> = ({
     const axiosConfig = {
       method: "PATCH",
       url: `${BASE_URL}questions/${questionId}`,
-      // headers: {
-      //   Authorization: `Bearer ${token}`,
-      // },
+      headers: {
+        Authorization: `Bearer ${getAccess()}`,
+      },
       data: {
         subject: subjectSelected,
         subCategory: subjectCategorySelected,

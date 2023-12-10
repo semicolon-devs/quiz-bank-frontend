@@ -7,6 +7,7 @@ import { Checkbox } from "@nextui-org/checkbox";
 import { Button, ButtonGroup } from "@nextui-org/button";
 
 import { BASE_URL } from "@/config/apiConfig";
+import { getAccess } from "@/helpers/token";
 
 interface Question {
   answers: { number: number; answer: string; _id: string }[];
@@ -40,9 +41,7 @@ export default function Page({ params }: { params: { id: string } }) {
     const getQuestion = () => {
       const handleSetAnswersSelected = (correctAnswer: number[]) => {
         setAnswersSelected((prevAnswerList) =>
-          prevAnswerList.map((answer, index) =>
-            correctAnswer.includes(index)
-          )
+          prevAnswerList.map((answer, index) => correctAnswer.includes(index))
         );
       };
 
@@ -50,6 +49,9 @@ export default function Page({ params }: { params: { id: string } }) {
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}questions/${params.id}`,
+        headers: {
+          Authorization: `Bearer ${getAccess()}`,
+        },
       };
       axios(axiosConfig)
         .then((response) => {

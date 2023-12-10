@@ -40,6 +40,7 @@ export const getAccess = () => {
     if (!refreshToken) {
       // navigate to unAuthorized page or login page here
       // this point means user not logged in or both tokens expired
+        window.location.href = "/sign-in";
     } else {
       const axiosConfig = {
         method: "POST",

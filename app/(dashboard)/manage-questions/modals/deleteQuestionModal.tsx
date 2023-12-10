@@ -15,6 +15,7 @@ import { Input } from "@nextui-org/input";
 import { DeleteIcon } from "@/components/icons";
 
 import { BASE_URL } from "@/config/apiConfig";
+import { getAccess } from "@/helpers/token";
 
 type Props = {};
 
@@ -40,9 +41,9 @@ const DeleteQuestionModal: React.FC<DeleteQuestionModalProps> = ({
     const axiosConfig = {
       method: "DELETE",
       url: `${BASE_URL}questions/${question._id}`,
-      // headers: {
-      //   Authorization: `Bearer ${token}`,
-      // },
+      headers: {
+        Authorization: `Bearer ${getAccess()}`,
+      },
     };
     axios(axiosConfig)
       .then((response) => {
