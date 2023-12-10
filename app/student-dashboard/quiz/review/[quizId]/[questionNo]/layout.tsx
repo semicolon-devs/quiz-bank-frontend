@@ -9,35 +9,33 @@ export default function QuizLayout({
     _id: number;
     status: string;
   }[] = [
-    { _id: 1, status: "answered" },
-    { _id: 2, status: "answered" },
-    { _id: 3, status: "answered" },
-    { _id: 4, status: "viewed" },
-    { _id: 5, status: "answered" },
-    { _id: 6, status: "answered" },
-    { _id: 7, status: "answered" },
-    { _id: 8, status: "answered" },
-    { _id: 9, status: "answered" },
-    { _id: 10, status: "active" },
-    { _id: 11, status: "not viewed" },
-    { _id: 12, status: "not viewed" },
-    { _id: 13, status: "not viewed" },
-    { _id: 14, status: "not viewed" },
-    { _id: 15, status: "not viewed" },
-    { _id: 16, status: "not viewed" },
-    { _id: 17, status: "not viewed" },
-    { _id: 18, status: "not viewed" },
-    { _id: 19, status: "not viewed" },
-    { _id: 20, status: "not viewed" },
+    { _id: 1, status: "correct" },
+    { _id: 2, status: "correct" },
+    { _id: 3, status: "correct" },
+    { _id: 4, status: "correct" },
+    { _id: 5, status: "correct" },
+    { _id: 6, status: "incorrect" },
+    { _id: 7, status: "correct" },
+    { _id: 8, status: "correct" },
+    { _id: 9, status: "correct" },
+    { _id: 10, status: "correct" },
+    { _id: 11, status: "correct" },
+    { _id: 12, status: "incorrect" },
+    { _id: 13, status: "correct" },
+    { _id: 14, status: "correct" },
+    { _id: 15, status: "correct" },
+    { _id: 16, status: "correct" },
+    { _id: 17, status: "correct" },
+    { _id: 18, status: "correct" },
+    { _id: 19, status: "correct" },
+    { _id: 20, status: "correct" },
   ];
 
   const questionBlockStatus = (status: string) => {
-    if (status === "not viewed") {
-      return "text-blue bg-white";
-    } else if (status === "answered") {
-      return "text-white bg-blue";
-    } else if (status === "active") {
-      return "text-blue bg-blue/25";
+    if (status === "incorrect") {
+      return "text-white bg-red border-red/25";
+    } else if (status === "correct") {
+      return "text-white bg-blue border-blue/25";
     } else {
       return "text-blue bg-white";
     }
@@ -55,7 +53,7 @@ export default function QuizLayout({
           {questionBlocks &&
             questionBlocks.map((block, index) => (
               <div
-                className={`border border-blue/25 rounded-md w-9 h-7 flex justify-center items-center font-semibold ${questionBlockStatus(
+                className={`border rounded-md w-9 h-7 flex justify-center items-center font-semibold ${questionBlockStatus(
                   block.status
                 )}`}
                 key={block._id}

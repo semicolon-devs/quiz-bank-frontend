@@ -96,6 +96,12 @@ export default function QuizDetailsPage({
             </div>
           ))}
       </div>
+      {question && (
+        <div
+          className="border border-blue p-3 rounded-xl w-full mt-5"
+          dangerouslySetInnerHTML={{ __html: question.explaination }}
+        />
+      )}
     </div>
   );
 }
