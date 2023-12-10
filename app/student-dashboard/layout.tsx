@@ -1,7 +1,7 @@
 import { Navbar } from "@/components/navbar";
 import { Sidebar } from "@/components/sidebar";
 
-export default function SigninLayout({
+export default function StudentDashboardLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -11,7 +11,7 @@ export default function SigninLayout({
       <Sidebar admin={false} />
       <div className="relative flex flex-col flex-grow">
         <Navbar />
-        <main className="p-6 overflow-y-auto">{children}</main>
+        <main className="p-6 overflow-y-auto h-full">{children}</main>
       </div>
     </div>
   );
