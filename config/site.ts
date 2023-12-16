@@ -10,8 +10,13 @@ export const siteConfig = {
       icon: "HomeIcon",
     },
     {
-      label: "Create Q Pack",
-      href: "/create-q-pack",
+      label: "Manage Q Papers",
+      href: "/manage-q-papers",
+      icon: "CreateQBankIcon",
+    },
+    {
+      label: "Create Q Paper",
+      href: "/create-q-paper",
       icon: "CreateQBankIcon",
     },
     {
