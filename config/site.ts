@@ -15,11 +15,6 @@ export const siteConfig = {
       icon: "CreateQBankIcon",
     },
     {
-      label: "Create Q Paper",
-      href: "/create-q-paper",
-      icon: "CreateQBankIcon",
-    },
-    {
       label: "Manage Questions",
       href: "/manage-questions",
       icon: "ManageQuestionsIcon",

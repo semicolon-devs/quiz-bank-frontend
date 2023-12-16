@@ -395,3 +395,39 @@ export const EyeCloseIcon = (props: { classes: string }) => (
     <path d="M17.821 6.593 14.964 9.45a4.952 4.952 0 0 1-5.514 5.514L7.665 16.75c.767.165 1.55.25 2.335.251 6.453 0 10-5.258 10-7 0-1.166-1.637-2.874-2.179-3.407Z" />
   </svg>
 );
+
+export const MinusIcon = (props: { classes: string }) => (
+  <svg
+    className={props.classes}
+    aria-hidden="true"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 18 2"
+  >
+    <path
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M1 1h16"
+    />
+  </svg>
+);
+
+export const PlusIcon = (props: { classes: string }) => (
+  <svg
+    className={props.classes}
+    aria-hidden="true"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 18 18"
+  >
+    <path
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M9 1v16M1 9h16"
+    />
+  </svg>
+);

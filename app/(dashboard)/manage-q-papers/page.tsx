@@ -46,12 +46,12 @@ const QPapers = [
 
 export default function CreateQPackPage() {
   const renderCell = React.useCallback(
-    (QPapers: QPaper, columnKey: React.Key) => {
-      const cellValue = QPapers[columnKey as keyof QPaper];
+    (QPaper: QPaper, columnKey: React.Key) => {
+      const cellValue = QPaper[columnKey as keyof QPaper];
 
       switch (columnKey) {
         case "name":
-          return <div>{QPapers.name}</div>;
+          return <div>{QPaper.name}</div>;
         case "paperId":
           return (
             <div className="flex flex-col">
