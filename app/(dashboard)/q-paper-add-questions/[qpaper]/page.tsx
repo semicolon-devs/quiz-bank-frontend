@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 import {
   Table,
   TableHeader,
@@ -12,7 +14,10 @@ import {
 import { Chip } from "@nextui-org/chip";
 import { MinusIcon, EyeOpenIcon, PlusIcon } from "@/components/icons";
 
+import { BASE_URL } from "@/config/apiConfig";
+import { getAccess } from "@/helpers/token";
 import { title } from "@/components/primitives";
+import AddQuestionModal from "./modals/addQuestionModal";
 
 const columns = [
   { name: "QUESTION", uid: "question" },
@@ -22,6 +27,17 @@ const columns = [
   { name: "DIFFICULTY LEVEL", uid: "difficulty" },
   { name: "ACTIONS", uid: "actions" },
 ];
+
+interface QPaper {
+  paperId: string;
+  name: string;
+  timeInMinutes: number;
+  isTimed: boolean;
+  paperType: string;
+  questions: Question[];
+  _id: string;
+  __v: number;
+}
 
 interface Question {
   _id: string;
@@ -106,76 +122,69 @@ const selectedQuestions: Question[] = [
   },
 ];
 
-const allQuestions: Question[] = [
-  {
-    _id: "656272a15924ffb42375caec",
-    subject: {
-      _id: "65546614c33fb7a51b895f28",
-      name: "Physics",
-      subCategories: [
-        "6554665fc33fb7a51b895f30",
-        "65546667c33fb7a51b895f34",
-        "65578d1523b28f6d5299fb79",
-      ],
-      __v: 0,
-    },
-    subCategory: {
-      _id: "6554665fc33fb7a51b895f30",
-      name: "Nuclear Physics",
-      __v: 0,
-      moduleList: ["65610b42a14c6efc0a94fe68"],
-    },
-    module: {
-      _id: "65610b42a14c6efc0a94fe68",
-      name: "Sustainable Nuclear Phyisics",
-      __v: 0,
-    },
-    difficulty: "Hard",
-    type: "MCQ",
-    question:
-      "<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,</p>",
-    answers: [
-      {
-        number: 1,
-        answer: "<p>a1</p>",
-        _id: "657560e1ce71e57992639451",
-      },
-      {
-        number: 2,
-        answer: "<p>a2</p>",
-        _id: "657560e1ce71e57992639452",
-      },
-      {
-        number: 3,
-        answer: "<p>a3</p>",
-        _id: "657560e1ce71e57992639453",
-      },
-      {
-        number: 4,
-        answer: "<p>a4</p>",
-        _id: "657560e1ce71e57992639454",
-      },
-      {
-        number: 5,
-        answer: "<p>a5</p>",
-        _id: "657560e1ce71e57992639455",
-      },
-    ],
-    correctAnswer: [0, 2],
-    explaination: "<p>explanation</p>",
-    __v: 0,
-  },
-];
-
 export default function CreateQPackPage({
   params,
 }: {
   params: { qpaper: string };
 }) {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [allQuestionList, setAllQuestionList] = useState<Question[]>([]);
   const [selectedQuestionRow, setSelectedQuestionRow] = useState<QuestionRow[]>(
     []
   );
   const [allQuestionRow, setAllQuestionRow] = useState<QuestionRow[]>([]);
+  const [qPaper, setQPaper] = useState<QPaper>();
+
+  console.log(qPaper);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const getQuestions = async () => {
+      setLoading(true);
+      const axiosConfig = {
+        method: "GET",
+        url: `${BASE_URL}questions`,
+        headers: {
+          Authorization: `Bearer ${getAccess()}`,
+        },
+      };
+      axios(axiosConfig)
+        .then((response) => {
+          setAllQuestionList(response.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    };
+
+    const getQPaper = () => {
+      setLoading(true);
+      const axiosConfig = {
+        method: "GET",
+        url: `${BASE_URL}papers/${params.qpaper}`,
+        headers: {
+          Authorization: `Bearer ${getAccess()}`,
+        },
+      };
+      axios(axiosConfig)
+        .then((response) => {
+          setQPaper(response.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    };
+
+    getQuestions();
+    getQPaper();
+  }, [params.qpaper]);
 
   useEffect(() => {
     const regex: RegExp = /(<([^>]+)>)/gi;
@@ -194,8 +203,8 @@ export default function CreateQPackPage({
     };
 
     setSelectedQuestionRow(extractQuestionRows(selectedQuestions));
-    setAllQuestionRow(extractQuestionRows(allQuestions));
-  }, []);
+    setAllQuestionRow(extractQuestionRows(allQuestionList));
+  }, [allQuestionList]);
 
   const renderSelectedQuestionsCell = React.useCallback(
     (question: QuestionRow, columnKey: React.Key) => {
@@ -235,7 +244,7 @@ export default function CreateQPackPage({
     },
     []
   );
-  
+
   const renderAllQuestionsCell = React.useCallback(
     (question: QuestionRow, columnKey: React.Key) => {
       const cellValue = question[columnKey as keyof QuestionRow];
@@ -255,16 +264,16 @@ export default function CreateQPackPage({
           return (
             <div className="relative flex items-center gap-2">
               <Chip size="sm" color="secondary">
-                <span className="text-lg text-white cursor-pointer active:opacity-50 flex items-center gap-2">
+                <span
+                  className="text-lg text-white cursor-pointer active:opacity-50 flex items-center gap-2"
+                  onClick={() => router.push(`/preview/${question._id}`)}
+                >
                   <EyeOpenIcon classes="h-3 w-3" />
                   <p className="text-sm uppercase font-semibold">preview</p>
                 </span>
               </Chip>
               <Chip size="sm" color="primary">
-                <span className="text-lg text-white cursor-pointer active:opacity-50 flex items-center gap-2">
-                  <PlusIcon classes="h-3 w-3" />
-                  <p className="text-sm uppercase font-semibold">add</p>
-                </span>
+                <AddQuestionModal question={question} qPaper={qPaper} />
               </Chip>
             </div>
           );
@@ -277,9 +286,7 @@ export default function CreateQPackPage({
 
   return (
     <div>
-      <h1 className={title({ size: "md" })}>
-        Add questions to Q Paper {params.qpaper}
-      </h1>
+      <h1 className={title({ size: "md" })}>{qPaper?.name}</h1>
       <p className="mt-5">added questions</p>
       <Table aria-label="Added Questions" className="mt-5">
         <TableHeader columns={columns}>
@@ -296,34 +303,40 @@ export default function CreateQPackPage({
           {(item) => (
             <TableRow key={item._id}>
               {(columnKey) => (
-                <TableCell>{renderSelectedQuestionsCell(item, columnKey)}</TableCell>
+                <TableCell>
+                  {renderSelectedQuestionsCell(item, columnKey)}
+                </TableCell>
               )}
             </TableRow>
           )}
         </TableBody>
       </Table>
       <p className="mt-5">all questions</p>
-      <Table aria-label="All Questions" className="mt-5">
-        <TableHeader columns={columns}>
-          {(column) => (
-            <TableColumn
-              key={column.uid}
-              align={column.uid === "actions" ? "center" : "start"}
-            >
-              {column.name}
-            </TableColumn>
-          )}
-        </TableHeader>
-        <TableBody items={allQuestionRow}>
-          {(item) => (
-            <TableRow key={item._id}>
-              {(columnKey) => (
-                <TableCell>{renderAllQuestionsCell(item, columnKey)}</TableCell>
-              )}
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+      {qPaper && (
+        <Table aria-label="All Questions" className="mt-5">
+          <TableHeader columns={columns}>
+            {(column) => (
+              <TableColumn
+                key={column.uid}
+                align={column.uid === "actions" ? "center" : "start"}
+              >
+                {column.name}
+              </TableColumn>
+            )}
+          </TableHeader>
+          <TableBody items={allQuestionRow}>
+            {(item) => (
+              <TableRow key={item._id}>
+                {(columnKey) => (
+                  <TableCell>
+                    {renderAllQuestionsCell(item, columnKey)}
+                  </TableCell>
+                )}
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      )}
     </div>
   );
 }

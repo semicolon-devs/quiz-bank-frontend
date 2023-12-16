@@ -87,8 +87,6 @@ export default function ManageQuestionsPage() {
     getQuestions();
   }, []);
 
-  // console.log(questionList);
-
   useEffect(() => {
     const regex: RegExp = /(<([^>]+)>)/gi;
 

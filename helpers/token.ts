@@ -4,16 +4,19 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 export const getAuthToken = (): string | null => Cookies.get("session") ?? null;
+
 export const getRefreshToken = (): string | null =>
   Cookies.get("refreshToken") ?? null;
+
 const domain = typeof window !== "undefined" ? window.location.hostname : "";
 
 export const setAuthToken = (token: string) =>
   Cookies.set("session", token, {
     path: "/",
     domain,
-    expires: 1 / 48, // 1 day
+    expires: 1 / 48, // 30 mins
   });
+
 export const setRefreshToken = (refreshToken: string) =>
   Cookies.set("refreshToken", refreshToken, {
     path: "/",
@@ -26,6 +29,7 @@ export const clearAuthToken = () => {
     path: "/",
     domain,
   });
+
   Cookies.remove("refreshToken", {
     path: "/",
     domain,
@@ -40,7 +44,7 @@ export const getAccess = () => {
     if (!refreshToken) {
       // navigate to unAuthorized page or login page here
       // this point means user not logged in or both tokens expired
-        window.location.href = "/sign-in";
+      window.location.href = "/sign-in";
     } else {
       const axiosConfig = {
         method: "POST",
@@ -49,6 +53,7 @@ export const getAccess = () => {
         },
         url: `${BASE_URL}auth/refresh-token`,
       };
+      
       axios(axiosConfig)
         .then((response) => {
           setAuthToken(response.data.accessToken);
@@ -58,7 +63,7 @@ export const getAccess = () => {
           console.log(err);
         })
         .finally(() => {
-          return getAuthToken();
+          getAccess();
         });
     }
   } else {
