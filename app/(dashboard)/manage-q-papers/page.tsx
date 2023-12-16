@@ -16,6 +16,9 @@ import {
 import { Chip, ChipProps } from "@nextui-org/chip";
 import { EditIcon, DeleteIcon, EyeOpenIcon } from "@/components/icons";
 
+import DeleteQPaperModal from "./modals/deleteQPaperModal";
+import EditQPaperModal from "./modals/editQPaperModal";
+
 import { BASE_URL } from "@/config/apiConfig";
 import { getAccess } from "@/helpers/token";
 
@@ -69,7 +72,9 @@ export default function CreateQPackPage() {
             <div className="relative flex items-center gap-2">
               <span
                 className="text-lg text-default-400 cursor-pointer active:opacity-50"
-                onClick={() => router.push(`/q-paper-add-questions/${QPaper._id}`)}
+                onClick={() =>
+                  router.push(`/q-paper-add-questions/${QPaper._id}`)
+                }
               >
                 <Chip className="uppercase" color="secondary" size="sm">
                   <p className="font-semibold text-xs">manage questions</p>
@@ -84,10 +89,10 @@ export default function CreateQPackPage() {
                 <EyeOpenIcon classes="h-4 w-4" />
               </span>
               <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                <EditIcon classes="h-4 w-4" />
+                <EditQPaperModal qPaper={QPaper} />
               </span>
               <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                <DeleteIcon classes="h-4 w-4" />
+                <DeleteQPaperModal qPaper={QPaper} />
               </span>
             </div>
           );
