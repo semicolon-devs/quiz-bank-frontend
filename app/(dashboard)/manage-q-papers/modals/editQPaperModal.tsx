@@ -2,9 +2,7 @@
 
 import { useState, useEffect } from "react";
 import axios from "axios";
-import "react-quill/dist/quill.snow.css";
 
-import dynamic from "next/dynamic";
 import {
   Modal,
   ModalContent,

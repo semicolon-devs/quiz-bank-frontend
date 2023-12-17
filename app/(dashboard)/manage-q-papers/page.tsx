@@ -18,6 +18,7 @@ import { EditIcon, DeleteIcon, EyeOpenIcon } from "@/components/icons";
 
 import DeleteQPaperModal from "./modals/deleteQPaperModal";
 import EditQPaperModal from "./modals/editQPaperModal";
+import CreateQPaperModal from "./modals/CreateQPaperModal";
 
 import { BASE_URL } from "@/config/apiConfig";
 import { getAccess } from "@/helpers/token";
@@ -130,7 +131,10 @@ export default function CreateQPackPage() {
 
   return (
     <div>
-      <h1 className={title({ size: "md" })}>Manage Q Papers</h1>
+      <div className="flex justify-between">
+        <h1 className={title({ size: "md" })}>Manage Q Papers</h1>
+        <CreateQPaperModal />
+      </div>
       <Table aria-label="Example table with custom cells" className="mt-5">
         <TableHeader columns={columns}>
           {(column) => (
