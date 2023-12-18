@@ -286,8 +286,10 @@ export default function CreateQPackPage({
 
   return (
     <div>
-      <h1 className={title({ size: "md" })}>{qPaper?.name}</h1>
-      <p className="mt-5">added questions</p>
+      <h1 className={`${title({ size: "md" })} uppercase`}>
+        {qPaper?.paperId} : {qPaper?.name}
+      </h1>
+      <p className="mt-5 font-semibold capitalize text-lg">added questions</p>
       <Table aria-label="Added Questions" className="mt-5">
         <TableHeader columns={columns}>
           {(column) => (
@@ -311,7 +313,7 @@ export default function CreateQPackPage({
           )}
         </TableBody>
       </Table>
-      <p className="mt-5">all questions</p>
+      <p className="mt-5 font-semibold capitalize text-lg">all questions</p>
       {qPaper && (
         <Table aria-label="All Questions" className="mt-5">
           <TableHeader columns={columns}>

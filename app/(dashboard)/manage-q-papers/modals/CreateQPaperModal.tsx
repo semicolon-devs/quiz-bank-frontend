@@ -30,35 +30,43 @@ const CreateQPaperModal = () => {
   const [time, setTime] = useState<string>();
   const [timed, setTimed] = useState<boolean>(false);
   const [paperType, setPaperType] = useState<string>();
+  const [error, setError] = useState<string>();
 
   const paperTypes = ["ONE ATTEMPT", "MULTIPLE ATTEMPT"];
 
-  const createQPaper = () => {
+  const createQPaper = (onCloseFunction: () => void) => {
     setLoading(true);
-    const axiosConfig = {
-      method: "POST",
-      url: `${BASE_URL}papers`,
-      headers: {
-        Authorization: `Bearer ${getAccess()}`,
-      },
-      data: {
-        paperId: paperId,
-        name: paperName,
-        timeInMinutes: time && parseInt(time),
-        isTimed: timed,
-        paperType: paperType,
-      },
-    };
-    axios(axiosConfig)
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    setError("");
+    if (paperName && paperId && time && paperType) {
+      const axiosConfig = {
+        method: "POST",
+        url: `${BASE_URL}papers`,
+        headers: {
+          Authorization: `Bearer ${getAccess()}`,
+        },
+        data: {
+          paperId: paperId,
+          name: paperName,
+          timeInMinutes: time && parseInt(time),
+          isTimed: timed,
+          paperType: paperType,
+        },
+      };
+      axios(axiosConfig)
+        .then((response) => {
+          console.log(response);
+          onCloseFunction();
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    } else {
+      setError("Incomplete feilds present");
+      setLoading(false);
+    }
   };
 
   return (
@@ -102,6 +110,7 @@ const CreateQPaperModal = () => {
                     onChange={(e) => setPaperType(e.target.value)}
                     className="w-full text-sm text-dark/75"
                   >
+                    <option value="">Select a paper type</option>
                     {paperTypes.map((item) => (
                       <option value={item} key={item}>
                         {item}
@@ -119,6 +128,11 @@ const CreateQPaperModal = () => {
                 <Checkbox isSelected={timed} onValueChange={setTimed}>
                   Is paper timed
                 </Checkbox>
+                {error && (
+                  <div className="border border-red rounded-lg p-3 text-red font-semibold">
+                    {error}
+                  </div>
+                )}
               </ModalBody>
               <ModalFooter>
                 <Button color="secondary" variant="flat" onPress={onClose}>
@@ -127,12 +141,15 @@ const CreateQPaperModal = () => {
                 <Button
                   color="primary"
                   onPress={() => {
-                    createQPaper();
-                    onClose();
+                    createQPaper(onClose);
                   }}
                   className="capitalize"
                 >
-                  create q pack
+                  {loading ? (
+                    <Spinner color="success" size="sm" />
+                  ) : (
+                    "create q pack"
+                  )}
                 </Button>
               </ModalFooter>
             </>
