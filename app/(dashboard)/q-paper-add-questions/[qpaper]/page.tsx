@@ -12,12 +12,15 @@ import {
   TableCell,
 } from "@nextui-org/table";
 import { Chip } from "@nextui-org/chip";
+import { Spinner } from "@nextui-org/spinner";
 import { MinusIcon, EyeOpenIcon, PlusIcon } from "@/components/icons";
 
 import { BASE_URL } from "@/config/apiConfig";
 import { getAccess } from "@/helpers/token";
 import { title } from "@/components/primitives";
+
 import AddQuestionModal from "./modals/addQuestionModal";
+import RemoveQuestionModal from "./modals/removeQuestionModal";
 
 const columns = [
   { name: "QUESTION", uid: "question" },
@@ -53,6 +56,16 @@ interface Question {
   __v: number;
 }
 
+interface SimplifiedQuestion {
+  difficulty: string;
+  module: { name: string };
+  question: string;
+  subCategory: { name: string };
+  subject: { name: string };
+  type: string;
+  _id: string;
+}
+
 interface QuestionRow {
   _id: string;
   question: string;
@@ -62,86 +75,30 @@ interface QuestionRow {
   difficulty: string;
 }
 
-const selectedQuestions: Question[] = [
-  {
-    _id: "656272a15924ffb42375caec",
-    subject: {
-      _id: "65546614c33fb7a51b895f28",
-      name: "Biology",
-      subCategories: [
-        "6554665fc33fb7a51b895f30",
-        "65546667c33fb7a51b895f34",
-        "65578d1523b28f6d5299fb79",
-      ],
-      __v: 0,
-    },
-    subCategory: {
-      _id: "6554665fc33fb7a51b895f30",
-      name: "Anatomy",
-      __v: 0,
-      moduleList: ["65610b42a14c6efc0a94fe68"],
-    },
-    module: {
-      _id: "65610b42a14c6efc0a94fe68",
-      name: "Human Anatomy",
-      __v: 0,
-    },
-    difficulty: "Medium",
-    type: "MCQ",
-    question: "<p>Question updated</p>",
-    answers: [
-      {
-        number: 1,
-        answer: "<p>a1</p>",
-        _id: "657560e1ce71e57992639451",
-      },
-      {
-        number: 2,
-        answer: "<p>a2</p>",
-        _id: "657560e1ce71e57992639452",
-      },
-      {
-        number: 3,
-        answer: "<p>a3</p>",
-        _id: "657560e1ce71e57992639453",
-      },
-      {
-        number: 4,
-        answer: "<p>a4</p>",
-        _id: "657560e1ce71e57992639454",
-      },
-      {
-        number: 5,
-        answer: "<p>a5</p>",
-        _id: "657560e1ce71e57992639455",
-      },
-    ],
-    correctAnswer: [0, 2],
-    explaination: "<p>explanation</p>",
-    __v: 0,
-  },
-];
-
 export default function CreateQPackPage({
   params,
 }: {
   params: { qpaper: string };
 }) {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [allQuestionList, setAllQuestionList] = useState<Question[]>([]);
+  const [questionsLoading, setQuestionsLoading] = useState<boolean>(false);
+  const [qPaperLoading, setQPaperLoading] = useState<boolean>(false);
+  const [allQuestionList, setAllQuestionList] = useState<SimplifiedQuestion[]>(
+    []
+  );
   const [selectedQuestionRow, setSelectedQuestionRow] = useState<QuestionRow[]>(
     []
   );
   const [allQuestionRow, setAllQuestionRow] = useState<QuestionRow[]>([]);
   const [qPaper, setQPaper] = useState<QPaper>();
-
-  console.log(qPaper);
+  const [qPaperError, setQPaperError] = useState<boolean>(false);
 
   const router = useRouter();
 
+  console.log(qPaper);
+
   useEffect(() => {
     const getQuestions = async () => {
-      setLoading(true);
+      setQuestionsLoading(true);
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}questions`,
@@ -157,12 +114,17 @@ export default function CreateQPackPage({
           console.log(err);
         })
         .finally(() => {
-          setLoading(false);
+          setQuestionsLoading(false);
         });
     };
 
+    getQuestions();
+  }, []);
+
+  useEffect(() => {
     const getQPaper = () => {
-      setLoading(true);
+      setQPaperError(false);
+      setQPaperLoading(true);
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}papers/${params.qpaper}`,
@@ -175,36 +137,53 @@ export default function CreateQPackPage({
           setQPaper(response.data);
         })
         .catch((err) => {
+          setQPaperError(true);
           console.log(err);
         })
         .finally(() => {
-          setLoading(false);
+          setQPaperLoading(false);
         });
     };
 
-    getQuestions();
     getQPaper();
   }, [params.qpaper]);
 
-  useEffect(() => {
-    const regex: RegExp = /(<([^>]+)>)/gi;
+  // useEffect(() => {
+  //   const regex: RegExp = /(<([^>]+)>)/gi;
 
-    const extractQuestionRows = (questions: Question[]): QuestionRow[] => {
-      return questions.map(
-        ({ _id, question, difficulty, subject, subCategory, module }) => ({
-          _id,
-          question: question.replace(regex, ""),
-          difficulty,
-          module: module.name,
-          subject: subject.name,
-          subCategory: subCategory.name,
-        })
-      );
-    };
+  //   const extractAllQuestionRows = (
+  //     questions: SimplifiedQuestion[]
+  //   ): QuestionRow[] => {
+  //     return questions.map(
+  //       ({ _id, question, difficulty, subject, subCategory, module }) => ({
+  //         _id,
+  //         question: question && question.replace(regex, ""),
+  //         difficulty,
+  //         module: module.name,
+  //         subject: subject.name,
+  //         subCategory: subCategory.name,
+  //       })
+  //     );
+  //   };
 
-    setSelectedQuestionRow(extractQuestionRows(selectedQuestions));
-    setAllQuestionRow(extractQuestionRows(allQuestionList));
-  }, [allQuestionList]);
+  //   const extractQuestionRows = (
+  //     questions: SimplifiedQuestion[]
+  //   ): QuestionRow[] => {
+  //     return questions.map(
+  //       ({ _id, question, difficulty, subject, subCategory, module }) => ({
+  //         _id,
+  //         question: question && question.replace(regex, ""),
+  //         difficulty,
+  //         module: module.name,
+  //         subject: subject.name,
+  //         subCategory: subCategory.name,
+  //       })
+  //     );
+  //   };
+
+  //   qPaper && setSelectedQuestionRow(extractQuestionRows(qPaper.questions));
+  //   setAllQuestionRow(extractAllQuestionRows(allQuestionList));
+  // }, [allQuestionList, qPaper]);
 
   const renderSelectedQuestionsCell = React.useCallback(
     (question: QuestionRow, columnKey: React.Key) => {
@@ -225,16 +204,16 @@ export default function CreateQPackPage({
           return (
             <div className="relative flex items-center gap-2">
               <Chip size="sm" color="secondary">
-                <span className="text-lg text-white cursor-pointer active:opacity-50 flex items-center gap-2">
+                <span
+                  className="text-lg text-white cursor-pointer active:opacity-50 flex items-center gap-2"
+                  onClick={() => router.push(`/preview/${question._id}`)}
+                >
                   <EyeOpenIcon classes="h-3 w-3" />
                   <p className="text-sm uppercase font-semibold">preview</p>
                 </span>
               </Chip>
               <Chip size="sm" color="danger">
-                <span className="text-lg text-white cursor-pointer active:opacity-50 flex items-center gap-2">
-                  <MinusIcon classes="h-3 w-3" />
-                  <p className="text-sm uppercase font-semibold">remove</p>
-                </span>
+                <RemoveQuestionModal qPaper={qPaper} question={question} />
               </Chip>
             </div>
           );
@@ -242,7 +221,7 @@ export default function CreateQPackPage({
           return cellValue;
       }
     },
-    []
+    [qPaper]
   );
 
   const renderAllQuestionsCell = React.useCallback(
@@ -281,63 +260,86 @@ export default function CreateQPackPage({
           return cellValue;
       }
     },
-    []
+    [qPaper]
   );
 
   return (
     <div>
-      <h1 className={`${title({ size: "md" })} uppercase`}>
-        {qPaper?.paperId} : {qPaper?.name}
-      </h1>
-      <p className="mt-5 font-semibold capitalize text-lg">added questions</p>
-      <Table aria-label="Added Questions" className="mt-5">
-        <TableHeader columns={columns}>
-          {(column) => (
-            <TableColumn
-              key={column.uid}
-              align={column.uid === "actions" ? "center" : "start"}
-            >
-              {column.name}
-            </TableColumn>
-          )}
-        </TableHeader>
-        <TableBody items={selectedQuestionRow}>
-          {(item) => (
-            <TableRow key={item._id}>
-              {(columnKey) => (
-                <TableCell>
-                  {renderSelectedQuestionsCell(item, columnKey)}
-                </TableCell>
-              )}
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-      <p className="mt-5 font-semibold capitalize text-lg">all questions</p>
-      {qPaper && (
-        <Table aria-label="All Questions" className="mt-5">
-          <TableHeader columns={columns}>
-            {(column) => (
-              <TableColumn
-                key={column.uid}
-                align={column.uid === "actions" ? "center" : "start"}
-              >
-                {column.name}
-              </TableColumn>
-            )}
-          </TableHeader>
-          <TableBody items={allQuestionRow}>
-            {(item) => (
-              <TableRow key={item._id}>
-                {(columnKey) => (
-                  <TableCell>
-                    {renderAllQuestionsCell(item, columnKey)}
-                  </TableCell>
+      {qPaperError ? (
+        <div className="w-full">
+          <p className="text-xl capitalize text-center">
+            This Q Paper does not exist
+          </p>
+        </div>
+      ) : (
+        <>
+          <h1 className={`${title({ size: "md" })} uppercase`}>
+            {qPaper ? qPaper.paperId : "Paper loading ..."} :{" "}
+            {qPaper && qPaper.name}
+          </h1>
+          <p className="mt-5 font-semibold capitalize text-lg">
+            added questions
+          </p>
+          {/* {qPaperLoading ? (
+            <div className="w-full flex justify-center items-center my-5">
+              <Spinner color="primary" />
+            </div>
+          ) : (
+            <Table aria-label="Added Questions" className="mt-5">
+              <TableHeader columns={columns}>
+                {(column) => (
+                  <TableColumn
+                    key={column.uid}
+                    align={column.uid === "actions" ? "center" : "start"}
+                  >
+                    {column.name}
+                  </TableColumn>
                 )}
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+              </TableHeader>
+              <TableBody items={selectedQuestionRow}>
+                {(item) => (
+                  <TableRow key={item._id}>
+                    {(columnKey) => (
+                      <TableCell>
+                        {renderSelectedQuestionsCell(item, columnKey)}
+                      </TableCell>
+                    )}
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          )}
+          <p className="mt-5 font-semibold capitalize text-lg">all questions</p>
+          {questionsLoading ? (
+            <div className="w-full flex justify-center items-center my-5">
+              <Spinner color="primary" />
+            </div>
+          ) : (
+            <Table aria-label="All Questions" className="mt-5">
+              <TableHeader columns={columns}>
+                {(column) => (
+                  <TableColumn
+                    key={column.uid}
+                    align={column.uid === "actions" ? "center" : "start"}
+                  >
+                    {column.name}
+                  </TableColumn>
+                )}
+              </TableHeader>
+              <TableBody items={allQuestionRow}>
+                {(item) => (
+                  <TableRow key={item._id}>
+                    {(columnKey) => (
+                      <TableCell>
+                        {renderAllQuestionsCell(item, columnKey)}
+                      </TableCell>
+                    )}
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          )} */}
+        </>
       )}
     </div>
   );
