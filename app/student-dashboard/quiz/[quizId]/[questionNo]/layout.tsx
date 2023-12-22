@@ -1,3 +1,12 @@
+"use client"
+
+import React, { useState } from "react";
+
+import axios from "axios";
+
+import { BASE_URL } from "@/config/apiConfig";
+import { getAccess } from "@/helpers/token";
+
 import QuitQuizModal from "./modals/QuitQuizModal";
 
 export default function QuizLayout({
@@ -7,6 +16,8 @@ export default function QuizLayout({
   children: React.ReactNode;
   params: { questionNo: string; quizId: string };
 }) {
+  const [loading, setLoading] = useState<boolean>();
+
   const questionBlocks: {
     _id: number;
     status: string;
@@ -43,6 +54,27 @@ export default function QuizLayout({
     } else {
       return "text-blue bg-white";
     }
+  };
+
+  const getQuestion = () => {
+    setLoading(true);
+    const axiosConfig = {
+      method: "GET",
+      url: `${BASE_URL}questions/${params}`,
+      headers: {
+        Authorization: `Bearer ${getAccess()}`,
+      },
+    };
+    axios(axiosConfig)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
