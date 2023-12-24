@@ -15,6 +15,8 @@ import { title } from "@/components/primitives";
 import { BASE_URL } from "@/config/apiConfig";
 import { getAccess } from "@/helpers/token";
 
+import { getAccess } from "@/helpers/token";
+
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 const modules = {
@@ -322,7 +324,7 @@ export default function AddQuestionPage() {
         className="mt-5"
         onPress={() => handleAddQuestionButtonClick()}
       >
-        {loading ? <Spinner color="default"/> : "Add Question"}
+        {loading ? <Spinner color="default" /> : "Add Question"}
       </Button>
     </div>
   );
