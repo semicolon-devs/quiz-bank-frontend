@@ -13,6 +13,7 @@ import { Spinner } from "@nextui-org/spinner";
 import { title } from "@/components/primitives";
 
 import { BASE_URL } from "@/config/apiConfig";
+import { getAccess } from "@/helpers/token";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
@@ -83,6 +84,9 @@ export default function AddQuestionPage() {
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}subjects`,
+        headers: {
+          Authorization: `Bearer ${getAccess()}`,
+        },
       };
       axios(axiosConfig)
         .then((response) => {
@@ -131,6 +135,9 @@ export default function AddQuestionPage() {
         correctAnswer: getCorrectAnswer(),
         explaination: answerExplaination,
         difficulty: difficultyLevelSelected,
+      },
+      headers: {
+        Authorization: `Bearer ${getAccess()}`,
       },
     };
     axios(axiosConfig)

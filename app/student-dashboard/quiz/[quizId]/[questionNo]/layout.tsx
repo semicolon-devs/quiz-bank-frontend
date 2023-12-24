@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import axios from "axios";
 
@@ -56,26 +56,30 @@ export default function QuizLayout({
     }
   };
 
-  const getQuestion = () => {
-    setLoading(true);
-    const axiosConfig = {
-      method: "GET",
-      url: `${BASE_URL}questions/${params}`,
-      headers: {
-        Authorization: `Bearer ${getAccess()}`,
-      },
+  useEffect(() => {
+    const getQuestionBlocks = () => {
+      setLoading(true);
+      const axiosConfig = {
+        method: "GET",
+        url: `${BASE_URL}answers/status/65734bd2868d6424d688a12c/${params.quizId}`,
+        headers: {
+          Authorization: `Bearer ${getAccess()}`,
+        },
+      };
+      axios(axiosConfig)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     };
-    axios(axiosConfig)
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  };
+
+    getQuestionBlocks();
+  }, []);
 
   return (
     <section className="w-full h-full">
