@@ -94,8 +94,6 @@ export default function CreateQPackPage({
 
   const router = useRouter();
 
-  console.log(qPaper);
-
   useEffect(() => {
     const getQuestions = async () => {
       setQuestionsLoading(true);
@@ -127,7 +125,7 @@ export default function CreateQPackPage({
       setQPaperLoading(true);
       const axiosConfig = {
         method: "GET",
-        url: `${BASE_URL}papers/${params.qpaper}`,
+        url: `${BASE_URL}papers/admin/${params.qpaper}`,
         headers: {
           Authorization: `Bearer ${getAccess()}`,
         },
@@ -148,42 +146,49 @@ export default function CreateQPackPage({
     getQPaper();
   }, [params.qpaper]);
 
-  // useEffect(() => {
-  //   const regex: RegExp = /(<([^>]+)>)/gi;
+  useEffect(() => {
+    const regex: RegExp = /(<([^>]+)>)/gi;
 
-  //   const extractAllQuestionRows = (
-  //     questions: SimplifiedQuestion[]
-  //   ): QuestionRow[] => {
-  //     return questions.map(
-  //       ({ _id, question, difficulty, subject, subCategory, module }) => ({
-  //         _id,
-  //         question: question && question.replace(regex, ""),
-  //         difficulty,
-  //         module: module.name,
-  //         subject: subject.name,
-  //         subCategory: subCategory.name,
-  //       })
-  //     );
-  //   };
+    const extractAllQuestionRows = (
+      questions: SimplifiedQuestion[]
+    ): QuestionRow[] => {
+      return questions.map(
+        ({ _id, question, difficulty, subject, subCategory, module }) => ({
+          _id,
+          question: question && question.replace(regex, ""),
+          difficulty,
+          module: module.name,
+          subject: subject.name,
+          subCategory: subCategory.name,
+        })
+      );
+    };
 
-  //   const extractQuestionRows = (
-  //     questions: SimplifiedQuestion[]
-  //   ): QuestionRow[] => {
-  //     return questions.map(
-  //       ({ _id, question, difficulty, subject, subCategory, module }) => ({
-  //         _id,
-  //         question: question && question.replace(regex, ""),
-  //         difficulty,
-  //         module: module.name,
-  //         subject: subject.name,
-  //         subCategory: subCategory.name,
-  //       })
-  //     );
-  //   };
+    const extractQuestionRows = (
+      questions: SimplifiedQuestion[]
+    ): QuestionRow[] => {
+      return questions.map(
+        ({ _id, question, difficulty, subject, subCategory, module }) => ({
+          _id,
+          question: question && question.replace(regex, ""),
+          difficulty,
+          module: module.name,
+          subject: subject.name,
+          subCategory: subCategory.name,
+        })
+      );
+    };
 
-  //   qPaper && setSelectedQuestionRow(extractQuestionRows(qPaper.questions));
-  //   setAllQuestionRow(extractAllQuestionRows(allQuestionList));
-  // }, [allQuestionList, qPaper]);
+    qPaper && setSelectedQuestionRow(extractQuestionRows(qPaper.questions));
+    setAllQuestionRow(
+      extractAllQuestionRows(
+        allQuestionList.filter(
+          (obj1) =>
+            qPaper && !qPaper.questions.some((obj2) => obj2._id === obj1._id)
+        )
+      )
+    );
+  }, [allQuestionList, qPaper]);
 
   const renderSelectedQuestionsCell = React.useCallback(
     (question: QuestionRow, columnKey: React.Key) => {
@@ -280,7 +285,7 @@ export default function CreateQPackPage({
           <p className="mt-5 font-semibold capitalize text-lg">
             added questions
           </p>
-          {/* {qPaperLoading ? (
+          {qPaperLoading ? (
             <div className="w-full flex justify-center items-center my-5">
               <Spinner color="primary" />
             </div>
@@ -338,7 +343,7 @@ export default function CreateQPackPage({
                 )}
               </TableBody>
             </Table>
-          )} */}
+          )}
         </>
       )}
     </div>

@@ -15,8 +15,6 @@ import { title } from "@/components/primitives";
 import { BASE_URL } from "@/config/apiConfig";
 import { getAccess } from "@/helpers/token";
 
-import { getAccess } from "@/helpers/token";
-
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 const modules = {

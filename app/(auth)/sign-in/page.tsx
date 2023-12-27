@@ -7,6 +7,7 @@ import NextLink from "next/link";
 import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card";
 import { Input } from "@nextui-org/input";
 import { Button, ButtonGroup } from "@nextui-org/button";
+import { Spinner } from "@nextui-org/spinner";
 
 import { EyeOpenIcon, EyeCloseIcon } from "@/components/icons";
 import axios from "axios";
@@ -16,11 +17,15 @@ import { setAuthToken, setRefreshToken } from "@/helpers/token";
 export default function SigninPage() {
   const [email, setEmail] = useState<string>();
   const [password, setPassword] = useState<string>();
+  const [error, setError] = useState<string>();
+  const [loading, setLoading] = useState<boolean>(false);
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   const toggleVisibility = () => setIsVisible(!isVisible);
 
   const signIn = () => {
+    setError(undefined);
+    setLoading(true);
     const axiosConfig = {
       method: "POST",
       url: `${BASE_URL}auth/login`,
@@ -36,9 +41,11 @@ export default function SigninPage() {
         window.location.href = "/home";
       })
       .catch((err) => {
-        console.log(err);
+        setError("incorrect email or password. please try again");
       })
-      .finally(() => {});
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
@@ -77,8 +84,17 @@ export default function SigninPage() {
             variant="bordered"
           />
           <Button color="primary" onClick={signIn}>
-            <p className="capitalize font-semibold">sign in</p>
+            {loading ? (
+              <Spinner color="success" size="sm" />
+            ) : (
+              <p className="capitalize font-semibold">sign in</p>
+            )}
           </Button>
+          {error && (
+            <div className="p-3 border border-red rounded-lg">
+              <p className="text-red capitalize text-sm">{error}</p>
+            </div>
+          )}
         </CardBody>
       </Card>
       <p className="mt-5 text-sm text-dark">
