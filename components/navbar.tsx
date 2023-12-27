@@ -23,6 +23,7 @@ import axios from "axios";
 
 import { BASE_URL } from "@/config/apiConfig";
 import { getAccess } from "@/helpers/token";
+import { getUser, getUserDetails } from "@/helpers/userDetails";
 
 import { siteConfig } from "@/config/site";
 import NextLink from "next/link";
@@ -36,36 +37,17 @@ interface UserDetails {
   lastname: string;
   email: string;
   roles: ("USER" | "MODERATOR" | "ADMIN")[];
+  _id: string;
 }
 
 export const Navbar = () => {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [userDetails, setUserDetails] = useState<UserDetails>();
+  const [userDetails, setUserDetails] = useState<UserDetails | null>();
   const [role, setRole] = useState<"USER" | "MODERATOR" | "ADMIN">();
 
   useEffect(() => {
-    const getUserDetails = () => {
-      setLoading(true);
-      const axiosConfig = {
-        method: "GET",
-        url: `${BASE_URL}auth/user-details`,
-        headers: {
-          Authorization: `Bearer ${getAccess()}`,
-        },
-      };
-      axios(axiosConfig)
-        .then((response) => {
-          setUserDetails(response.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    };
+    getUser();
 
-    getUserDetails();
+    setUserDetails(getUserDetails());
   }, []);
 
   useEffect(() => {
