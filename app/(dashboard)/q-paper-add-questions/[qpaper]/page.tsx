@@ -211,7 +211,9 @@ export default function CreateQPackPage({
               <Chip size="sm" color="secondary">
                 <span
                   className="text-lg text-white cursor-pointer active:opacity-50 flex items-center gap-2"
-                  onClick={() => router.push(`/preview/${question._id}`)}
+                  onClick={() =>
+                    router.push(`/preview/question/${question._id}`)
+                  }
                 >
                   <EyeOpenIcon classes="h-3 w-3" />
                   <p className="text-sm uppercase font-semibold">preview</p>
@@ -250,7 +252,9 @@ export default function CreateQPackPage({
               <Chip size="sm" color="secondary">
                 <span
                   className="text-lg text-white cursor-pointer active:opacity-50 flex items-center gap-2"
-                  onClick={() => router.push(`/preview/${question._id}`)}
+                  onClick={() =>
+                    router.push(`/preview/question/${question._id}`)
+                  }
                 >
                   <EyeOpenIcon classes="h-3 w-3" />
                   <p className="text-sm uppercase font-semibold">preview</p>

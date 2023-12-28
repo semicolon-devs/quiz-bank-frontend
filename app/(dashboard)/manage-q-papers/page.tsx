@@ -86,7 +86,9 @@ export default function CreateQPackPage() {
         case "actions":
           return (
             <div className="relative flex items-center gap-2">
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+              <span className="text-lg text-default-400 cursor-pointer active:opacity-50"
+                onClick={() => router.push(`/preview/quiz/${QPaper._id}/1`)}
+              >
                 <EyeOpenIcon classes="h-4 w-4" />
               </span>
               <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
