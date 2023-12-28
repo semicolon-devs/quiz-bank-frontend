@@ -13,6 +13,7 @@ import { Button } from "@nextui-org/button";
 import { Input } from "@nextui-org/input";
 
 import { BASE_URL } from "@/config/apiConfig";
+import { getAccess } from "@/helpers/token";
 
 type Props = {};
 
@@ -30,9 +31,9 @@ const EditModuleModal: React.FC<EditModuleModalProps> = ({ module }) => {
     const axiosConfig = {
       method: "PATCH",
       url: `${BASE_URL}subjects/module/${module._id}`,
-      // headers: {
-      //   Authorization: `Bearer ${token}`,
-      // },
+      headers: {
+        Authorization: `Bearer ${getAccess()}`,
+      },
       data: {
         name: moduleName,
       },

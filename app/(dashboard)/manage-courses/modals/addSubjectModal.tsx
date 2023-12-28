@@ -13,6 +13,7 @@ import { Button } from "@nextui-org/button";
 import { Input } from "@nextui-org/input";
 
 import { BASE_URL } from "@/config/apiConfig";
+import { getAccess } from "@/helpers/token";
 
 type Props = {};
 
@@ -26,9 +27,9 @@ const AddSubjectModal = (props: Props) => {
     const axiosConfig = {
       method: "POST",
       url: `${BASE_URL}subjects`,
-      // headers: {
-      //   Authorization: `Bearer ${token}`,
-      // },
+      headers: {
+        Authorization: `Bearer ${getAccess()}`,
+      },
       data: {
         name: subject,
       },

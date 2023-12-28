@@ -19,6 +19,7 @@ import DeleteModuleModal from "./modals/deleteModuleModal";
 import EditModuleModal from "./modals/editModuleModal";
 
 import { BASE_URL } from "@/config/apiConfig";
+import { getAccess } from "@/helpers/token";
 
 interface Course {
   _id: string;
@@ -73,6 +74,9 @@ export default function ManageCoursesPage() {
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}subjects`,
+        headers: {
+          Authorization: `Bearer ${getAccess()}`,
+        },
       };
       axios(axiosConfig)
         .then((response) => {

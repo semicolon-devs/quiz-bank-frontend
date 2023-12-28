@@ -14,6 +14,7 @@ import { Input } from "@nextui-org/input";
 // import { Select, SelectSection, SelectItem } from "@nextui-org/select";
 
 import { BASE_URL } from "@/config/apiConfig";
+import { getAccess } from "@/helpers/token";
 
 interface SubjectWithSubCategories {
   _id: string;
@@ -64,9 +65,9 @@ const AddModuleModal: React.FC<AddModuleModalProps> = ({ subjects }) => {
     const axiosConfig = {
       method: "POST",
       url: `${BASE_URL}subjects/module/${subjectCategory}`,
-      // headers: {
-      //   Authorization: `Bearer ${token}`,
-      // },
+      headers: {
+        Authorization: `Bearer ${getAccess()}`,
+      },
       data: {
         name: module,
       },

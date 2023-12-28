@@ -13,6 +13,7 @@ import { Button } from "@nextui-org/button";
 import { Input } from "@nextui-org/input";
 
 import { BASE_URL } from "@/config/apiConfig";
+import { getAccess } from "@/helpers/token";
 
 type Props = {};
 
@@ -35,9 +36,9 @@ const DeleteSubjectModal: React.FC<DeleteSubjectModalProps> = ({ subject }) => {
     const axiosConfig = {
       method: "DELETE",
       url: `${BASE_URL}subjects/${subject._id}`,
-      // headers: {
-      //   Authorization: `Bearer ${token}`,
-      // },
+      headers: {
+        Authorization: `Bearer ${getAccess()}`,
+      },
     };
     axios(axiosConfig)
       .then((response) => {

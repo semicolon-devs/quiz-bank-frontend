@@ -13,6 +13,7 @@ import { Button } from "@nextui-org/button";
 import { Input } from "@nextui-org/input";
 
 import { BASE_URL } from "@/config/apiConfig";
+import { getAccess } from "@/helpers/token";
 
 type Props = {};
 
@@ -34,9 +35,9 @@ const EditSubjectCategoryModal: React.FC<EditSubjectCategoryModalProps> = ({
     const axiosConfig = {
       method: "PATCH",
       url: `${BASE_URL}subjects/courses/${subCategory._id}`,
-      // headers: {
-      //   Authorization: `Bearer ${token}`,
-      // },
+      headers: {
+        Authorization: `Bearer ${getAccess()}`,
+      },
       data: {
         name: subjectCategoryName,
       },

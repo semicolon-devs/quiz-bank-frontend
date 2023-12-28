@@ -13,6 +13,7 @@ import { Button } from "@nextui-org/button";
 import { Input } from "@nextui-org/input";
 
 import { BASE_URL } from "@/config/apiConfig";
+import { getAccess } from "@/helpers/token";
 
 type Props = {};
 
@@ -36,9 +37,9 @@ const DeleteSubjectCategoryModal: React.FC<DeleteSubjectCategoryModalProps> = ({
     const axiosConfig = {
       method: "DELETE",
       url: `${BASE_URL}subjects/${subjectId}/${subCategory._id}`,
-      // headers: {
-      //   Authorization: `Bearer ${token}`,
-      // },
+      headers: {
+        Authorization: `Bearer ${getAccess()}`,
+      },
     };
     axios(axiosConfig)
       .then((response) => {
