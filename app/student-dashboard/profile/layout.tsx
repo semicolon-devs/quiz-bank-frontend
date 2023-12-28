@@ -1,4 +1,4 @@
-export default function CreateQPackLayout({
+export default function ProfileLayout({
   children,
 }: {
   children: React.ReactNode;

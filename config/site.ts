@@ -3,15 +3,15 @@ export type SiteConfig = typeof siteConfig;
 export const siteConfig = {
   name: "QBank",
   description: "Quiz Website",
-  sidebarItems: [
+  adminSidebarItems: [
     {
       label: "Home",
       href: "/home",
       icon: "HomeIcon",
     },
     {
-      label: "Create Q Pack",
-      href: "/create-q-pack",
+      label: "Manage Q Papers",
+      href: "/manage-q-papers",
       icon: "CreateQBankIcon",
     },
     {
@@ -42,6 +42,23 @@ export const siteConfig = {
     {
       label: "Profile",
       href: "/profile",
+      icon: "ProfileIcon",
+    },
+  ],
+  studentSidebarItems: [
+    {
+      label: "Home",
+      href: "/student-dashboard/home",
+      icon: "HomeIcon",
+    },
+    {
+      label: "Payment Details",
+      href: "/student-dashboard/payment-details",
+      icon: "ProfileIcon",
+    },
+    {
+      label: "Profile",
+      href: "/student-dashboard/profile",
       icon: "ProfileIcon",
     },
   ],

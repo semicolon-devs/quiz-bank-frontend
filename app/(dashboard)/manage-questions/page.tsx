@@ -4,6 +4,9 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 
+import EditQuestionModal from "./modals/editQuestionModal";
+import DeleteQuestionModal from "./modals/deleteQuestionModal";
+
 import {
   Table,
   TableHeader,
@@ -14,26 +17,24 @@ import {
   getKeyValue,
 } from "@nextui-org/table";
 
-import { EyeIcon, EditIcon, DeleteIcon } from "@/components/icons";
+import { EyeOpenIcon, EditIcon, DeleteIcon } from "@/components/icons";
 
 import { title } from "@/components/primitives";
 import { BASE_URL } from "@/config/apiConfig";
+import { getAccess } from "@/helpers/token";
 
 interface Question {
   answers: any[];
   correctAnswer: number[];
+  difficulty: string;
   explaination: string;
+  module: { _id: string; name: string; __v: number };
   question: string;
-  subCategory: {
-    name: string;
-    __v: number;
-    _id: string;
-  };
-  subject: { _id: string; name: string; subCategories: string[]; __v: number };
+  subCategory: { _id: string; name: string; __v: number; moduleList: any[] };
+  subject: { _id: string; name: string; subCategories: any[]; __v: number };
   type: string;
   __v: number;
   _id: string;
-  difficulty: string;
 }
 
 interface QuestionRow {
@@ -41,6 +42,7 @@ interface QuestionRow {
   question: string;
   subject: string;
   subCategory: string;
+  module: string;
   difficulty: string;
 }
 
@@ -48,6 +50,7 @@ const columns = [
   { name: "QUESTION", uid: "question" },
   { name: "SUBJECT", uid: "subject" },
   { name: "SUBJECT CATEGORY", uid: "subCategory" },
+  { name: "MODULE", uid: "module" },
   { name: "DIFFICULTY LEVEL", uid: "difficulty" },
   { name: "ACTIONS", uid: "actions" },
 ];
@@ -65,6 +68,9 @@ export default function ManageQuestionsPage() {
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}questions`,
+        headers: {
+          Authorization: `Bearer ${getAccess()}`,
+        },
       };
       axios(axiosConfig)
         .then((response) => {
@@ -86,10 +92,11 @@ export default function ManageQuestionsPage() {
 
     const extractQuestionRows = (questions: Question[]): QuestionRow[] => {
       return questions.map(
-        ({ _id, question, difficulty, subject, subCategory }) => ({
+        ({ _id, question, difficulty, subject, subCategory, module }) => ({
           _id,
           question: question.replace(regex, ""),
           difficulty,
+          module: module.name,
           subject: subject.name,
           subCategory: subCategory.name,
         })
@@ -119,15 +126,15 @@ export default function ManageQuestionsPage() {
             <div className="relative flex items-center gap-2">
               <span
                 className="text-lg text-blue cursor-pointer active:opacity-50"
-                onClick={() => router.push(`/preview/${question._id}`)}
+                onClick={() => router.push(`/preview/question/${question._id}`)}
               >
-                <EyeIcon classes="w-4 h-4" />
+                <EyeOpenIcon classes="w-4 h-4" />
               </span>
               <span className="text-lg text-blue cursor-pointer active:opacity-50">
-                <EditIcon classes="w-4 h-4" />
+                <EditQuestionModal questionId={question._id} />
               </span>
               <span className="text-lg text-red cursor-pointer active:opacity-50">
-                <DeleteIcon classes="w-4 h-4" />
+                <DeleteQuestionModal question={question} />
               </span>
             </div>
           );

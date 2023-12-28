@@ -1,3 +1,7 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
+
 import {
   Navbar as NextUINavbar,
   NavbarContent,
@@ -15,6 +19,12 @@ import { Avatar, AvatarGroup, AvatarIcon } from "@nextui-org/avatar";
 
 import { link as linkStyles } from "@nextui-org/theme";
 
+import axios from "axios";
+
+import { BASE_URL } from "@/config/apiConfig";
+import { getAccess } from "@/helpers/token";
+import { getUser, getUserDetails } from "@/helpers/userDetails";
+
 import { siteConfig } from "@/config/site";
 import NextLink from "next/link";
 import clsx from "clsx";
@@ -22,7 +32,38 @@ import clsx from "clsx";
 // import { ThemeSwitch } from "@/components/theme-switch";
 import { SearchIcon } from "@/components/icons";
 
+interface UserDetails {
+  firstname: string;
+  lastname: string;
+  email: string;
+  roles: ("USER" | "MODERATOR" | "ADMIN")[];
+  _id: string;
+}
+
 export const Navbar = () => {
+  const [userDetails, setUserDetails] = useState<UserDetails | null>();
+  const [role, setRole] = useState<"USER" | "MODERATOR" | "ADMIN">();
+
+  useEffect(() => {
+    getUser();
+
+    setUserDetails(getUserDetails());
+  }, []);
+
+  useEffect(() => {
+    const getHighestRole = (): "USER" | "MODERATOR" | "ADMIN" => {
+      if (userDetails?.roles.includes("ADMIN")) {
+        return "ADMIN";
+      } else if (userDetails?.roles.includes("MODERATOR")) {
+        return "MODERATOR";
+      } else {
+        return "USER";
+      }
+    };
+
+    setRole(getHighestRole());
+  }, [userDetails]);
+
   const searchInput = (
     <Input
       aria-label="Search"
@@ -109,8 +150,10 @@ export const Navbar = () => {
           src="https://i.pravatar.cc/150?u=a04258a2462d826712d"
         />
         <div className="">
-          <p className="font-semibold text-blue text-sm">Viraj Pattapola</p>
-          <p className="text-blue text-sm">Admin</p>
+          <p className="font-semibold text-blue text-sm">
+            {userDetails?.firstname} {userDetails?.lastname}
+          </p>
+          <p className="text-blue text-xs">{role}</p>
         </div>
       </NavbarContent>
 

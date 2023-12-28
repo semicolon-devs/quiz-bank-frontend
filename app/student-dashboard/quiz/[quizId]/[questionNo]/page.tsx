@@ -7,28 +7,24 @@ import { Checkbox } from "@nextui-org/checkbox";
 import { Button, ButtonGroup } from "@nextui-org/button";
 
 import { BASE_URL } from "@/config/apiConfig";
+import { getAccess } from "@/helpers/token";
 
 interface Question {
   answers: { number: number; answer: string; _id: string }[];
-  correctAnswer: number[];
-  explaination: string;
   question: string;
-  subCategory: {
-    name: string;
-    __v: number;
-    _id: string;
-  };
-  subject: { _id: string; name: string; subCategories: string[]; __v: number };
   type: string;
   __v: number;
-  _id: string;
-  difficulty: string;
 }
 
-export default function Page({ params }: { params: { id: string } }) {
+export default function QuizDetailsPage({
+  params,
+}: {
+  params: { questionNo: string; quizId: string };
+}) {
   const [loading, setLoading] = useState<boolean>(false);
   const [question, setQuestion] = useState<Question>();
   const [answersSelected, setAnswersSelected] = useState<boolean[]>([
+    false,
     false,
     false,
     false,
@@ -40,7 +36,10 @@ export default function Page({ params }: { params: { id: string } }) {
       setLoading(true);
       const axiosConfig = {
         method: "GET",
-        url: `${BASE_URL}questions/${params.id}`,
+        url: `${BASE_URL}papers/${params.quizId}/${params.questionNo}`,
+        headers: {
+          Authorization: `Bearer ${getAccess()}`,
+        },
       };
       axios(axiosConfig)
         .then((response) => {
@@ -55,12 +54,15 @@ export default function Page({ params }: { params: { id: string } }) {
     };
 
     getQuestion();
-  }, [params.id]);
+  }, []);
 
   return (
-    <div>
+    <div className="w-full">
       {question && (
-        <div dangerouslySetInnerHTML={{ __html: question.question }} />
+        <div
+          dangerouslySetInnerHTML={{ __html: question.question }}
+          className="font-semibold"
+        />
       )}
       <div className="flex flex-col gap-2 mt-5">
         {question &&
@@ -68,14 +70,14 @@ export default function Page({ params }: { params: { id: string } }) {
           question.answers.map((answer, index) => (
             <div className="flex gap-5" key={answer._id}>
               <Checkbox
-                isSelected={answersSelected[index + 1]}
-                onValueChange={() =>
-                  setAnswersSelected((prev) => [
-                    ...prev.slice(0, index + 1),
-                    !prev[index + 1],
-                    ...prev.slice(index + 2),
-                  ])
-                }
+                // isSelected={answersSelected[index]}
+                // onValueChange={() =>
+                //   setAnswersSelected((prev) => [
+                //     ...prev.slice(0, index),
+                //     !prev[index],
+                //     ...prev.slice(index),
+                //   ])
+                // }
               ></Checkbox>
               <div
                 className="bg-white p-3 rounded-xl w-full"
@@ -84,12 +86,6 @@ export default function Page({ params }: { params: { id: string } }) {
             </div>
           ))}
       </div>
-      {question && (
-        <div
-          className="border border-blue p-3 rounded-xl w-full mt-5"
-          dangerouslySetInnerHTML={{ __html: question.explaination }}
-        />
-      )}
     </div>
   );
 }

@@ -31,27 +31,27 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ subject }) => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const editSubject = () => {
-    // setLoading(true);
-    // const axiosConfig = {
-    //   method: "POST",
-    //   url: `${BASE_URL}subjects`,
-    //   // headers: {
-    //   //   Authorization: `Bearer ${token}`,
-    //   // },
-    //   data: {
-    //     name: subject,
-    //   },
-    // };
-    // axios(axiosConfig)
-    //   .then((response) => {
-    //     console.log(response);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   })
-    //   .finally(() => {
-    //     setLoading(false);
-    //   });
+    setLoading(true);
+    const axiosConfig = {
+      method: "PATCH",
+      url: `${BASE_URL}subjects/${subject._id}`,
+      // headers: {
+      //   Authorization: `Bearer ${token}`,
+      // },
+      data: {
+        name: subjectName,
+      },
+    };
+    axios(axiosConfig)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (

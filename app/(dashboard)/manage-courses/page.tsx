@@ -15,6 +15,8 @@ import DeleteSubjectModal from "./modals/deleteSubjectModal";
 import EditSubjectModal from "./modals/editSubjectModal";
 import DeleteSubjectCategoryModal from "./modals/deleteSubjectCategoryModal";
 import EditSubjectCategoryModal from "./modals/editSubjectCategoryModal";
+import DeleteModuleModal from "./modals/deleteModuleModal";
+import EditModuleModal from "./modals/editModuleModal";
 
 import { BASE_URL } from "@/config/apiConfig";
 
@@ -129,6 +131,7 @@ export default function ManageCoursesPage() {
                     onSelectionChange={(e) =>
                       setSelectedSubjectCategory(String(e))
                     }
+                    // size="sm"
                   >
                     {course.subCategories &&
                       course.subCategories.map((category) => (
@@ -158,26 +161,27 @@ export default function ManageCoursesPage() {
                           </Card>
 
                           <div className="flex flex-col gap-2">
-                            {category.moduleList.map((module) => (
-                              <Card key={module._id}>
-                                <CardBody>
-                                  <div className="flex flex-col">
-                                    <div className="flex justify-between items-center">
-                                      <p className="text-blue">{module.name}</p>
-                                      <div className="flex gap-5">
-                                        <EditSubjectCategoryModal
-                                          subCategory={category}
-                                        />
-                                        <DeleteSubjectCategoryModal
-                                          subCategory={category}
-                                          subjectId={course._id}
-                                        />
+                            {category.moduleList &&
+                              category.moduleList.map((module) => (
+                                <Card key={module._id}>
+                                  <CardBody>
+                                    <div className="flex flex-col">
+                                      <div className="flex justify-between items-center">
+                                        <p className="text-blue">
+                                          {module.name}
+                                        </p>
+                                        <div className="flex gap-5">
+                                          <EditModuleModal module={module} />
+                                          <DeleteModuleModal
+                                            module={module}
+                                            subCategoryId={category._id}
+                                          />
+                                        </div>
                                       </div>
                                     </div>
-                                  </div>
-                                </CardBody>
-                              </Card>
-                            ))}
+                                  </CardBody>
+                                </Card>
+                              ))}
                           </div>
                         </Tab>
                       ))}
