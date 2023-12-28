@@ -7,9 +7,9 @@ import axios from "axios";
 
 import { BASE_URL } from "@/config/apiConfig";
 import { getAccess } from "@/helpers/token";
-
-import QuitQuizModal from "./modals/QuitQuizModal";
 import { getUserDetails } from "@/helpers/userDetails";
+
+// import QuitQuizModal from "./modals/QuitQuizModal";
 
 export default function QuizLayout({
   children,
