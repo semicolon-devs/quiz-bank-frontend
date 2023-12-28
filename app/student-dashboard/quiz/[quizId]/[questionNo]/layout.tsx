@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 import axios from "axios";
 
@@ -22,6 +23,8 @@ export default function QuizLayout({
   const [answeredArray, setAnsweredArray] = useState<number[]>();
   const [QPaperName, setQPaperName] = useState<string>();
   const [QPaperId, setQPaperId] = useState<string>();
+
+  const router = useRouter();
 
   const questionBlockStatus = (status: string) => {
     if (status === "not viewed") {
@@ -94,19 +97,26 @@ export default function QuizLayout({
         <QuitQuizModal />
       </div>
       <div className="flex">
-        <div className="p-6 grid grid-cols-5 gap-2 h-max">
-          {Array.from({ length: totalQuestions }, (block, i) => i).map((i) => (
-            <div
-              key={i}
-              className={`border border-blue/25 rounded-md w-9 h-7 flex justify-center items-center font-semibold`}
-            >
-              {i + 1}
-            </div>
-          ))}
+        <div className="p-6 h-max w-[260px]">
+          <div className="grid grid-cols-5 gap-2 w-max">
+            {Array.from({ length: totalQuestions }, (block, i) => i).map(
+              (i) => (
+                <div
+                  key={i}
+                  className={`border border-blue/25 rounded-md w-9 h-7 flex justify-center items-center font-semibold cursor-pointer hover:bg-blue/20`}
+                  onClick={() =>
+                    router.push(
+                      `/student-dashboard/quiz/${params.quizId}/${i + 1}`
+                    )
+                  }
+                >
+                  {i + 1}
+                </div>
+              )
+            )}
+          </div>
         </div>
-        <div className="p-6 flex flex-grow border-l border-dark/25 ">
-          {children}
-        </div>
+        <div className="p-6 flex flex-grow border-l border-dark/25 ">{children}</div>
       </div>
     </section>
   );

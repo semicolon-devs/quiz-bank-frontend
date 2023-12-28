@@ -11,19 +11,9 @@ import { getAccess } from "@/helpers/token";
 
 interface Question {
   answers: { number: number; answer: string; _id: string }[];
-  correctAnswer: number[];
-  explaination: string;
   question: string;
-  subCategory: {
-    name: string;
-    __v: number;
-    _id: string;
-  };
-  subject: { _id: string; name: string; subCategories: string[]; __v: number };
   type: string;
   __v: number;
-  _id: string;
-  difficulty: string;
 }
 
 export default function QuizDetailsPage({
@@ -46,7 +36,7 @@ export default function QuizDetailsPage({
       setLoading(true);
       const axiosConfig = {
         method: "GET",
-        url: `${BASE_URL}questions/656272a15924ffb42375caec`,
+        url: `${BASE_URL}papers/${params.quizId}/${params.questionNo}`,
         headers: {
           Authorization: `Bearer ${getAccess()}`,
         },
@@ -80,14 +70,14 @@ export default function QuizDetailsPage({
           question.answers.map((answer, index) => (
             <div className="flex gap-5" key={answer._id}>
               <Checkbox
-                isSelected={answersSelected[index]}
-                onValueChange={() =>
-                  setAnswersSelected((prev) => [
-                    ...prev.slice(0, index),
-                    !prev[index],
-                    ...prev.slice(index),
-                  ])
-                }
+                // isSelected={answersSelected[index]}
+                // onValueChange={() =>
+                //   setAnswersSelected((prev) => [
+                //     ...prev.slice(0, index),
+                //     !prev[index],
+                //     ...prev.slice(index),
+                //   ])
+                // }
               ></Checkbox>
               <div
                 className="bg-white p-3 rounded-xl w-full"
