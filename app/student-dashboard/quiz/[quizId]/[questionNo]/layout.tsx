@@ -8,6 +8,7 @@ import { BASE_URL } from "@/config/apiConfig";
 import { getAccess } from "@/helpers/token";
 
 import QuitQuizModal from "./modals/QuitQuizModal";
+import { getUserDetails } from "@/helpers/userDetails";
 
 export default function QuizLayout({
   children,
@@ -17,32 +18,10 @@ export default function QuizLayout({
   params: { questionNo: string; quizId: string };
 }) {
   const [loading, setLoading] = useState<boolean>();
-
-  const questionBlocks: {
-    _id: number;
-    status: string;
-  }[] = [
-    { _id: 1, status: "answered" },
-    { _id: 2, status: "answered" },
-    { _id: 3, status: "answered" },
-    { _id: 4, status: "viewed" },
-    { _id: 5, status: "answered" },
-    { _id: 6, status: "answered" },
-    { _id: 7, status: "answered" },
-    { _id: 8, status: "answered" },
-    { _id: 9, status: "answered" },
-    { _id: 10, status: "active" },
-    { _id: 11, status: "not viewed" },
-    { _id: 12, status: "not viewed" },
-    { _id: 13, status: "not viewed" },
-    { _id: 14, status: "not viewed" },
-    { _id: 15, status: "not viewed" },
-    { _id: 16, status: "not viewed" },
-    { _id: 17, status: "not viewed" },
-    { _id: 18, status: "not viewed" },
-    { _id: 19, status: "not viewed" },
-    { _id: 20, status: "not viewed" },
-  ];
+  const [totalQuestions, setTotalQuestions] = useState<number>(0);
+  const [answeredArray, setAnsweredArray] = useState<number[]>();
+  const [QPaperName, setQPaperName] = useState<string>();
+  const [QPaperId, setQPaperId] = useState<string>();
 
   const questionBlockStatus = (status: string) => {
     if (status === "not viewed") {
@@ -59,16 +38,18 @@ export default function QuizLayout({
   useEffect(() => {
     const getQuestionBlocks = () => {
       setLoading(true);
+      const userID = getUserDetails()?._id;
       const axiosConfig = {
         method: "GET",
-        url: `${BASE_URL}answers/status/65734bd2868d6424d688a12c/${params.quizId}`,
+        url: `${BASE_URL}answers/status/${userID}/${params.quizId}`,
         headers: {
           Authorization: `Bearer ${getAccess()}`,
         },
       };
       axios(axiosConfig)
         .then((response) => {
-          console.log(response);
+          setTotalQuestions(response.data.totalQuestions);
+          setAnsweredArray(response.data.answered);
         })
         .catch((err) => {
           console.log(err);
@@ -78,30 +59,50 @@ export default function QuizLayout({
         });
     };
 
+    const getQPaperInfo = () => {
+      setLoading(true);
+      const axiosConfig = {
+        method: "GET",
+        url: `${BASE_URL}papers/${params.quizId}/info`,
+        headers: {
+          Authorization: `Bearer ${getAccess()}`,
+        },
+      };
+      axios(axiosConfig)
+        .then((response) => {
+          setQPaperName(response.data.name);
+          setQPaperId(response.data.paperId);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    };
+
+    getQPaperInfo();
     getQuestionBlocks();
   }, []);
 
   return (
     <section className="w-full h-full">
       <div className="border-b border-dark/25 p-3 flex justify-between items-center">
-        <p className="font-semibold text-lg">
-          Bio Chemistry Quiz - #{params.quizId}
+        <p className="font-bold text-lg uppercase">
+          {QPaperName} - {QPaperId}
         </p>
         <QuitQuizModal />
       </div>
       <div className="flex">
         <div className="p-6 grid grid-cols-5 gap-2 h-max">
-          {questionBlocks &&
-            questionBlocks.map((block, index) => (
-              <div
-                className={`border border-blue/25 rounded-md w-9 h-7 flex justify-center items-center font-semibold ${questionBlockStatus(
-                  block.status
-                )}`}
-                key={block._id}
-              >
-                {index + 1}
-              </div>
-            ))}
+          {Array.from({ length: totalQuestions }, (block, i) => i).map((i) => (
+            <div
+              key={i}
+              className={`border border-blue/25 rounded-md w-9 h-7 flex justify-center items-center font-semibold`}
+            >
+              {i + 1}
+            </div>
+          ))}
         </div>
         <div className="p-6 flex flex-grow border-l border-dark/25 ">
           {children}
