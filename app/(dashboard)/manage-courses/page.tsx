@@ -37,7 +37,7 @@ interface Course {
   __v: number;
 }
 
-export default function ManageCoursesPage() {
+export default async function ManageCoursesPage() {
   const [selectedSubject, setSelectedSubject] = useState<string>();
   const [selectedSubjectCategory, setSelectedSubjectCategory] =
     useState<string>();

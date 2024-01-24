@@ -55,7 +55,7 @@ const columns = [
   { name: "ACTIONS", uid: "actions" },
 ];
 
-export default function ManageQuestionsPage() {
+export default async function ManageQuestionsPage() {
   const [loading, setLoading] = useState<boolean>(false);
   const [questionList, setQuestionList] = useState<Question[]>([]);
   const [questionRow, setQuestionRow] = useState<QuestionRow[]>([]);

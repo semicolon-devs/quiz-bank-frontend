@@ -1,7 +1,7 @@
 import { title } from "@/components/primitives";
 import { getAccess } from "@/helpers/token";
 
-export default function ProfilePage() {
+export default async function ProfilePage() {
   return (
     <div>
       <h1 className={title({ size: "md" })}>Payment Details</h1>

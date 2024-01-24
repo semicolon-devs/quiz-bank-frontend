@@ -51,7 +51,7 @@ interface Module {
   name: string;
 }
 
-export default function AddQuestionPage() {
+export default async function AddQuestionPage() {
   const [difficultyLevelSelected, setDifficultyLevelSelected] =
     useState<string>(difficultyLevelArr[0]);
   const [subjectSelected, setSubjectSelected] = useState<string>("");

@@ -17,7 +17,7 @@ interface Question {
   __v: number;
 }
 
-export default function QuizDetailsPage({
+export default async function QuizDetailsPage({
   params,
 }: {
   params: { questionNo: string; quizId: string };

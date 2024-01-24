@@ -43,7 +43,7 @@ const columns = [
   { name: "ACTIONS", uid: "actions" },
 ];
 
-export default function CreateQPackPage() {
+export default async function CreateQPackPage() {
   const [loading, setLoading] = useState<boolean>(false);
   const [QPaperList, setQPaperList] = useState<QPaper[]>([]);
 

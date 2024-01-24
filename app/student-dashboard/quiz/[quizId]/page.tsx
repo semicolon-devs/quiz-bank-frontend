@@ -1,4 +1,4 @@
-export default function QuizDetailsPage({
+export default async function QuizDetailsPage({
   params,
 }: {
   params: { quizId: string };

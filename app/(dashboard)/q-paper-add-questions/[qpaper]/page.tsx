@@ -75,7 +75,7 @@ interface QuestionRow {
   difficulty: string;
 }
 
-export default function CreateQPackPage({
+export default async function CreateQPackPage({
   params,
 }: {
   params: { qpaper: string };

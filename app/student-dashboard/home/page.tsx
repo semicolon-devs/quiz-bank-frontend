@@ -18,7 +18,7 @@ import {
 import { title, subtitle } from "@/components/primitives";
 import { RightArrowIcon } from "@/components/icons";
 
-export default function DashboardHomePage() {
+export default async function DashboardHomePage() {
   const rows = [
     {
       key: "1",
