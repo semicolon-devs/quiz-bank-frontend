@@ -9,6 +9,7 @@ import { Spinner } from "@nextui-org/spinner";
 
 import { BASE_URL } from "@/config/apiConfig";
 import { getAccess } from "@/helpers/token";
+import { getUserID } from "@/helpers/userDetails";
 
 interface Question {
   answers: { number: number; answer: string; _id: string }[];
@@ -17,7 +18,7 @@ interface Question {
   __v: number;
 }
 
-export default async function QuizDetailsPage({
+export default async function QuizQuestionPage({
   params,
 }: {
   params: { questionNo: string; quizId: string };
@@ -44,7 +45,8 @@ export default async function QuizDetailsPage({
       };
       axios(axiosConfig)
         .then((response) => {
-          setQuestion(response.data);
+          setQuestion(response.data.question);
+          setSubmittedAnswers(response.data.answer.answer);
         })
         .catch((err) => {
           console.log(err);
@@ -56,6 +58,57 @@ export default async function QuizDetailsPage({
 
     getQuestion();
   }, []);
+
+  function setSubmittedAnswers(submittedAnswers: number[]) {
+    for (let i = 0; i < answersSelected.length; i++) {
+      if (submittedAnswers.includes(i)) {
+        setAnswersSelected((prev) => {
+          const newArray = [...prev];
+          newArray[i] = true;
+          return newArray;
+        });
+      }
+    }
+  }
+
+  function getTrueIndexes(): number[] {
+    let trueIndexes = [];
+    for (let i = 0; i < answersSelected.length; i++) {
+      if (answersSelected[i] === true) {
+        trueIndexes.push(i);
+      }
+    }
+    return trueIndexes;
+  }
+
+  const handleSubmit = () => {
+    console.log(getTrueIndexes());
+    setLoading(true);
+    const axiosConfig = {
+      method: "POST",
+      url: `${BASE_URL}answers/submit`,
+      headers: {
+        Authorization: `Bearer ${getAccess()}`,
+      },
+      data: {
+        userId: getUserID(),
+        paperId: params.quizId,
+        questionIndex: params.questionNo,
+        answer: getTrueIndexes(),
+        submitAt: "2023-02-02",
+      },
+    };
+    axios(axiosConfig)
+      .then((response) => {
+        setQuestion(response.data._doc);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   return (
     <div className="w-full h-full flex flex-col gap-5 flex-grow">
@@ -78,14 +131,14 @@ export default async function QuizDetailsPage({
                 question.answers.map((answer, index) => (
                   <div className="flex gap-5" key={answer._id}>
                     <Checkbox
-                    // isSelected={answersSelected[index]}
-                    // onValueChange={() =>
-                    //   setAnswersSelected((prev) => [
-                    //     ...prev.slice(0, index),
-                    //     !prev[index],
-                    //     ...prev.slice(index),
-                    //   ])
-                    // }
+                      isSelected={answersSelected[index]}
+                      onValueChange={() =>
+                        setAnswersSelected((prev) => {
+                          let newArray = [...prev];
+                          newArray[index] = !newArray[index];
+                          return newArray;
+                        })
+                      }
                     ></Checkbox>
                     <div
                       className="bg-white p-3 rounded-xl w-full"
@@ -96,7 +149,9 @@ export default async function QuizDetailsPage({
             </div>
           </div>
           <div className="w-full flex justify-end items-center">
-            <Button color="primary">Submit</Button>
+            <Button color="primary" onClick={handleSubmit}>
+              Submit
+            </Button>
           </div>
         </>
       )}

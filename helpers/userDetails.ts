@@ -40,6 +40,16 @@ export const clearUserDetails = () => {
   });
 };
 
+export const getUserID = (): string | null => {
+  const userDetails = Cookies.get("userDetails");
+  if (userDetails) {
+    const userDetailsObj: UserDetails = JSON.parse(userDetails);
+    return userDetailsObj._id;
+  } else {
+    return null;
+  }
+};
+
 export const getUser = () => {
   const userDetails = getUserDetails();
 

@@ -25,7 +25,7 @@ export default function QuizLayout({
   const [loadingQBlocks, setLoadingQBlocks] = useState<boolean>(false);
   const [loadingQPaper, setLoadingQPaper] = useState<boolean>(false);
   const [totalQuestions, setTotalQuestions] = useState<number>(0);
-  const [answeredArray, setAnsweredArray] = useState<number[]>();
+  const [answeredArray, setAnsweredArray] = useState<number[]>([]);
   const [QPaperError, setQPaperError] = useState<boolean>(false);
   const [QPaperName, setQPaperName] = useState<string>();
   const [QPaperId, setQPaperId] = useState<string>();
@@ -114,7 +114,11 @@ export default function QuizLayout({
                       (i) => (
                         <div
                           key={i}
-                          className={`border border-blue/25 rounded-md w-9 h-7 flex justify-center items-center font-semibold cursor-pointer hover:bg-blue/20`}
+                          className={`border border-blue/25 rounded-md w-9 h-7 flex justify-center items-center font-semibold cursor-pointer hover:bg-blue/20 ${
+                            answeredArray.includes(i + 1)
+                              ? "text-white bg-blue hover:bg-blue/90"
+                              : "hover:bg-blue/20"
+                          }`}
                           onClick={() =>
                             router.push(
                               `/student-dashboard/quiz/${params.quizId}/${

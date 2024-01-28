@@ -20,9 +20,11 @@ export default function QuizLayout({
 }) {
   const [loading, setLoading] = useState<boolean>();
   const [totalQuestions, setTotalQuestions] = useState<number>(0);
-  const [answeredArray, setAnsweredArray] = useState<number[]>();
+  const [answeredArray, setAnsweredArray] = useState<number[]>([]);
   const [QPaperName, setQPaperName] = useState<string>();
   const [QPaperId, setQPaperId] = useState<string>();
+
+  console.log(answeredArray);
 
   const router = useRouter();
 
@@ -103,11 +105,13 @@ export default function QuizLayout({
               (i) => (
                 <div
                   key={i}
-                  className={`border border-blue/25 rounded-md w-9 h-7 flex justify-center items-center font-semibold cursor-pointer hover:bg-blue/20`}
+                  className={`border border-blue/25 rounded-md w-9 h-7 flex justify-center items-center font-semibold cursor-pointer ${
+                    answeredArray.includes(i)
+                      ? "text-white bg-blue hover:bg-blue/90"
+                      : "hover:bg-blue/20"
+                  }`}
                   onClick={() =>
-                    router.push(
-                      `/preview/quiz/${params.quizId}/${i + 1}`
-                    )
+                    router.push(`/preview/quiz/${params.quizId}/${i + 1}`)
                   }
                 >
                   {i + 1}
@@ -116,7 +120,9 @@ export default function QuizLayout({
             )}
           </div>
         </div>
-        <div className="p-6 flex flex-grow border-l border-dark/25 ">{children}</div>
+        <div className="p-6 flex flex-grow border-l border-dark/25">
+          {children}
+        </div>
       </div>
     </section>
   );

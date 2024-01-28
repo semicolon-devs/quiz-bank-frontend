@@ -16,7 +16,7 @@ interface Question {
   __v: number;
 }
 
-export default async function QuizDetailsPage({
+export default async function QuizQuestionPage({
   params,
 }: {
   params: { questionNo: string; quizId: string };
@@ -31,6 +31,8 @@ export default async function QuizDetailsPage({
     false,
   ]);
 
+  console.log(question);
+
   useEffect(() => {
     const getQuestion = () => {
       setLoading(true);
@@ -43,7 +45,7 @@ export default async function QuizDetailsPage({
       };
       axios(axiosConfig)
         .then((response) => {
-          setQuestion(response.data);
+          setQuestion(response.data._doc);
         })
         .catch((err) => {
           console.log(err);
@@ -70,14 +72,14 @@ export default async function QuizDetailsPage({
           question.answers.map((answer, index) => (
             <div className="flex gap-5" key={answer._id}>
               <Checkbox
-                // isSelected={answersSelected[index]}
-                // onValueChange={() =>
-                //   setAnswersSelected((prev) => [
-                //     ...prev.slice(0, index),
-                //     !prev[index],
-                //     ...prev.slice(index),
-                //   ])
-                // }
+              // isSelected={answersSelected[index]}
+              // onValueChange={() =>
+              //   setAnswersSelected((prev) => [
+              //     ...prev.slice(0, index),
+              //     !prev[index],
+              //     ...prev.slice(index),
+              //   ])
+              // }
               ></Checkbox>
               <div
                 className="bg-white p-3 rounded-xl w-full"
