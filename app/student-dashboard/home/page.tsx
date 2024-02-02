@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import axios from "axios";
 import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card";
 import { Link } from "@nextui-org/link";
 import { Divider } from "@nextui-org/divider";
@@ -18,7 +20,24 @@ import {
 import { title, subtitle } from "@/components/primitives";
 import { RightArrowIcon } from "@/components/icons";
 
+import { getAccess } from "@/helpers/token";
+import { BASE_URL } from "@/config/apiConfig";
+
+interface QPaper {
+  isTimed: boolean;
+  name: string;
+  paperId: string;
+  paperType: string;
+  questions: any[];
+  timeInMinutes: number;
+  __v: number;
+  _id: string;
+}
+
 export default async function DashboardHomePage() {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [qPaperList, setQPaperList] = useState<QPaper[]>();
+
   const rows = [
     {
       key: "1",
@@ -93,155 +112,79 @@ export default async function DashboardHomePage() {
     },
   ];
 
+  useEffect(() => {
+    const getQPapers = async () => {
+      setLoading(true);
+      const axiosConfig = {
+        method: "GET",
+        url: `${BASE_URL}papers`,
+        headers: {
+          Authorization: `Bearer ${getAccess()}`,
+        },
+      };
+      axios(axiosConfig)
+        .then((response) => {
+          console.log(response);
+          setQPaperList(response.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    };
+
+    getQPapers();
+  }, []);
+
   return (
     <div>
       <h1 className={title({ size: "md" })}>Student Dashboard</h1>
       <h1 className={subtitle()}>Question Packs</h1>
-      <div className="mb-6 flex gap-3">
-        <Card className="w-[250px]">
-          <CardHeader className="flex gap-3">
-            <Image
-              alt="nextui logo"
-              height={40}
-              radius="sm"
-              src="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
-              width={40}
-            />
-            <div className="flex flex-col">
-              <p className="text-md">Module Quiz</p>
-              <p className="text-small text-default-500">Quiz #45252</p>
-            </div>
-          </CardHeader>
-          <Divider />
-          <CardBody>
-            <p className="text-lg font-semibold">Bio Chemistry Quiz</p>
-          </CardBody>
-          {/* <Divider /> */}
-          <CardFooter className="flex justify-end">
-            <Chip
-              endContent={<RightArrowIcon classes="w-3 h-3" />}
-              variant="solid"
-              color="primary"
-              size="lg"
-            >
-              <Link
-                isExternal
-                href="https://github.com/nextui-org/nextui"
-                className="uppercase text-white text-sm"
-              >
-                details
-              </Link>
-            </Chip>
-          </CardFooter>
-        </Card>
-        <Card className="w-[250px]">
-          <CardHeader className="flex gap-3">
-            <Image
-              alt="nextui logo"
-              height={40}
-              radius="sm"
-              src="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
-              width={40}
-            />
-            <div className="flex flex-col">
-              <p className="text-md">Module Quiz</p>
-              <p className="text-small text-default-500">Quiz #45252</p>
-            </div>
-          </CardHeader>
-          <Divider />
-          <CardBody>
-            <p className="text-lg font-semibold">Psychology Quiz</p>
-          </CardBody>
-          {/* <Divider /> */}
-          <CardFooter className="flex justify-end">
-            <Chip
-              endContent={<RightArrowIcon classes="w-3 h-3" />}
-              variant="solid"
-              color="primary"
-              size="lg"
-            >
-              <Link
-                isExternal
-                href="https://github.com/nextui-org/nextui"
-                className="uppercase text-white text-sm"
-              >
-                details
-              </Link>
-            </Chip>
-          </CardFooter>
-        </Card>
-        <Card className="w-[250px]">
-          <CardHeader className="flex gap-3">
-            <Image
-              alt="nextui logo"
-              height={40}
-              radius="sm"
-              src="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
-              width={40}
-            />
-            <div className="flex flex-col">
-              <p className="text-md">Module Quiz</p>
-              <p className="text-small text-default-500">Quiz #45252</p>
-            </div>
-          </CardHeader>
-          <Divider />
-          <CardBody>
-            <p className="text-lg font-semibold">Human Anatomy Quiz</p>
-          </CardBody>
-          {/* <Divider /> */}
-          <CardFooter className="flex justify-end">
-            <Chip
-              endContent={<RightArrowIcon classes="w-3 h-3" />}
-              variant="solid"
-              color="primary"
-              size="lg"
-            >
-              <Link
-                isExternal
-                href="https://github.com/nextui-org/nextui"
-                className="uppercase text-white text-sm"
-              >
-                details
-              </Link>
-            </Chip>
-          </CardFooter>
-        </Card>
-        <Card className="w-[250px]">
-          <CardHeader className="flex gap-3">
-            <Image
-              alt="nextui logo"
-              height={40}
-              radius="sm"
-              src="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
-              width={40}
-            />
-            <div className="flex flex-col">
-              <p className="text-md">Module Quiz</p>
-              <p className="text-small text-default-500">Quiz #45252</p>
-            </div>
-          </CardHeader>
-          <Divider />
-          <CardBody>
-            <p className="text-lg font-semibold">Human Anatomy Quiz</p>
-          </CardBody>
-          {/* <Divider /> */}
-          <CardFooter className="flex justify-end">
-            <Chip
-              endContent={<RightArrowIcon classes="w-3 h-3" />}
-              variant="solid"
-              color="primary"
-              size="lg"
-            >
-              <Link
-                isExternal
-                href="https://github.com/nextui-org/nextui"
-                className="uppercase text-white text-sm"
-              >
-                details
-              </Link>
-            </Chip>
-          </CardFooter>
-        </Card>
+      <div className="mb-6 flex gap-3 w-full overflow-x-auto">
+        {qPaperList &&
+          qPaperList.map((qpaper) => (
+            <Card className="w-[250px]">
+              <CardHeader className="flex gap-3">
+                <Image
+                  alt="nextui logo"
+                  height={40}
+                  radius="sm"
+                  src="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
+                  width={40}
+                />
+                <div className="flex flex-col">
+                  <p className="text-md">Module Quiz</p>
+                  <p className="text-small text-default-500">
+                    {qpaper.paperId}
+                  </p>
+                </div>
+              </CardHeader>
+              <Divider />
+              <CardBody>
+                <p className="text-lg font-semibold">{qpaper.name}</p>
+              </CardBody>
+              {/* <Divider /> */}
+              <CardFooter className="flex justify-end">
+                <Chip
+                  endContent={<RightArrowIcon classes="w-3 h-3" />}
+                  variant="solid"
+                  color="primary"
+                  size="lg"
+                >
+                  <Link
+                    isExternal
+                    href={`/student-dashboard/quiz/${qpaper._id}/01`}
+                    className="uppercase text-white text-sm"
+                  >
+                    Take Quiz
+                  </Link>
+                </Chip>
+              </CardFooter>
+            </Card>
+            // <div>{qpaper.name}</div>
+          ))}
       </div>
       <h1 className={subtitle()}>Stats</h1>
       <div className="grid grid-cols-3 gap-3">

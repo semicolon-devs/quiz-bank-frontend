@@ -100,13 +100,37 @@ export default async function QuizQuestionPage({
     };
     axios(axiosConfig)
       .then((response) => {
-        setQuestion(response.data._doc);
+        console.log(response);
       })
       .catch((err) => {
         console.log(err);
       })
       .finally(() => {
         setLoading(false);
+      });
+  };
+
+  const handleCompleteQuiz = () => {
+    handleSubmit();
+    const axiosConfig = {
+      method: "POST",
+      url: `${BASE_URL}answers/finish`,
+      headers: {
+        Authorization: `Bearer ${getAccess()}`,
+      },
+      data: {
+        userId: getUserID(),
+        paperId: params.quizId,
+        submitAt: "2023-02-02",
+      },
+    };
+    axios(axiosConfig)
+      .then((response) => {
+        console.log(response);
+        window.location.href = `/student-dashboard/quiz/review/${params.quizId}`;
+      })
+      .catch((err) => {
+        console.log(err);
       });
   };
 
@@ -148,9 +172,12 @@ export default async function QuizQuestionPage({
                 ))}
             </div>
           </div>
-          <div className="w-full flex justify-end items-center">
+          <div className="w-full flex justify-end items-center gap-3">
             <Button color="primary" onClick={handleSubmit}>
-              Submit
+              Submit Answer
+            </Button>
+            <Button color="secondary" onClick={handleCompleteQuiz}>
+              Complete Quiz
             </Button>
           </div>
         </>

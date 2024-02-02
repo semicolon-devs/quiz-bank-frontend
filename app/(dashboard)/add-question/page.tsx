@@ -51,7 +51,7 @@ interface Module {
   name: string;
 }
 
-export default async function AddQuestionPage() {
+export default function AddQuestionPage() {
   const [difficultyLevelSelected, setDifficultyLevelSelected] =
     useState<string>(difficultyLevelArr[0]);
   const [subjectSelected, setSubjectSelected] = useState<string>("");
@@ -143,6 +143,7 @@ export default async function AddQuestionPage() {
     axios(axiosConfig)
       .then((response) => {
         console.log(response);
+        window.location.href = "/manage-questions";
       })
       .catch((err) => {
         console.log(err);
