@@ -1,7 +1,7 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: "QBank",
+  name: "SMIT Academy",
   description: "Quiz Website",
   adminSidebarItems: [
     {
