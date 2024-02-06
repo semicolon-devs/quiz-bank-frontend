@@ -11,38 +11,23 @@ import {
   NavbarItem,
   NavbarMenuItem,
 } from "@nextui-org/navbar";
-import { Button } from "@nextui-org/button";
 import { Kbd } from "@nextui-org/kbd";
-import { Link } from "@nextui-org/link";
 import { Input } from "@nextui-org/input";
 import { Avatar, AvatarGroup, AvatarIcon } from "@nextui-org/avatar";
 
-import { link as linkStyles } from "@nextui-org/theme";
-
-import axios from "axios";
-
-import { BASE_URL } from "@/config/apiConfig";
-import { getAccess } from "@/helpers/token";
 import { getUser, getUserDetails } from "@/helpers/userDetails";
 
-import { siteConfig } from "@/config/site";
+
 import NextLink from "next/link";
 import clsx from "clsx";
 
-// import { ThemeSwitch } from "@/components/theme-switch";
 import { SearchIcon } from "@/components/icons";
-
-interface UserDetails {
-  firstname: string;
-  lastname: string;
-  email: string;
-  roles: ("USER" | "MODERATOR" | "ADMIN")[];
-  _id: string;
-}
+import { UserRole } from "@/utils/enums";
+import { UserDetails } from "@/types";
 
 export const Navbar = () => {
   const [userDetails, setUserDetails] = useState<UserDetails | null>();
-  const [role, setRole] = useState<"USER" | "MODERATOR" | "ADMIN">();
+  const [role, setRole] = useState<UserRole>();
 
   useEffect(() => {
     getUser();
@@ -51,13 +36,13 @@ export const Navbar = () => {
   }, []);
 
   useEffect(() => {
-    const getHighestRole = (): "USER" | "MODERATOR" | "ADMIN" => {
-      if (userDetails?.roles.includes("ADMIN")) {
-        return "ADMIN";
-      } else if (userDetails?.roles.includes("MODERATOR")) {
-        return "MODERATOR";
+    const getHighestRole = (): UserRole => {
+      if (userDetails?.roles.includes(UserRole.ADMIN)) {
+        return UserRole.ADMIN;
+      } else if (userDetails?.roles.includes(UserRole.MODERATOR)) {
+        return UserRole.MODERATOR;
       } else {
-        return "USER";
+        return UserRole.USER;
       }
     };
 

@@ -6,9 +6,13 @@ export enum UrlSlugType {
 
   // User Url
   HOME = "/home",
-  ORDERS = "/orders",
-  MENU = "/menu",
-  PAYMENTS = "/payments",
-  TEAM = "/team",
-  SETTINGS = "/settings",
+  MANAGE_PAPERS = "/manage-papers",
+  MANAGE_QUESTIONS = "/manage-questions",
+  ADD_QUESTION = "/add-question",
+  MANAGE_COURSES = "/manage-courses",
+  MANAGE_USERS = "/manage-users",
+  SUBSCRIPTIONS = "/subscriptions",
+  PROFILE = "/profile",
+  PAYMENT_DETAILS = "/payment-details",
+
 }
