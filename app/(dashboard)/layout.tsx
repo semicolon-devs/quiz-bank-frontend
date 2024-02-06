@@ -8,7 +8,7 @@ export default function SigninLayout({
 }) {
   return (
     <div className="flex h-screen">
-      <Sidebar admin={true} />
+      <Sidebar />
       <div className="relative flex flex-col flex-grow">
         <Navbar />
         <main className="p-6 overflow-y-auto">{children}</main>
