@@ -1,5 +1,6 @@
 /* eslint-disable no-useless-concat */
 import { BASE_URL } from "@/config/apiConfig";
+import { UrlSlugType } from "@/utils/enums/UrlSlug";
 import axios from "axios";
 import Cookies from "js-cookie";
 
@@ -44,7 +45,7 @@ export const getAccess = () => {
     if (!refreshToken) {
       // navigate to unAuthorized page or login page here
       // this point means user not logged in or both tokens expired
-      window.location.href = "/sign-in";
+      window.location.href = UrlSlugType.LOGIN;
     } else {
       const axiosConfig = {
         method: "POST",
@@ -53,7 +54,7 @@ export const getAccess = () => {
         },
         url: `${BASE_URL}auth/refresh-token`,
       };
-      
+
       axios(axiosConfig)
         .then((response) => {
           setAuthToken(response.data.accessToken);

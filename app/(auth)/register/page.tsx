@@ -43,7 +43,7 @@ export const metadata: Metadata = {
   title: "Register",
 };
 
-export default function SignUpPage() {
+export default function RegisterPage() {
   const router = useRouter();
 
   const [loading, setLoading] = useState<boolean>(false);

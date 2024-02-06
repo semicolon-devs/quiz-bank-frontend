@@ -10,6 +10,7 @@ import {
 } from "formik";
 import NextLink from "next/link";
 import type { Metadata } from "next";
+import { useRouter } from "next/navigation";
 
 import Spinner from "@/components/spinner";
 
@@ -37,9 +38,9 @@ export const metadata: Metadata = {
   title: "Log in",
 };
 
-export default function SigninPage() {
-  // const [email, setEmail] = useState<string>();
-  // const [password, setPassword] = useState<string>();
+export default function LoginPage() {
+  const router = useRouter();
+
   const [error, setError] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
@@ -74,7 +75,7 @@ export default function SigninPage() {
       .then((response) => {
         setAuthToken(response.data.accessToken);
         setRefreshToken(response.data.refreshToken);
-        window.location.href = "/home";
+        router.push(UrlSlugType.HOME)
       })
       .catch((err) => {
         setError("incorrect email or password. please try again");
