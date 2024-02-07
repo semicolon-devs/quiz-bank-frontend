@@ -48,26 +48,15 @@ export const Navbar = () => {
     setRole(getHighestRole());
   }, [userDetails]);
 
-  const searchInput = (
-    <Input
-      aria-label="Search"
-      classNames={{
-        inputWrapper: "bg-default-100",
-        input: "text-sm",
-      }}
-      endContent={
-        <Kbd className="hidden lg:inline-block" keys={["command"]}>
-          K
-        </Kbd>
-      }
-      labelPlacement="outside"
-      placeholder="Search..."
-      startContent={
-        <SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0" />
-      }
-      type="search"
-    />
+  return (
+    <div className="max-h-12 h-12 flex flex-grow bg-white justify-end items-center px-4 py-1">
+      <div className="flex flex-col ">
+        <p className="text-sm font-normal text-blue">
+          {userDetails?.firstname}&nbsp;
+          {userDetails?.lastname}
+        </p>
+        <p className="text-xs font-semibold">{role}</p>
+      </div>
+    </div>
   );
-
-  return <div className="max-h-16 h-16 flex flex-grow bg-white">navbar</div>;
 };

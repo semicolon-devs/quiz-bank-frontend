@@ -60,9 +60,7 @@ export const Sidebar = (props: Props) => {
       href={path}
       className={`${
         pathname == path ? "border-r-5 border-white" : ""
-      }  px-5 flex gap-5 items-center duration-700 
-      ${isSidebarExpanded ? "w-64" : "w-[65px]"} 
-      h-10`}
+      }  px-5 flex gap-5 items-center w-full duration-700 h-10`}
       key={path}
     >
       {icon}
@@ -85,7 +83,7 @@ export const Sidebar = (props: Props) => {
       }  bg-blue`}
     >
       <div className="flex flex-col">
-        <div className="h-16 flex items-center">
+        <div className="h-12 flex items-center">
           <div
             className={`cursor-pointer ml-2.5 flex gap-5 items-center p-2`}
             onClick={() => {
