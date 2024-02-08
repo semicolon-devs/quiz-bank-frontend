@@ -49,7 +49,7 @@ export const Navbar = () => {
   }, [userDetails]);
 
   return (
-    <div className="max-h-12 h-12 flex flex-grow bg-white justify-end items-center px-4 py-1">
+    <nav className="max-h-16 h-16 flex w-full bg-white justify-end items-center px-5 py-1">
       <div className="flex flex-col ">
         <p className="text-sm font-normal text-blue">
           {userDetails?.firstname}&nbsp;
@@ -57,6 +57,6 @@ export const Navbar = () => {
         </p>
         <p className="text-xs font-semibold">{role}</p>
       </div>
-    </div>
+    </nav>
   );
 };

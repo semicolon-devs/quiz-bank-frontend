@@ -60,7 +60,9 @@ export const Sidebar = (props: Props) => {
       href={path}
       className={`${
         pathname == path ? "border-r-5 border-white" : ""
-      }  px-5 flex gap-5 items-center w-full duration-700 h-10`}
+      }  px-5 flex gap-5 items-center duration-700 h-10
+      ${isSidebarExpanded ? "w-64" : "w-[65px]"}
+      `}
       key={path}
     >
       {icon}
@@ -79,11 +81,11 @@ export const Sidebar = (props: Props) => {
   return (
     <div
       className={`h-screen flex flex-col justify-between duration-700 ${
-        isSidebarExpanded ? "w-64" : "w-[65px]"
+        isSidebarExpanded ? "min-w-64" : "min-w-[65px]"
       }  bg-blue`}
     >
       <div className="flex flex-col">
-        <div className="h-12 flex items-center">
+        <div className="h-16 flex items-center">
           <div
             className={`cursor-pointer ml-2.5 flex gap-5 items-center p-2`}
             onClick={() => {
@@ -100,7 +102,7 @@ export const Sidebar = (props: Props) => {
         </div>
       </div>
       <div
-        className={`cursor-pointer px-5 flex gap-5 items-center py-2 mb-1`}
+        className={`cursor-pointer px-5 flex gap-5 items-center py-2 mb-1 w-full`}
         onClick={() => {
           clearUserDetails();
           clearAuthToken();

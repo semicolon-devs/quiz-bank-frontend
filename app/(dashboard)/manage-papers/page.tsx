@@ -1,6 +1,5 @@
 "use client";
 
-import { title } from "@/components/primitives";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
@@ -19,6 +18,8 @@ import { EditIcon, DeleteIcon, EyeOpenIcon } from "@/components/icons";
 import DeleteQPaperModal from "./modals/deleteQPaperModal";
 import EditQPaperModal from "./modals/editQPaperModal";
 import CreateQPaperModal from "./modals/CreateQPaperModal";
+
+import SectionTitle from "@/components/sectionTitle";
 
 import { BASE_URL } from "@/config/apiConfig";
 import { getAccess } from "@/helpers/token";
@@ -86,7 +87,8 @@ export default async function CreateQPackPage() {
         case "actions":
           return (
             <div className="relative flex items-center gap-2">
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50"
+              <span
+                className="text-lg text-default-400 cursor-pointer active:opacity-50"
                 onClick={() => router.push(`/preview/quiz/${QPaper._id}/1`)}
               >
                 <EyeOpenIcon classes="h-4 w-4" />
@@ -134,7 +136,7 @@ export default async function CreateQPackPage() {
   return (
     <div>
       <div className="flex justify-between">
-        <h1 className={title({ size: "md" })}>Manage Q Papers</h1>
+        <SectionTitle title="Manage Papers" />
         <CreateQPaperModal />
       </div>
       <Table aria-label="Example table with custom cells" className="mt-5">

@@ -1,9 +1,9 @@
-import { title } from "@/components/primitives";
+import SectionTitle from "@/components/sectionTitle";
 
 export default async function ManageUsersPage() {
   return (
     <div>
-      <h1 className={title({ size: "md" })}>Manage Users</h1>
+      <SectionTitle title="Manage Users" />
     </div>
   );
 }

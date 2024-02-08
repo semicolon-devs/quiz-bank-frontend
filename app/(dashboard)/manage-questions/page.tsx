@@ -19,7 +19,8 @@ import {
 
 import { EyeOpenIcon, EditIcon, DeleteIcon } from "@/components/icons";
 
-import { title } from "@/components/primitives";
+import SectionTitle from "@/components/sectionTitle";
+
 import { BASE_URL } from "@/config/apiConfig";
 import { getAccess } from "@/helpers/token";
 
@@ -147,7 +148,7 @@ export default async function ManageQuestionsPage() {
 
   return (
     <div>
-      <h1 className={title({ size: "md" })}>Manage Questions</h1>
+      <SectionTitle title="Manage Questions" />
       <Table aria-label="Example table with custom cells" className="mt-5">
         <TableHeader columns={columns}>
           {(column) => (

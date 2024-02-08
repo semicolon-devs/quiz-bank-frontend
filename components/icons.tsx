@@ -529,3 +529,21 @@ export const ExclamationMarkIcon = (props: { classes: string }) => (
     <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM10 15a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm1-4a1 1 0 0 1-2 0V6a1 1 0 0 1 2 0v5Z" />
   </svg>
 );
+
+export const RightArrowWithTailIcon = (props: { classes: string }) => (
+  <svg
+    className={props.classes}
+    aria-hidden="true"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+  >
+    <path
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      d="M19 12H5m14 0-4 4m4-4-4-4"
+    />
+  </svg>
+);

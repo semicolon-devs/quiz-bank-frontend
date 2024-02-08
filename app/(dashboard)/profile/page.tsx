@@ -1,10 +1,10 @@
-import { title } from "@/components/primitives";
+import SectionTitle from "@/components/sectionTitle";
 import { getAccess } from "@/helpers/token";
 
 export default async function ProfilePage() {
   return (
     <div>
-      <h1 className={title({ size: "md" })}>Profile</h1>
+      <SectionTitle title="Profile" />
     </div>
   );
 }

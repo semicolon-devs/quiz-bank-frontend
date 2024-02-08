@@ -17,8 +17,8 @@ import { MinusIcon, EyeOpenIcon, PlusIcon } from "@/components/icons";
 
 import { BASE_URL } from "@/config/apiConfig";
 import { getAccess } from "@/helpers/token";
-import { title } from "@/components/primitives";
 
+import SectionTitle from "@/components/sectionTitle";
 import AddQuestionModal from "./modals/addQuestionModal";
 import RemoveQuestionModal from "./modals/removeQuestionModal";
 
@@ -282,10 +282,13 @@ export default async function CreateQPackPage({
         </div>
       ) : (
         <>
-          <h1 className={`${title({ size: "md" })} uppercase`}>
+          <SectionTitle
+            title={qPaper?.name ? qPaper?.name : "Paper Loading..."}
+          />
+          {/* <h1 className={`${title({ size: "md" })} uppercase`}>
             {qPaper ? qPaper.paperId : "Paper loading ..."} :{" "}
             {qPaper && qPaper.name}
-          </h1>
+          </h1> */}
           <p className="mt-5 font-semibold capitalize text-lg">
             added questions
           </p>

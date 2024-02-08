@@ -10,10 +10,9 @@ import { Button, ButtonGroup } from "@nextui-org/button";
 import { Select, SelectSection, SelectItem } from "@nextui-org/select";
 import { Spinner } from "@nextui-org/spinner";
 
-import { title } from "@/components/primitives";
-
 import { BASE_URL } from "@/config/apiConfig";
 import { getAccess } from "@/helpers/token";
+import SectionTitle from "@/components/sectionTitle";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
@@ -215,7 +214,7 @@ export default function AddQuestionPage() {
 
   return (
     <div>
-      <h1 className={title({ size: "md" })}>Add Question</h1>
+      <SectionTitle title="Add Question" />
       <div className="flex flex-col gap-5 mt-10">
         <p className="font-semibold">Select Difficulty Level</p>
         <select

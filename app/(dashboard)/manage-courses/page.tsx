@@ -6,8 +6,6 @@ import axios from "axios";
 import { Tabs, Tab } from "@nextui-org/tabs";
 import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card";
 
-import { title } from "@/components/primitives";
-
 import AddSubjectModal from "./modals/addSubjectModal";
 import AddSubjectCategoryModal from "./modals/addSubjectCategoryModal";
 import AddModuleModal from "./modals/addModuleModal";
@@ -17,6 +15,8 @@ import DeleteSubjectCategoryModal from "./modals/deleteSubjectCategoryModal";
 import EditSubjectCategoryModal from "./modals/editSubjectCategoryModal";
 import DeleteModuleModal from "./modals/deleteModuleModal";
 import EditModuleModal from "./modals/editModuleModal";
+
+import SectionTitle from "@/components/sectionTitle";
 
 import { BASE_URL } from "@/config/apiConfig";
 import { getAccess } from "@/helpers/token";
@@ -94,7 +94,7 @@ export default async function ManageCoursesPage() {
 
   return (
     <div>
-      <h1 className={title({ size: "md" })}>Manage Courses</h1>
+      <SectionTitle title="Manage Courses" />
       <div className="my-5 flex items-center justify-end gap-5">
         <AddSubjectModal />
         <AddSubjectCategoryModal subjects={extractSubjects(courses)} />
