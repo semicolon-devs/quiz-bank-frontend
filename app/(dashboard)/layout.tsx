@@ -7,11 +7,11 @@ export default function SigninLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex max-h-screen max-w-screen h-screen w-screen border border-blue box-border">
+    <div className="flex h-screen w-screen">
       <Sidebar />
-      <div className="relative flex flex-col w-full">
+      <div className="relative flex flex-col min-w-[calc(100vw-256px)] max-w-[calc(100vw-65px)] w-full">
         <Navbar />
-        <main className="p-5 h-[calc(100vh-64px)] overflow-y-auto">
+        <main className="p-5 overflow-y-auto h-[calc(100vh-56px)]">
           {children}
         </main>
       </div>

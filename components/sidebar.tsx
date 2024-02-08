@@ -80,12 +80,12 @@ export const Sidebar = (props: Props) => {
 
   return (
     <div
-      className={`h-screen flex flex-col justify-between duration-700 ${
+      className={`h-full flex flex-col justify-between duration-700 ${
         isSidebarExpanded ? "min-w-64" : "min-w-[65px]"
       }  bg-blue`}
     >
       <div className="flex flex-col">
-        <div className="h-16 flex items-center">
+        <div className="h-14 flex items-center">
           <div
             className={`cursor-pointer ml-2.5 flex gap-5 items-center p-2`}
             onClick={() => {

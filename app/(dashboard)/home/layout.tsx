@@ -37,5 +37,5 @@ export default function DashboardHomeLayout({
     setRole(getHighestRole());
   }, [userDetails]);
 
-  return <section className="">{role == UserRole.ADMIN ? admin : student}</section>;
+  return <>{role == UserRole.ADMIN ? admin : student}</>;
 }
