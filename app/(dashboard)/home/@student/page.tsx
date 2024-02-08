@@ -2,11 +2,8 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card";
-import { Link } from "@nextui-org/link";
-import { Divider } from "@nextui-org/divider";
-import { Image } from "@nextui-org/image";
-import { Chip } from "@nextui-org/chip";
 import {
   Table,
   TableHeader,
@@ -20,10 +17,11 @@ import {
 import SectionTitle from "@/components/sectionTitle";
 import SectionSubTitle from "@/components/sectionSubTitle";
 
-import { RightArrowWithTailIcon as RightArrowIcon } from "@/components/icons";
+import { RightArrowWithTailIcon, RightArrowIcon } from "@/components/icons";
 
 import { getAccess } from "@/helpers/token";
 import { BASE_URL } from "@/config/apiConfig";
+import { UrlSlugType } from "@/utils/enums/UrlSlug";
 
 const rows = [
   {
@@ -114,6 +112,8 @@ export default async function DashboardHomePage() {
   const [loading, setLoading] = useState<boolean>(false);
   const [qPaperList, setQPaperList] = useState<QPaper[]>();
 
+  const router = useRouter();
+
   useEffect(() => {
     const getQPapers = async () => {
       setLoading(true);
@@ -126,7 +126,6 @@ export default async function DashboardHomePage() {
       };
       axios(axiosConfig)
         .then((response) => {
-          console.log(response);
           setQPaperList(response.data);
         })
         .catch((err) => {
@@ -144,28 +143,35 @@ export default async function DashboardHomePage() {
     <>
       <SectionTitle title={"Student Dashboard"} />
       <div className="mb-4 max-w-full">
-        <SectionSubTitle title={"Question Packs"} />
-        <div className="max-w-full overflow-x-scroll border border-blue flex flex-grow">
-          <div className="flex gap-5">
-            {qPaperList &&
-              qPaperList.map((qpaper) => (
-                <div
-                  className="bg-white rounded-xl overflow-hidden shadow-lg w-52 p-2 flex flex-col justify-between h-40"
-                  key={qpaper._id}
-                >
-                  <div className="flex flex-col">
-                    <p className="text-sm uppercase">{qpaper.paperId}</p>
-                    <p className="text-xl font-semibold uppercase leading-6">
-                      {qpaper.name}
-                    </p>
-                  </div>
-                  <button className="bg-blue rounded-lg px-2 py-1 w-full flex gap-2 items-center justify-center">
-                    <p className="text-white text-sm">Take Quiz</p>
-                    <RightArrowIcon classes="h-5 w-5 text-white" />
-                  </button>
-                </div>
-              ))}
+        <div className="flex justify-between items-center">
+          <SectionSubTitle title={"Papers"} />
+          <div
+            className="flex gap-2 transition duration-700 items-center cursor-pointer"
+            onClick={() => router.push(UrlSlugType.PAPERS)}
+          >
+            <p className="text-blue-600 text-sm font-medium">View all</p>
+            <RightArrowIcon classes={"w-2.5 h-2.5 text-blue-600"} />
           </div>
+        </div>
+        <div className="w-full grid grid-cols-4 gap-5">
+          {qPaperList &&
+            qPaperList.slice(0, 4).map((qpaper) => (
+              <div
+                className="bg-white rounded-xl overflow-hidden shadow-lg w-full p-2 flex flex-col justify-between h-40"
+                key={qpaper._id}
+              >
+                <div className="flex flex-col">
+                  <p className="text-sm uppercase">{qpaper.paperId}</p>
+                  <p className="text-xl font-semibold uppercase leading-6">
+                    {qpaper.name}
+                  </p>
+                </div>
+                <button className="bg-blue-500 hover:bg-blue-700 hover:gap-3 transition duration-1000 rounded-lg px-2 py-1 w-full flex gap-2 items-center justify-center">
+                  <p className="text-white text-sm">Take Quiz</p>
+                  <RightArrowWithTailIcon classes="h-5 w-5 text-white" />
+                </button>
+              </div>
+            ))}
         </div>
       </div>
       <SectionSubTitle title="Stats" />

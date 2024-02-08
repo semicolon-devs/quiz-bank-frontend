@@ -51,7 +51,7 @@ export const Navbar = () => {
   return (
     <nav className="max-h-14 h-14 flex w-full bg-white justify-end items-center px-5 py-1">
       <div className="flex flex-col ">
-        <p className="text-sm font-normal text-blue">
+        <p className="text-sm font-normal text-blue-500">
           {userDetails?.firstname}&nbsp;
           {userDetails?.lastname}
         </p>

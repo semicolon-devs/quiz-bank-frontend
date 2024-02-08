@@ -167,7 +167,7 @@ export default function LoginPage() {
       <p className="mt-5 text-sm text-dark">
         Don't have an account?{" "}
         <NextLink
-          className="capitalize font-semibold text-blue"
+          className="capitalize font-semibold text-blue-500"
           href={UrlSlugType.REGISTER}
         >
           register

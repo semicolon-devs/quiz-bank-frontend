@@ -302,7 +302,7 @@ const EditQuestionModal: React.FC<EditQuestionModalProps> = ({
                       onChange={(e) =>
                         setDifficultyLevelSelected(e.target.value)
                       }
-                      className="p-1 border border-blue/25 rounded-lg"
+                      className="p-1 border border-blue-500/25 rounded-lg"
                     >
                       {difficultyLevelArr.map((item) => (
                         <option value={item} key={item}>
@@ -314,7 +314,7 @@ const EditQuestionModal: React.FC<EditQuestionModalProps> = ({
                     <select
                       value={subjectSelected}
                       onChange={(e) => setSubjectSelected(e.target.value)}
-                      className="p-1 border border-blue/25 rounded-lg"
+                      className="p-1 border border-blue-500/25 rounded-lg"
                     >
                       <option value="">Select a subject</option>
                       {courses &&
@@ -330,7 +330,7 @@ const EditQuestionModal: React.FC<EditQuestionModalProps> = ({
                       onChange={(e) =>
                         setSubjectCategorySelected(e.target.value)
                       }
-                      className="p-1 border border-blue/25 rounded-lg"
+                      className="p-1 border border-blue-500/25 rounded-lg"
                     >
                       <option value="">Select a subject category</option>
                       {subjectCategoryList &&
@@ -344,7 +344,7 @@ const EditQuestionModal: React.FC<EditQuestionModalProps> = ({
                     <select
                       value={moduleSelected}
                       onChange={(e) => setModuleSelected(e.target.value)}
-                      className="p-1 border border-blue/25 rounded-lg"
+                      className="p-1 border border-blue-500/25 rounded-lg"
                     >
                       <option value="">Select a module</option>
                       {moduleList &&

@@ -7,6 +7,7 @@ export enum UrlSlugType {
   // User Url
   HOME = "/home",
   MANAGE_PAPERS = "/manage-papers",
+  PAPERS = "/papers",
   MANAGE_QUESTIONS = "/manage-questions",
   ADD_QUESTION = "/add-question",
   MANAGE_COURSES = "/manage-courses",

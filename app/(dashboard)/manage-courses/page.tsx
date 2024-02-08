@@ -100,7 +100,7 @@ export default async function ManageCoursesPage() {
         <AddSubjectCategoryModal subjects={extractSubjects(courses)} />
         <AddModuleModal subjects={extractSubjectsAndSubCategories(courses)} />
       </div>
-      <div className="flex w-full flex-col border-2 border-blue/25 p-3 rounded-3xl">
+      <div className="flex w-full flex-col border-2 border-blue-500/25 p-3 rounded-3xl">
         <Tabs
           aria-label="Subjects"
           selectedKey={selectedSubject}
@@ -109,7 +109,7 @@ export default async function ManageCoursesPage() {
           {courses &&
             courses.map((course) => (
               <Tab key={course._id} title={course.name}>
-                <Card className="bg-blue/75 mb-3">
+                <Card className="bg-blue-500/75 mb-3">
                   <CardBody>
                     <div className="flex justify-between items-center">
                       <div className="">
@@ -128,7 +128,7 @@ export default async function ManageCoursesPage() {
                   </CardBody>
                 </Card>
 
-                <div className="flex w-full flex-col border-2 border-blue/25 p-3 rounded-3xl">
+                <div className="flex w-full flex-col border-2 border-blue-500/25 p-3 rounded-3xl">
                   <Tabs
                     aria-label="Subject Category List"
                     selectedKey={selectedSubjectCategory}
@@ -140,7 +140,7 @@ export default async function ManageCoursesPage() {
                     {course.subCategories &&
                       course.subCategories.map((category) => (
                         <Tab key={category._id} title={category.name}>
-                          <Card className="bg-blue/75 mb-3">
+                          <Card className="bg-blue-500/75 mb-3">
                             <CardBody>
                               <div className="flex justify-between items-center">
                                 <div className="">
@@ -171,7 +171,7 @@ export default async function ManageCoursesPage() {
                                   <CardBody>
                                     <div className="flex flex-col">
                                       <div className="flex justify-between items-center">
-                                        <p className="text-blue">
+                                        <p className="text-blue-500">
                                           {module.name}
                                         </p>
                                         <div className="flex gap-5">

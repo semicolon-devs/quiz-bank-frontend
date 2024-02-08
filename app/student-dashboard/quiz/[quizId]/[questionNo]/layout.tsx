@@ -34,13 +34,13 @@ export default function QuizLayout({
 
   const questionBlockStatus = (status: string) => {
     if (status === "not viewed") {
-      return "text-blue bg-white";
+      return "text-blue-500 bg-white";
     } else if (status === "answered") {
-      return "text-white bg-blue";
+      return "text-white bg-blue-500";
     } else if (status === "active") {
-      return "text-blue bg-blue/25";
+      return "text-blue-500 bg-blue-500/25";
     } else {
-      return "text-blue bg-white";
+      return "text-blue-500 bg-white";
     }
   };
 
@@ -114,10 +114,10 @@ export default function QuizLayout({
                       (i) => (
                         <div
                           key={i}
-                          className={`border border-blue/25 rounded-md w-9 h-7 flex justify-center items-center font-semibold cursor-pointer hover:bg-blue/20 ${
+                          className={`border border-blue-500/25 rounded-md w-9 h-7 flex justify-center items-center font-semibold cursor-pointer hover:bg-blue/20 ${
                             answeredArray.includes(i + 1)
-                              ? "text-white bg-blue hover:bg-blue/90"
-                              : "hover:bg-blue/20"
+                              ? "text-white bg-blue-500 hover:bg-blue-500/90"
+                              : "hover:bg-blue-500/20"
                           }`}
                           onClick={() =>
                             router.push(
@@ -133,7 +133,7 @@ export default function QuizLayout({
                     )
                   : Array.from({ length: 20 }, (block, i) => i).map((i) => (
                       <Skeleton
-                        className="rounded-md w-9 h-7 border border-blue/10"
+                        className="rounded-md w-9 h-7 border border-blue-500/10"
                         key={i}
                       >
                         <div className="rounded-md w-9 h-7"></div>

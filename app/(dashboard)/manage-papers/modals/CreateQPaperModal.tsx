@@ -129,7 +129,7 @@ const CreateQPaperModal = () => {
                   Is paper timed
                 </Checkbox>
                 {error && (
-                  <div className="border border-red rounded-lg p-3 text-red font-semibold">
+                  <div className="border border-red-500 rounded-lg p-3 text-red-500 font-semibold">
                     {error}
                   </div>
                 )}

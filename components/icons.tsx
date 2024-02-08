@@ -403,7 +403,7 @@ export const MenuIcon = () => (
 
 export const RightArrowIcon = (props: { classes: string }) => (
   <svg
-    className={`${props.classes} text-white`}
+    className={`${props.classes}`}
     aria-hidden="true"
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
@@ -544,6 +544,24 @@ export const RightArrowWithTailIcon = (props: { classes: string }) => (
       strokeLinejoin="round"
       strokeWidth="2"
       d="M19 12H5m14 0-4 4m4-4-4-4"
+    />
+  </svg>
+);
+
+export const ClockIcon = (props: { classes: string }) => (
+  <svg
+    className={props.classes}
+    aria-hidden="true"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+  >
+    <path
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
     />
   </svg>
 );

@@ -28,6 +28,12 @@ export const menuItems = (): MenuItems[] => {
       users: [UserRole.ADMIN, UserRole.MODERATOR],
     },
     {
+      name: "papers",
+      path: UrlSlugType.PAPERS,
+      icon: <ManagePapersIcon />,
+      users: [UserRole.USER],
+    },
+    {
       name: "manage questions",
       path: UrlSlugType.MANAGE_QUESTIONS,
       icon: <ManageQuestionsIcon />,

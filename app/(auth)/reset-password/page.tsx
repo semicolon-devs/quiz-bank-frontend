@@ -50,8 +50,8 @@ export default function ResetPasswordPage() {
     <div className="flex flex-col w-full h-full items-center justify-center">
       <Card className="bg-white w-96">
         <CardBody className="flex flex-col gap-3">
-          <p className="text-blue capitalize font-bold text-xl">new password</p>
-          <p className="text-blue text-sm">
+          <p className="text-blue-500 capitalize font-bold text-xl">new password</p>
+          <p className="text-blue-500 text-sm">
             Please create a new password for your account
           </p>
           <Input
@@ -106,7 +106,7 @@ export default function ResetPasswordPage() {
       <p className="mt-5 text-sm text-dark">
         Just remebered the password?{" "}
         <NextLink
-          className="capitalize font-semibold text-blue"
+          className="capitalize font-semibold text-blue-500"
           href="/sign-in"
         >
           sign in

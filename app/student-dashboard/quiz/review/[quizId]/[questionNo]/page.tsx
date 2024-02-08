@@ -98,7 +98,7 @@ export default async function QuizDetailsPage({
       </div>
       {question && (
         <div
-          className="border border-blue p-3 rounded-xl w-full mt-5"
+          className="border border-blue-500 p-3 rounded-xl w-full mt-5"
           dangerouslySetInnerHTML={{ __html: question.explaination }}
         />
       )}

@@ -126,15 +126,15 @@ export default async function ManageQuestionsPage() {
           return (
             <div className="relative flex items-center gap-2">
               <span
-                className="text-lg text-blue cursor-pointer active:opacity-50"
+                className="text-lg text-blue-500 cursor-pointer active:opacity-50"
                 onClick={() => router.push(`/preview/question/${question._id}`)}
               >
                 <EyeOpenIcon classes="w-4 h-4" />
               </span>
-              <span className="text-lg text-blue cursor-pointer active:opacity-50">
+              <span className="text-lg text-blue-500 cursor-pointer active:opacity-50">
                 <EditQuestionModal questionId={question._id} />
               </span>
-              <span className="text-lg text-red cursor-pointer active:opacity-50">
+              <span className="text-lg text-red-500 cursor-pointer active:opacity-50">
                 <DeleteQuestionModal question={question} />
               </span>
             </div>

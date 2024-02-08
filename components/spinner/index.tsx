@@ -4,7 +4,7 @@ import { SpinnerCircular } from "spinners-react";
 
 interface SpinnerProps {
   size?: number;
-  color?: "blue" | "white";
+  color?: "blue-500" | "white";
 }
 
 const Spinner = (props: SpinnerProps) => {

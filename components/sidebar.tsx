@@ -82,7 +82,7 @@ export const Sidebar = (props: Props) => {
     <div
       className={`h-full flex flex-col justify-between duration-700 ${
         isSidebarExpanded ? "min-w-64" : "min-w-[65px]"
-      }  bg-blue`}
+      }  bg-blue-600`}
     >
       <div className="flex flex-col">
         <div className="h-14 flex items-center">
@@ -102,7 +102,9 @@ export const Sidebar = (props: Props) => {
         </div>
       </div>
       <div
-        className={`cursor-pointer px-5 flex gap-5 items-center py-2 mb-1 w-full`}
+        className={`cursor-pointer px-5 flex gap-5 items-center py-2 mb-1 ${
+          isSidebarExpanded ? "w-64" : "w-[65px]"
+        }`}
         onClick={() => {
           clearUserDetails();
           clearAuthToken();
