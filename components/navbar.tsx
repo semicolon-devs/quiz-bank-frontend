@@ -29,8 +29,6 @@ export const Navbar = () => {
   const [role, setRole] = useState<UserRole>();
 
   useEffect(() => {
-    getUser();
-
     setUserDetails(getUserDetails());
   }, []);
 

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 import SectionTitle from "@/components/sectionTitle";
 
@@ -9,6 +10,7 @@ import { ClockIcon } from "@/components/icons";
 
 import { getAccess } from "@/helpers/token";
 import { BASE_URL } from "@/config/apiConfig";
+import { UrlSlugType } from "@/utils/enums/UrlSlug";
 
 interface QPaper {
   isTimed: boolean;
@@ -24,6 +26,8 @@ interface QPaper {
 export default async function PapersPage() {
   const [loaiding, setLoading] = useState<boolean>(false);
   const [qPaperList, setQPaperList] = useState<QPaper[]>();
+
+  const router = useRouter();
 
   useEffect(() => {
     const getQPapers = async () => {
@@ -64,7 +68,15 @@ export default async function PapersPage() {
                 <p className="text-xl font-semibold uppercase leading-6">
                   {qpaper.name}
                 </p>
-                <button className="bg-blue-500 hover:bg-blue-700 rounded-lg px-4 py-1 w-max flex gap-2 items-center justify-center">
+                <button
+                  className="bg-blue-500 hover:bg-blue-700 rounded-lg px-4 py-1 w-max flex gap-2 items-center justify-center"
+                  onClick={() =>
+                    router.push(
+                      // UrlSlugType.PAPER_DETAILS.replace(":paperID", qpaper._id)
+                      `papers/${qpaper._id}`
+                    )
+                  }
+                >
                   <p className="text-white text-base">Take Quiz</p>
                 </button>
               </div>

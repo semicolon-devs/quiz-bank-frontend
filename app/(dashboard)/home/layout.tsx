@@ -1,10 +1,5 @@
-"use client";
-
-import React, { useState, useEffect, Fragment } from "react";
-
-import { getUser, getUserDetails } from "@/helpers/userDetails";
-
-import { UserDetails } from "@/types";
+import React, { useState, useEffect } from "react";
+import { getUserDetails } from "@/helpers/userDetails";
 import { UserRole } from "@/utils/enums";
 
 export default function DashboardHomeLayout({
@@ -14,17 +9,12 @@ export default function DashboardHomeLayout({
   admin: React.ReactNode;
   student: React.ReactNode;
 }) {
-  const [userDetails, setUserDetails] = useState<UserDetails | null>();
-  const [role, setRole] = useState<UserRole>();
-
-  useEffect(() => {
-    getUser();
-
-    setUserDetails(getUserDetails());
-  }, []);
+  const [role, setRole] = useState<UserRole | undefined>(undefined);
 
   useEffect(() => {
     const getHighestRole = (): UserRole => {
+      const userDetails = getUserDetails();
+
       if (userDetails?.roles.includes(UserRole.ADMIN)) {
         return UserRole.ADMIN;
       } else if (userDetails?.roles.includes(UserRole.MODERATOR)) {
@@ -35,7 +25,8 @@ export default function DashboardHomeLayout({
     };
 
     setRole(getHighestRole());
-  }, [userDetails]);
+  }, []);
 
-  return <>{role == UserRole.ADMIN ? admin : student}</>;
+  return student;
+  // return role === UserRole.ADMIN ? admin : student;
 }
