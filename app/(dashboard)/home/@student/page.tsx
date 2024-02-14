@@ -166,8 +166,11 @@ export default function DashboardHomePage() {
                     {qpaper.name}
                   </p>
                 </div>
-                <button className="bg-blue-500 hover:bg-blue-700 hover:gap-3 transition duration-1000 rounded-lg px-2 py-1 w-full flex gap-2 items-center justify-center">
-                  <p className="text-white text-sm">Take Quiz</p>
+                <button
+                  className="bg-blue-500 hover:bg-blue-700 hover:gap-3 transition duration-1000 rounded-lg px-2 py-1 w-full flex gap-2 items-center justify-center"
+                  onClick={() => router.push(`papers/${qpaper._id}`)}
+                >
+                  <p className="text-white text-sm">View Details</p>
                   <RightArrowWithTailIcon classes="h-5 w-5 text-white" />
                 </button>
               </div>

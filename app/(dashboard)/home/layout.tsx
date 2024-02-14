@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect } from "react";
 import { getUserDetails } from "@/helpers/userDetails";
 import { UserRole } from "@/utils/enums";

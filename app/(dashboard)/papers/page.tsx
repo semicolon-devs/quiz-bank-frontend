@@ -70,14 +70,9 @@ export default async function PapersPage() {
                 </p>
                 <button
                   className="bg-blue-500 hover:bg-blue-700 rounded-lg px-4 py-1 w-max flex gap-2 items-center justify-center"
-                  onClick={() =>
-                    router.push(
-                      // UrlSlugType.PAPER_DETAILS.replace(":paperID", qpaper._id)
-                      `papers/${qpaper._id}`
-                    )
-                  }
+                  onClick={() => router.push(`papers/${qpaper._id}`)}
                 >
-                  <p className="text-white text-base">Take Quiz</p>
+                  <p className="text-white text-base">View Details</p>
                 </button>
               </div>
               <div className="grid grid-cols-4">
