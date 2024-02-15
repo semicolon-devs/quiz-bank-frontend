@@ -20,3 +20,13 @@ export type UserDetails = {
   roles: UserRole[];
   _id: string;
 };
+
+export type PaperDetails = {
+  isTimed: boolean;
+  name: string;
+  paperId: string;
+  paperType: string;
+  timeInMinutes: number;
+  __v: number;
+  _id: string;
+};
