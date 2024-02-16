@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 import { BASE_URL } from "@/config/apiConfig";
 import { getAccess } from "@/helpers/token";
@@ -9,20 +10,22 @@ import { getAccess } from "@/helpers/token";
 import { PaperDetails } from "@/types";
 import { RightArrowWithTailIcon } from "@/components/icons";
 
-export default async function QuizDetailsPage({
+export default function PaperDetailsPage({
   params,
 }: {
-  params: { ID: string };
+  params: { PaperID: string };
 }) {
   const [qPaper, setQPaper] = useState<PaperDetails>();
   const [loading, setLoading] = useState<boolean>(false);
+
+  const router = useRouter();
 
   useEffect(() => {
     const getQPapers = async () => {
       setLoading(true);
       const axiosConfig = {
         method: "GET",
-        url: `${BASE_URL}papers/${params.ID}`,
+        url: `${BASE_URL}papers/${params.PaperID}`,
         headers: {
           Authorization: `Bearer ${getAccess()}`,
         },
@@ -50,7 +53,10 @@ export default async function QuizDetailsPage({
             <p className="text-blue-600 capitalize text-3xl font-semibold">
               {qPaper.name}
             </p>
-            <button className="bg-blue-500 hover:bg-blue-700 rounded-lg px-4 py-1 w-max flex gap-2 items-center justify-center">
+            <button
+              className="bg-blue-500 hover:bg-blue-700 rounded-lg px-4 py-1 w-max flex gap-2 items-center justify-center"
+              onClick={() => router.push(`/papers/${params.PaperID}/1`)}
+            >
               <p className="text-white text-base font-medium">Start Quiz</p>
               <RightArrowWithTailIcon classes={"w-5 h-5 text-white"} />
             </button>

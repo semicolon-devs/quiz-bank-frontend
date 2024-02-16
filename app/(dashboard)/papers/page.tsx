@@ -23,7 +23,7 @@ interface QPaper {
   _id: string;
 }
 
-export default async function PapersPage() {
+export default function PapersPage() {
   const [loaiding, setLoading] = useState<boolean>(false);
   const [qPaperList, setQPaperList] = useState<QPaper[]>();
 
