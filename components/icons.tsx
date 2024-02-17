@@ -246,6 +246,24 @@ export const ChevronDownIcon = () => (
   </svg>
 );
 
+export const ChevronLeftIcon = (props: { classes: string }) => (
+  <svg
+    className={props.classes}
+    aria-hidden="true"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+  >
+    <path
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      d="m14 8-4 4 4 4"
+    />
+  </svg>
+);
+
 export const HomeIcon = () => (
   <svg
     className="w-5 h-5 text-white"

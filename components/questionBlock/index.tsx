@@ -6,6 +6,7 @@ type Props = {
   answeredArray?: number[];
   review?: boolean;
   directingURL: string;
+  activeQuestion: string;
 };
 
 const QuestionBlock = ({
@@ -13,6 +14,7 @@ const QuestionBlock = ({
   answeredArray = [],
   review = false,
   directingURL,
+  activeQuestion,
 }: Props) => {
   const router = useRouter();
 
@@ -21,10 +23,13 @@ const QuestionBlock = ({
       {Array.from({ length: totalQuestions }, (block, i) => i).map((i) => (
         <div
           key={i}
-          className={`border border-blue-100 rounded-md w-9 h-7 flex justify-center items-center font-semibold cursor-pointer hover:bg-blue-200 ${
+          className={` border border-blue-100 ${
+            parseInt(activeQuestion) == i + 1 &&
+            "outline outline-offset-1 outline-3 outline-blue-600"
+          } rounded-md w-9 h-7 flex justify-center items-center font-semibold cursor-pointer hover:bg-blue-200 ${
             !review && answeredArray.includes(i + 1)
-              ? "text-white bg-blue-500 hover:bg-blue-400"
-              : "hover:bg-blue-400"
+              ? "text-white bg-blue-600 hover:bg-blue-200"
+              : "hover:bg-blue-200"
           }`}
           onClick={() => router.push(`${directingURL}/${i + 1}`)}
         >

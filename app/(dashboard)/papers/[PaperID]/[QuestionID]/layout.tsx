@@ -7,11 +7,15 @@ import axios from "axios";
 import Modal from "@/components/modal";
 import QuestionBlock from "@/components/questionBlock";
 
-import { ExclamationMarkIcon } from "@/components/icons";
+import {
+  ExclamationMarkIcon,
+  ChevronLeftIcon,
+  FilledCheckIcon,
+} from "@/components/icons";
 
 import { BASE_URL } from "@/config/apiConfig";
 import { getAccess } from "@/helpers/token";
-import { getUserDetails } from "@/helpers/userDetails";
+import { getUserDetails, getUserID } from "@/helpers/userDetails";
 
 export default function PaperTemplate({
   children,
@@ -30,6 +34,29 @@ export default function PaperTemplate({
 
   const router = useRouter();
 
+  const handleCompleteQuiz = () => {
+    const axiosConfig = {
+      method: "POST",
+      url: `${BASE_URL}answers/finish`,
+      headers: {
+        Authorization: `Bearer ${getAccess()}`,
+      },
+      data: {
+        userId: getUserID(),
+        paperId: params.PaperID,
+        submitAt: "2023-02-02",
+      },
+    };
+    axios(axiosConfig)
+      .then((response) => {
+        console.log(response);
+        router.push(`/paper/review/${params.PaperID}`);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   useEffect(() => {
     const getQuestionBlocks = () => {
       setLoadingQBlocks(true);
@@ -45,6 +72,9 @@ export default function PaperTemplate({
         .then((response) => {
           setTotalQuestions(response.data.totalQuestions);
           setAnsweredArray(response.data.answered);
+          if (parseInt(params.QuestionID) > response.data.totalQuestions) {
+            router.push(`/papers/${params.PaperID}/1`);
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -80,47 +110,101 @@ export default function PaperTemplate({
 
     getQPaperInfo();
     getQuestionBlocks();
-  }, []);
+  }, [params]);
 
   return (
-    <section className="w-full h-full">
+    <section className="w-full h-[calc(100vh-96px)]">
       {!QPaperError ? (
         <>
-          <div className="border-b border-blue-100 p-3 flex justify-between items-center">
-            <p className="font-bold text-lg uppercase">
-              {!loadingQPaper ? QPaperName : "Loading..."} - {QPaperId}
-            </p>
+          <div className="border-b border-blue-100 flex justify-between items-center h-11">
+            <div className="flex items-center">
+              <div className="w-[228px] flex justify-start items-center">
+                <Modal
+                  viewButton={
+                    <button className="cursor-pointer flex items-center justify-center">
+                      <ChevronLeftIcon classes={"h-6 w-6 text-blue-600"} />
+                      <p className="font-semibold uppercase text-blue-600">
+                        back
+                      </p>
+                    </button>
+                  }
+                  modalTitle={"Quit Paper"}
+                  children={
+                    <>
+                      <p className="">
+                        Are you sure you want to Quit the Paper?
+                      </p>
+                      {/* <p className="text-sm italic">
+                        Your progress will be saved and you can resume the quiz
+                        later
+                      </p> */}
+                    </>
+                  }
+                  submitBtn={
+                    <button className="bg-red-400 px-4 py-2 rounded-md">
+                      <p className="text-white text-sm font-medium">
+                        Quit Paper
+                      </p>
+                    </button>
+                  }
+                  handleSubmit={() => router.push(`/papers/${params.PaperID}`)}
+                />
+              </div>
+              <p className="font-bold text-lg uppercase text-blue-600">
+                {!loadingQPaper ? QPaperName : "Loading..."} - {QPaperId}
+              </p>
+            </div>
             <Modal
               viewButton={
-                <button className="bg-red-400 px-4 py-1 outline-none rounded-md">
-                  <p className="text-white font-medium">Quit Paper</p>
+                <button className="bg-blue-600 hover:bg-blue-500 px-4 py-1 outline-none rounded-md">
+                  <p className="text-white font-medium">Finalize Submission</p>
                 </button>
               }
-              modalTitle={"Quit Paper"}
+              modalTitle={"Submit Paper"}
               children={
                 <>
-                  <p className="">Are you sure you want to Quit the Quiz?</p>
-                  <p className="text-sm italic">
-                    Your progress will be saved and you can resume the quiz
-                    later
-                  </p>
+                  <p className="">Are you sure you want to submit the Paper?</p>
+                  {answeredArray.length >= totalQuestions ? (
+                    <div className="mt-2 flex gap-2">
+                      <FilledCheckIcon classes={"w-5 h-5 text-green-600"} />
+                      <p className="text-sm text-green-600">
+                        All questions has been answered
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="mt-2 flex gap-2">
+                      <ExclamationMarkIcon classes={"w-5 h-5 text-red-600"} />
+                      <p className="text-sm text-red-600">
+                        {`Only ${answeredArray.length} out of ${totalQuestions} questions have been answered`}
+                      </p>
+                    </div>
+                  )}
                 </>
               }
+              submitBtn={
+                <button className="bg-blue-400 px-4 py-2 rounded-md">
+                  <p className="text-white text-sm font-medium">
+                    Confirm Submission
+                  </p>
+                </button>
+              }
+              handleSubmit={() => handleCompleteQuiz()}
             />
           </div>
-          <div className="flex h-full">
-            <div className="p-6 h-max w-[260px]">
+          <div className="flex">
+            <div className="p-2 h-max w-[228px]">
               <div className="grid grid-cols-5 gap-2 w-max">
                 {!loadingQBlocks && (
                   <QuestionBlock
                     totalQuestions={totalQuestions}
                     answeredArray={answeredArray}
                     directingURL={`/papers/${params.PaperID}`}
+                    activeQuestion={params.QuestionID}
                   />
                 )}
               </div>
             </div>
-            <div className="p-3 flex h-full w-full border-l border-blue-100 overflow-y-auto">
+            <div className="p-3 flex h-[calc(100vh-140px)] w-full border-l border-blue-100 overflow-y-auto">
               {children}
             </div>
           </div>

@@ -103,7 +103,7 @@ export default async function QuizDetailsPage({
     <div className="flex justify-center items-center h-full">
       {hasFinished ? (
         <div className="bg-white w-72 h-max flex justify-center items-center flex-col rounded-lg p-5">
-          <FilledCheckIcon classes="text-green w-16 h-16" />
+          <FilledCheckIcon classes="text-green-500 w-16 h-16" />
           <p className="uppercase font-semibold text-sm mt-5">
             quiz {quizInfo && quizInfo.paperId}
           </p>

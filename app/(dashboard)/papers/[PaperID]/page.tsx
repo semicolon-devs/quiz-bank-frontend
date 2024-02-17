@@ -65,7 +65,7 @@ export default function PaperDetailsPage({
             <div className="bg-white p-3 rounded-xl shadow-lg">
               <div className="flex">
                 <p className="w-1/2 font-medium">Paper code</p>
-                <p className="w-1/2">{qPaper.paperId}</p>
+                <p className="w-1/2 uppercase">{qPaper.paperId}</p>
               </div>
               <div className="flex">
                 <p className="w-1/2 font-medium">Paper type</p>

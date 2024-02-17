@@ -27,7 +27,7 @@ module.exports = {
         700: "#141E25",
         800: "#0C1317",
         900: "#070B0D",
-        950: "#040507"
+        950: "#040507",
       },
       red: {
         50: "#FDE7E7",
@@ -40,44 +40,24 @@ module.exports = {
         700: "#900B09",
         800: "#600806",
         900: "#300403",
-        950: "#180202"
+        950: "#180202",
       },
-      green: "#13F02A",
+      green: {
+        50: "#E7FDE9",
+        100: "#CFFCD4",
+        200: "#9FF9A8",
+        300: "#6FF67D",
+        400: "#44F356",
+        500: "#13F02A",
+        600: "#0DC51F",
+        700: "#099017",
+        800: "#06600F",
+        900: "#033008",
+        950: "#021804",
+      },
     },
     extend: {},
   },
   darkMode: "class",
-  plugins: [
-    nextui({
-      themes: {
-        light: {
-          // ...
-          colors: {
-            primary: {
-              DEFAULT: "#1F2F3A",
-              foreground: "#ffffff",
-            },
-            danger: {
-              DEFAULT: "#F01513",
-              foreground: "#ffffff",
-            },
-            secondary: {
-              DEFAULT: "#202020",
-              foreground: "#ffffff",
-            },
-            success: {
-              DEFAULT: "#f6f6f6",
-              foreground: "#ffffff",
-            },
-            focus: "#1F2F3A",
-          },
-        },
-        dark: {
-          // ...
-          colors: {},
-        },
-        // ... custom themes
-      },
-    }),
-  ],
+  plugins: [],
 };

@@ -3,10 +3,9 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 
-import { Checkbox } from "@nextui-org/checkbox";
-import { Button, ButtonGroup } from "@nextui-org/button";
-import { Spinner } from "@nextui-org/spinner";
+import Spinner from "@/components/spinner";
 
 import { BASE_URL } from "@/config/apiConfig";
 import { getAccess } from "@/helpers/token";
@@ -19,7 +18,7 @@ interface Question {
   __v: number;
 }
 
-export default async function PaperQuestionPage({
+export default function PaperQuestionPage({
   params,
 }: {
   params: { PaperID: string; QuestionID: string };
@@ -85,7 +84,6 @@ export default async function PaperQuestionPage({
   }
 
   const handleSubmit = () => {
-    console.log(getTrueIndexes());
     setLoading(true);
     const axiosConfig = {
       method: "POST",
@@ -98,12 +96,19 @@ export default async function PaperQuestionPage({
         paperId: params.PaperID,
         questionIndex: params.QuestionID,
         answer: getTrueIndexes(),
-        submitAt: "2023-02-02",
+        submitAt: new Date(),
       },
     };
     axios(axiosConfig)
       .then((response) => {
-        console.log(response);
+        toast.success(
+          `Answers ${getTrueIndexes()} has been submitted to Question no ${
+            params.QuestionID
+          }`
+        );
+        router.push(
+          `/papers/${params.PaperID}/${parseInt(params.QuestionID) + 1}`
+        );
       })
       .catch((err) => {
         console.log(err);
@@ -113,37 +118,16 @@ export default async function PaperQuestionPage({
       });
   };
 
-  const handleCompleteQuiz = () => {
-    handleSubmit();
-    const axiosConfig = {
-      method: "POST",
-      url: `${BASE_URL}answers/finish`,
-      headers: {
-        Authorization: `Bearer ${getAccess()}`,
-      },
-      data: {
-        userId: getUserID(),
-        paperId: params.PaperID,
-        submitAt: "2023-02-02",
-      },
-    };
-    axios(axiosConfig)
-      .then((response) => {
-        console.log(response);
-        router.push(`/paper/review/${params.PaperID}`);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
   return (
     <div className="w-full h-full flex flex-col gap-5 flex-grow">
       {loading ? (
-        <Spinner label="Loading ..." color="primary" labelColor="primary" />
+        <Spinner />
       ) : (
         <>
-          <div className="overflow-auto h-96 gap-3 flex flex-col">
+          <div className="overflow-auto h-full gap-3 flex flex-col">
+            <p className="font-bold text-blue-600">
+              Question No. {params.QuestionID}
+            </p>
             <div className="w-full flex justify-between items-center">
               {question && (
                 <p
@@ -156,17 +140,41 @@ export default async function PaperQuestionPage({
               {question &&
                 question?.answers.length > 0 &&
                 question.answers.map((answer, index) => (
-                  <div className="flex gap-5" key={answer._id}>
-                    <Checkbox
-                      isSelected={answersSelected[index]}
-                      onValueChange={() =>
-                        setAnswersSelected((prev) => {
-                          let newArray = [...prev];
-                          newArray[index] = !newArray[index];
-                          return newArray;
-                        })
-                      }
-                    ></Checkbox>
+                  <div className="flex gap-5 items-center" key={answer._id}>
+                    <label
+                      className="relative flex items-start cursor-pointer"
+                      htmlFor="blue"
+                    >
+                      <input
+                        type="checkbox"
+                        className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-100 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:bg-blue-300 before:opacity-0 before:transition-opacity checked:border-blue-600 checked:bg-blue-600"
+                        id="blue"
+                        checked={answersSelected[index]}
+                        onChange={() =>
+                          setAnswersSelected((prev) => {
+                            let newArray = [...prev];
+                            newArray[index] = !newArray[index];
+                            return newArray;
+                          })
+                        }
+                      />
+                      <span className="absolute text-white transition-opacity opacity-0 pointer-events-none top-2.5 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-3.5 w-3.5"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                          stroke="currentColor"
+                          strokeWidth="1"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                            clipRule="evenodd"
+                          ></path>
+                        </svg>
+                      </span>
+                    </label>
                     <div
                       className="bg-white p-3 rounded-xl w-full"
                       dangerouslySetInnerHTML={{ __html: answer.answer }}
@@ -176,12 +184,12 @@ export default async function PaperQuestionPage({
             </div>
           </div>
           <div className="w-full flex justify-end items-center gap-3">
-            <Button color="primary" onClick={handleSubmit}>
-              Submit Answer
-            </Button>
-            <Button color="secondary" onClick={handleCompleteQuiz}>
-              Complete Quiz
-            </Button>
+            <button
+              className="bg-blue-600 hover:bg-blue-500 px-4 py-1 outline-none rounded-md"
+              onClick={handleSubmit}
+            >
+              <p className="text-white font-medium">Submit Answer</p>
+            </button>
           </div>
         </>
       )}

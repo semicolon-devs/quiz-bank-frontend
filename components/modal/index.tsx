@@ -5,12 +5,16 @@ type ModalProps = {
   viewButton: ReactNode;
   modalTitle: string;
   children: ReactNode;
+  submitBtn: ReactNode;
+  handleSubmit: () => void;
 };
 
 export default function Modal({
   viewButton,
   modalTitle,
   children,
+  submitBtn,
+  handleSubmit,
 }: ModalProps) {
   let [isOpen, setIsOpen] = useState(false);
 
@@ -39,7 +43,7 @@ export default function Modal({
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 bg-black/25" />
+            <div className="fixed inset-0 bg-blue-900/50" />
           </Transition.Child>
 
           <div className="fixed inset-0 overflow-y-auto">
@@ -62,14 +66,17 @@ export default function Modal({
                   </Dialog.Title>
                   <div className="mt-4">{children}</div>
 
-                  <div className="mt-4">
+                  <div className="mt-4 flex justify-end gap-2">
                     <button
                       type="button"
-                      className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                      className="inline-flex capitalize justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200"
                       onClick={closeModal}
                     >
-                      Got it, thanks!
+                      cancel
                     </button>
+                    <div className="" onClick={handleSubmit}>
+                      {submitBtn}
+                    </div>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>
