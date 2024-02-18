@@ -1,18 +1,22 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import dynamic from "next/dynamic";
-
 import axios from "axios";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
+import { Listbox, Transition } from "@headlessui/react";
+
 import "react-quill/dist/quill.snow.css";
-import { Checkbox } from "@nextui-org/checkbox";
-import { Button, ButtonGroup } from "@nextui-org/button";
-import { Select, SelectSection, SelectItem } from "@nextui-org/select";
-import { Spinner } from "@nextui-org/spinner";
+
+import SectionTitle from "@/components/sectionTitle";
+import Select from "@/components/select";
+
+import { ChevronDownIcon } from "@/components/icons";
 
 import { BASE_URL } from "@/config/apiConfig";
 import { getAccess } from "@/helpers/token";
-import SectionTitle from "@/components/sectionTitle";
+import { UrlSlugType } from "@/utils/enums/UrlSlug";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
@@ -53,10 +57,15 @@ interface Module {
 export default function AddQuestionPage() {
   const [difficultyLevelSelected, setDifficultyLevelSelected] =
     useState<string>(difficultyLevelArr[0]);
-  const [subjectSelected, setSubjectSelected] = useState<string>("");
+  const [courses, setCourses] = useState<Course[]>();
+  const [subjectSelected, setSubjectSelected] = useState<Course>();
+  const [subjectCategoryList, setSubjectCategoryList] = useState<
+    SubCategory[] | undefined
+  >();
   const [subjectCategorySelected, setSubjectCategorySelected] =
-    useState<string>("");
-  const [moduleSelected, setModuleSelected] = useState<string>("");
+    useState<SubCategory>();
+  const [moduleList, setModuleList] = useState<Module[] | undefined>();
+  const [moduleSelected, setModuleSelected] = useState<Module>();
   const [question, setQuestion] = useState<string>("");
   const [answerList, setAnswerList] = useState<
     { content: string; isSelected: boolean }[]
@@ -68,13 +77,9 @@ export default function AddQuestionPage() {
     { content: "", isSelected: false },
   ]);
   const [answerExplaination, setAnswerExplaination] = useState<string>("");
-  const [courses, setCourses] = useState<Course[]>([]);
-  // const [subjectList, setSubjectList] = useState<Course[]>([]);
-  const [subjectCategoryList, setSubjectCategoryList] = useState<
-    SubCategory[] | undefined
-  >([]);
-  const [moduleList, setModuleList] = useState<Module[] | undefined>([]);
   const [loading, setLoading] = useState<boolean>(false);
+
+  const router = useRouter();
 
   // get all courses
   useEffect(() => {
@@ -114,42 +119,65 @@ export default function AddQuestionPage() {
       return correctAnswerArr;
     };
 
-    setLoading(true);
-    const axiosConfig = {
-      method: "POST",
-      url: `${BASE_URL}questions`,
-      data: {
-        subject: subjectSelected,
-        subCategory: subjectCategorySelected,
-        module: moduleSelected,
-        type: "MCQ",
-        question: question,
-        answers: [
-          { number: 1, answer: answerList[0].content },
-          { number: 2, answer: answerList[1].content },
-          { number: 3, answer: answerList[2].content },
-          { number: 4, answer: answerList[3].content },
-          { number: 5, answer: answerList[4].content },
-        ],
-        correctAnswer: getCorrectAnswer(),
-        explaination: answerExplaination,
-        difficulty: difficultyLevelSelected,
-      },
-      headers: {
-        Authorization: `Bearer ${getAccess()}`,
-      },
-    };
-    axios(axiosConfig)
-      .then((response) => {
-        console.log(response);
-        window.location.href = "/manage-questions";
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    if (!subjectSelected) {
+      toast.error("Please select a subject");
+    } else if (!subjectCategorySelected) {
+      toast.error("Please select a subject category");
+    } else if (!moduleSelected) {
+      toast.error("Please select a module");
+    } else if (question.length <= 0) {
+      toast.error("Please add content for the question");
+    } else if (
+      answerList[0].content.length <= 0 ||
+      answerList[1].content.length <= 0 ||
+      answerList[2].content.length <= 0 ||
+      answerList[3].content.length <= 0 ||
+      answerList[4].content.length <= 0
+    ) {
+      toast.error("Please add content for the all 5 answers");
+    } else if (getCorrectAnswer().length <= 0) {
+      toast.error("Please select atleast one correct answer");
+    } else if (answerExplaination.length <= 0) {
+      toast.error("Please add content for answer explanation");
+    } else {
+      setLoading(true);
+      const axiosConfig = {
+        method: "POST",
+        url: `${BASE_URL}questions`,
+        data: {
+          subject: subjectSelected,
+          subCategory: subjectCategorySelected,
+          module: moduleSelected,
+          type: "MCQ",
+          question: question,
+          answers: [
+            { number: 1, answer: answerList[0].content },
+            { number: 2, answer: answerList[1].content },
+            { number: 3, answer: answerList[2].content },
+            { number: 4, answer: answerList[3].content },
+            { number: 5, answer: answerList[4].content },
+          ],
+          correctAnswer: getCorrectAnswer(),
+          explaination: answerExplaination,
+          difficulty: difficultyLevelSelected,
+        },
+        headers: {
+          Authorization: `Bearer ${getAccess()}`,
+        },
+      };
+      axios(axiosConfig)
+        .then((response) => {
+          console.log(response);
+          toast.success("Question was added successfully");
+          router.push(UrlSlugType.MANAGE_QUESTIONS);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
   };
 
   useEffect(() => {
@@ -157,7 +185,7 @@ export default function AddQuestionPage() {
       courses: Course[]
     ): SubCategory[] | undefined => {
       const targetSubject = courses.find(
-        (subjectFind) => subjectFind._id === subjectSelected
+        (subjectFind) => subjectFind._id === subjectSelected?._id
       );
 
       if (!targetSubject) {
@@ -171,7 +199,7 @@ export default function AddQuestionPage() {
       }));
     };
 
-    setSubjectCategoryList(filterAndMapSubCategories(courses));
+    courses && setSubjectCategoryList(filterAndMapSubCategories(courses));
   }, [courses, subjectSelected]);
 
   useEffect(() => {
@@ -182,7 +210,7 @@ export default function AddQuestionPage() {
         subjectCategoryList &&
         subjectCategoryList.find(
           (subjectCategoryFind) =>
-            subjectCategoryFind._id === subjectCategorySelected
+            subjectCategoryFind._id === subjectCategorySelected?._id
         );
 
       if (!targetSubjectCategory) {
@@ -213,62 +241,36 @@ export default function AddQuestionPage() {
   };
 
   return (
-    <div>
+    <div className="flex flex-col gap-3">
       <SectionTitle title="Add Question" />
-      <div className="flex flex-col gap-5 mt-10">
+      <div className="flex flex-col gap-1">
         <p className="font-semibold">Select Difficulty Level</p>
-        <select
+        <Select
           value={difficultyLevelSelected}
-          onChange={(e) => setDifficultyLevelSelected(e.target.value)}
-        >
-          {difficultyLevelArr.map((item) => (
-            <option value={item} key={item}>
-              {item}
-            </option>
-          ))}
-        </select>
-        <p className="font-semibold">Select Subject</p>
-        <select
-          value={subjectSelected}
-          onChange={(e) => setSubjectSelected(e.target.value)}
-        >
-          <option value="">Select a subject</option>
-          {courses &&
-            courses.map((item) => (
-              <option value={item._id} key={item._id}>
-                {item.name}
-              </option>
-            ))}
-        </select>
-        <p className="font-semibold">Select Subject Category</p>
-        <select
-          value={subjectCategorySelected}
-          onChange={(e) => setSubjectCategorySelected(e.target.value)}
-        >
-          <option value="">Select a subject category</option>
-          {subjectCategoryList &&
-            subjectCategoryList.map((item) => (
-              <option value={item._id} key={item._id}>
-                {item.name}
-              </option>
-            ))}
-        </select>
-        <p className="font-semibold">Select Module</p>
-        <select
-          value={moduleSelected}
-          onChange={(e) => setModuleSelected(e.target.value)}
-        >
-          <option value="">Select a module</option>
-          {moduleList &&
-            moduleList.map((item) => (
-              <option value={item._id} key={item._id}>
-                {item.name}
-              </option>
-            ))}
-        </select>
+          setValue={setDifficultyLevelSelected}
+          array={difficultyLevelArr}
+        />
       </div>
+      <p className="font-semibold">Select Subject</p>
+      <Select
+        value={subjectSelected}
+        setValue={setSubjectSelected}
+        array={courses}
+      />
+      <p className="font-semibold">Select Subject Category</p>
+      <Select
+        value={subjectCategorySelected}
+        setValue={setSubjectCategorySelected}
+        array={subjectCategoryList}
+      />
+      <p className="font-semibold">Select Module</p>
+      <Select
+        value={moduleSelected}
+        setValue={setModuleSelected}
+        array={moduleList}
+      />
       <div className="my-10">
-        <p className="font-semibold text-lg">Question</p>
+        <p className="font-semibold text-lg mb-3">Question</p>
         <ReactQuill
           modules={modules}
           theme="snow"
@@ -278,22 +280,43 @@ export default function AddQuestionPage() {
         />
       </div>
       <div className="">
-        <p className="font-semibold text-lg">Answers</p>
-        <div className="grid grid-cols-6 mt-5">
+        <div className="grid grid-cols-12 mt-5">
           <p className="font-semibold">Correct Answer</p>
-          <p className="col-span-5 font-semibold">Answer Content</p>
+          <p className="col-span-11 font-semibold">Answer Content</p>
         </div>
         <div className="flex flex-col gap-6 mt-6">
           {answerList.map((item, index) => (
-            <div className="grid grid-cols-6" key={index}>
-              <div>
-                <Checkbox
-                  isSelected={item.isSelected}
-                  onValueChange={() => handleCheckboxChange(index)}
-                ></Checkbox>
-              </div>
-              <div className="col-span-5">
-                <p className="mb-3 font-semibold">Question no {index + 1}</p>
+            <div className="grid grid-cols-12" key={index}>
+              <label
+                className="relative flex items-start cursor-pointer w-max"
+                htmlFor="blue"
+              >
+                <input
+                  type="checkbox"
+                  className="before:content[''] peer shadow relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-100 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:bg-green-300 before:opacity-0 before:transition-opacity checked:border-green-600 checked:bg-green-600"
+                  id="blue"
+                  checked={item.isSelected}
+                  onChange={() => handleCheckboxChange(index)}
+                />
+                <span className="absolute text-white transition-opacity opacity-0 pointer-events-none top-2.5 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-3.5 w-3.5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    stroke="currentColor"
+                    strokeWidth="1"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clipRule="evenodd"
+                    ></path>
+                  </svg>
+                </span>
+              </label>
+              <div className="col-span-11">
+                <p className="mb-3 font-semibold">Answer no {index + 1}</p>
                 <ReactQuill
                   modules={modules}
                   theme="snow"
@@ -308,7 +331,7 @@ export default function AddQuestionPage() {
         </div>
       </div>
       <div className="mt-10">
-        <p className="font-semibold text-lg">Answer explaination</p>
+        <p className="font-semibold text-lg mb-3">Answer explaination</p>
         <ReactQuill
           modules={modules}
           theme="snow"
@@ -317,13 +340,12 @@ export default function AddQuestionPage() {
           className="bg-white"
         />
       </div>
-      <Button
-        color="primary"
-        className="mt-5"
-        onPress={() => handleAddQuestionButtonClick()}
+      <button
+        className="mt-5 bg-blue-600 text-white px-4 py-2 rounded-xl shadow font-medium hover:bg-blue-500 w-max"
+        onClick={() => handleAddQuestionButtonClick()}
       >
-        {loading ? <Spinner color="default" /> : "Add Question"}
-      </Button>
+        Add Question
+      </button>
     </div>
   );
 }
