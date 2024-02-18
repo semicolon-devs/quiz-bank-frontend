@@ -11,7 +11,13 @@ import Modal from "@/components/modal";
 
 import { table } from "@/variants/table";
 
-import { EyeOpenIcon, EditIcon, DeleteIcon } from "@/components/icons";
+import {
+  EyeOpenIcon,
+  EditIcon,
+  DeleteIcon,
+  PlusIcon,
+  SearchIcon,
+} from "@/components/icons";
 
 import SectionTitle from "@/components/sectionTitle";
 
@@ -33,15 +39,6 @@ interface Question {
   _id: string;
 }
 
-interface QuestionRow {
-  _id: string;
-  question: string;
-  subject: string;
-  subCategory: string;
-  module: string;
-  difficulty: string;
-}
-
 const headers = [
   "question",
   "subject",
@@ -51,12 +48,12 @@ const headers = [
   "actions",
 ];
 
-export default async function ManageQuestionsPage() {
+export default function ManageQuestionsPage() {
   const [loading, setLoading] = useState<boolean>(false);
   const [questionList, setQuestionList] = useState<Question[]>([]);
-  const [questionRow, setQuestionRow] = useState<QuestionRow[]>([]);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [numberOfPages, setNumberOfPages] = useState<number>(1);
+  const [tableSearch, setTableSearch] = useState<string>("");
 
   const page_size = 10;
 
@@ -99,7 +96,7 @@ export default async function ManageQuestionsPage() {
     axios(axiosConfig)
       .then((response) => {
         console.log(response);
-        toast.success("Question deleted successfully")
+        toast.success("Question deleted successfully");
       })
       .catch((err) => {
         console.log(err);
@@ -109,29 +106,40 @@ export default async function ManageQuestionsPage() {
       });
   };
 
-  useEffect(() => {
-    const regex: RegExp = /(<([^>]+)>)/gi;
-
-    const extractQuestionRows = (questions: Question[]): QuestionRow[] => {
-      return questions.map(
-        ({ _id, question, difficulty, subject, subCategory, module }) => ({
-          _id,
-          question: question.replace(regex, ""),
-          difficulty,
-          module: module.name,
-          subject: subject.name,
-          subCategory: subCategory.name,
-        })
-      );
-    };
-
-    setQuestionRow(extractQuestionRows(questionList));
-  }, [questionList]);
+  const filteredQuestions: Question[] =
+    questionList &&
+    questionList.filter((item) => {
+      return item.question.includes(tableSearch);
+    });
 
   return (
     <div className="flex flex-col">
       <SectionTitle title="Manage Questions" />
       <div className={table().base()}>
+        <div className={table().featuresRow({ className: "grid grid-cols-4" })}>
+          <div
+            className={table().featuresSearchDiv({ className: "col-span-2" })}
+          >
+            <input
+              type="text"
+              onChange={(e) => setTableSearch(e.target.value)}
+              value={tableSearch}
+              className={table().featuresSearchInput()}
+              placeholder="Search questions"
+            />
+            <div className={table().featuresSearchButton()}>
+              <SearchIcon classes={"h-4 w-4 text-white"} />
+            </div>
+          </div>
+          <div className=""></div>
+          <button
+            className={table().featuresButton()}
+            onClick={() => router.push(UrlSlugType.ADD_QUESTION)}
+          >
+            <PlusIcon classes={"w-4 h-4 text-white"} />
+            <p className="">add question</p>
+          </button>
+        </div>
         <div
           className={table().headerRow({
             className: "grid grid-cols-7 ",
@@ -148,71 +156,78 @@ export default async function ManageQuestionsPage() {
         </div>
         <div className={table().tableContent()}>
           {
-            questionRow.map((row: QuestionRow) => {
-              return (
-                <div
-                  className={table().tableRow({
-                    className: "grid grid-cols-7",
-                  })}
-                  key={row._id}
-                >
+            questionList &&
+              filteredQuestions.map((row: Question) => {
+                const regex: RegExp = /(<([^>]+)>)/gi;
+
+                const questionToView = row.question.replace(regex, "");
+
+                return (
                   <div
-                    className={table().rowItem({
-                      className: "col-span-2 font-medium",
+                    className={table().tableRow({
+                      className: "grid grid-cols-7",
                     })}
+                    key={row._id}
                   >
-                    {row.question.slice(0, 40)}
-                    {row.question.length >= 40 && "..."}
-                  </div>
-                  <div className={table().rowItem()}>{row.subject}</div>
-                  <div className={table().rowItem()}>{row.subCategory}</div>
-                  <div className={table().rowItem()}>{row.module}</div>
-                  <div className={table().rowItem()}>{row.difficulty}</div>
-                  <div className={table().rowItem({ className: "gap-2" })}>
                     <div
-                      className="p-1 cursor-pointer"
-                      onClick={() =>
-                        router.push(
-                          `${UrlSlugType.PREVIEW_QUESTION}/${row._id}`
-                        )
-                      }
+                      className={table().rowItem({
+                        className: "col-span-2 font-medium",
+                      })}
                     >
-                      <EyeOpenIcon classes={"w-4 h-5 text-blue-600"} />
+                      {questionToView.slice(0, 40)}
+                      {questionToView.length >= 40 && "..."}
                     </div>
-                    <div className="">
-                      <EditIcon classes="h-4 w-4 text-blue-600" />
-                      {/* <Modal viewButton={undefined} modalTitle={""} children={undefined}/> */}
+                    <div className={table().rowItem()}>{row.subject.name}</div>
+                    <div className={table().rowItem()}>
+                      {row.subCategory.name}
                     </div>
-                    <div className="cursor-pointer">
-                      <Modal
-                        viewButton={
-                          <DeleteIcon classes="h-4 w-4 text-red-600" />
+                    <div className={table().rowItem()}>{row.module.name}</div>
+                    <div className={table().rowItem()}>{row.difficulty}</div>
+                    <div className={table().rowItem({ className: "gap-2" })}>
+                      <div
+                        className="p-1 cursor-pointer"
+                        onClick={() =>
+                          router.push(
+                            `${UrlSlugType.PREVIEW_QUESTION}/${row._id}`
+                          )
                         }
-                        modalTitle={"Alert!"}
-                        children={
-                          <p className="">
-                            Are you sure you want to delete
-                            <span className="font-medium space-x-1">
-                              "{row.question.slice(0, 40)}
-                              {row.question.length >= 40 && "..."}"
-                            </span>{" "}
-                            from the system?
-                          </p>
-                        }
-                        submitBtn={
-                          <button className="bg-red-100 hover:bg-red-200 rounded-md px-4 py-2">
-                            <p className="capitalize text-red-600 font-medium">
-                              delete
+                      >
+                        <EyeOpenIcon classes={"w-4 h-5 text-blue-600"} />
+                      </div>
+                      <div className="">
+                        <EditIcon classes="h-4 w-4 text-blue-600" />
+                        {/* <Modal viewButton={undefined} modalTitle={""} children={undefined}/> */}
+                      </div>
+                      <div className="cursor-pointer">
+                        <Modal
+                          viewButton={
+                            <DeleteIcon classes="h-4 w-4 text-red-600" />
+                          }
+                          modalTitle={"Alert!"}
+                          children={
+                            <p className="">
+                              Are you sure you want to delete
+                              <span className="font-medium space-x-1">
+                                "{row.question.slice(0, 40)}
+                                {row.question.length >= 40 && "..."}"
+                              </span>{" "}
+                              from the system?
                             </p>
-                          </button>
-                        }
-                        handleSubmit={() => deleteQuestion(row._id)}
-                      />
+                          }
+                          submitBtn={
+                            <button className="bg-red-100 hover:bg-red-200 rounded-md px-4 py-2">
+                              <p className="capitalize text-red-600 font-medium">
+                                delete
+                              </p>
+                            </button>
+                          }
+                          handleSubmit={() => deleteQuestion(row._id)}
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })
+                );
+              })
             // ) : (
             //   <div className="w-full h-96 flex items-center justify-center">
             //     <div className="flex items-center flex-col max-w-[641px]">
