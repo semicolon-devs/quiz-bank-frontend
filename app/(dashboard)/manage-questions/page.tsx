@@ -5,7 +5,6 @@ import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 
-import EditQuestionModal from "./modals/editQuestionModal";
 import PaginationComponent from "@/components/pagination";
 import Modal from "@/components/modal";
 
@@ -194,9 +193,13 @@ export default function ManageQuestionsPage() {
                       >
                         <EyeOpenIcon classes={"w-4 h-5 text-blue-600"} />
                       </div>
-                      <div className="">
+                      <div
+                        className="cursor-pointer"
+                        onClick={() =>
+                          router.push(`${UrlSlugType.EDIT_QUESTION}/${row._id}`)
+                        }
+                      >
                         <EditIcon classes="h-4 w-4 text-blue-600" />
-                        {/* <Modal viewButton={undefined} modalTitle={""} children={undefined}/> */}
                       </div>
                       <div className="cursor-pointer">
                         <Modal

@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { ChevronLeftIcon } from "@/components/icons";
 
 import Modal from "@/components/modal";
+import SectionTitle from "@/components/sectionTitle";
 
 import { BASE_URL } from "@/config/apiConfig";
 import { getAccess } from "@/helpers/token";
@@ -76,17 +77,18 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="flex items-center gap-2">
+      <div className="flex items-end gap-2">
         <div
-          className="rounded-full h-7 w-7 flex items-center justify-center hover:bg-white cursor-pointer"
+          className="cursor-pointer hover:bg-white rounded-full flex items-center justify-center"
           onClick={() => router.back()}
         >
-          <ChevronLeftIcon classes={"h-6 w-6 text-blue-600"} />
+          <ChevronLeftIcon classes={"h-8 w-8 text-blue-600"} />
         </div>
-        {question && (
-          <div dangerouslySetInnerHTML={{ __html: question.question }} />
-        )}
+        <SectionTitle title={"Question Preview"} noMarginBottom />
       </div>
+      {question && (
+        <div dangerouslySetInnerHTML={{ __html: question.question }} />
+      )}
       <div className="flex flex-col gap-2">
         {question &&
           question?.answers.length > 0 &&

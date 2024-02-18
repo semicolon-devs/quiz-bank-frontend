@@ -12,6 +12,7 @@ export enum UrlSlugType {
   PAPER_ADD_QUESTIONS= "/paper-add-questions",
   MANAGE_QUESTIONS = "/manage-questions",
   ADD_QUESTION = "/add-question",
+  EDIT_QUESTION = "/edit-question",
   PREVIEW_QUESTION = "/preview/question",
   MANAGE_COURSES = "/manage-courses",
   MANAGE_USERS = "/manage-users",

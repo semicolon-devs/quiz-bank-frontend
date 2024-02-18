@@ -29,7 +29,7 @@ export const Sidebar = (props: Props) => {
 
   const [userDetails, setUserDetails] = useState<UserDetails | null>();
   const [role, setRole] = useState<UserRole>();
-  const [isSidebarExpanded, setIsSidebarExpanded] = useState<boolean>(true);
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState<boolean>(false);
 
   useEffect(() => {
     getUser();
