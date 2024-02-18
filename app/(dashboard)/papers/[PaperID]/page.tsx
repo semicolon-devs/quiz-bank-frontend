@@ -50,7 +50,7 @@ export default function PaperDetailsPage({
     <div className="w-full">
       {qPaper ? (
         <div className="w-full flex flex-col gap-4">
-          <div className="bg-white w-full flex items-center justify-between p-3 rounded-xl shadow-lg">
+          <div className="bg-white w-full flex items-center justify-between p-3 rounded-xl shadow">
             <p className="text-blue-600 capitalize text-3xl font-semibold">
               {qPaper.name}
             </p>
@@ -65,7 +65,7 @@ export default function PaperDetailsPage({
             </button>
           </div>
           <div className="grid grid-cols-2 gap-2">
-            <div className="bg-white p-3 rounded-xl shadow-lg">
+            <div className="bg-white p-3 rounded-xl shadow">
               <div className="flex">
                 <p className="w-1/2 font-medium">Paper code</p>
                 <p className="w-1/2 uppercase">{qPaper.paperId}</p>
@@ -92,12 +92,12 @@ export default function PaperDetailsPage({
               )}
             </div>
             <div className="flex flex-col gap-2">
-              <div className="bg-white p-3 rounded-xl shadow-lg">
+              <div className="bg-white p-3 rounded-xl shadow">
                 <p className="text-blue-600 capitalize text-xl font-medium">
                   Previous Attempts
                 </p>
               </div>
-              <div className="bg-blue-50 p-3 rounded-xl shadow-lg flex items-center justify-between">
+              <div className="bg-blue-50 p-3 rounded-xl shadow flex items-center justify-between">
                 <div className="">
                   <p className="text-blue-600 font-medium">
                     {new Date("2023-03-03").toLocaleString()}
@@ -109,7 +109,7 @@ export default function PaperDetailsPage({
                   </p>
                 </div>
               </div>
-              <div className="bg-blue-50 p-3 rounded-xl shadow-lg flex items-center justify-between">
+              <div className="bg-blue-50 p-3 rounded-xl shadow flex items-center justify-between">
                 <div className="">
                   <p className="text-blue-600 font-medium">
                     {new Date("2023-05-03").toLocaleString()}

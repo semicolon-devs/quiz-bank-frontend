@@ -1,19 +1,9 @@
 import React from "react";
 
-import { SpinnerCircular } from "spinners-react";
-
-interface SpinnerProps {
-  size?: number;
-}
-
-export default function Spinner({ size = 50 }: SpinnerProps) {
+export default function Spinner() {
   return (
-    <SpinnerCircular
-      size={size}
-      thickness={180}
-      speed={100}
-      color="rgba(255, 255, 255, 1)"
-      secondaryColor="rgba(0, 0, 0, 0)"
-    />
+    <div className="h-full w-full items-center justify-center">
+      <div className="border-light h-16 w-16 animate-spin rounded-full border-6 border-t-blue-600" />
+    </div>
   );
 }

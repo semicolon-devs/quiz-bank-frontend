@@ -101,7 +101,7 @@ export default function PaperDetailsPage({
 
   return (
     <div className="flex flex-col h-full w-full">
-      <div className="bg-white w-full flex items-center justify-between p-3 rounded-xl shadow-lg">
+      <div className="bg-white w-full flex items-center justify-between p-3 rounded-xl shadow">
         <p className="text-blue-600 capitalize text-3xl font-semibold">
           {paperInfo?.name} -{" "}
           <span className="uppercase">{paperInfo?.paperId}</span>
@@ -109,7 +109,7 @@ export default function PaperDetailsPage({
       </div>
       <div className="w-full h-full flex items-center justify-center">
         {/* {hasFinished ? ( */}
-        <div className="bg-white w-72 h-max flex justify-center items-center flex-col rounded-xl shadow-lg p-3">
+        <div className="bg-white w-72 h-max flex justify-center items-center flex-col rounded-xl shadow p-3">
           <FilledCheckIcon classes="text-green-500 w-16 h-16 mt-5" />
           <p className="uppercase font-semibold text-sm mt-5">Results</p>
           <p className="text-3xl uppercase font-extrabold">

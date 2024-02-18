@@ -151,7 +151,7 @@ export default function PaperQuestionPage({
                     >
                       <input
                         type="checkbox"
-                        className="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-100 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:bg-blue-300 before:opacity-0 before:transition-opacity checked:border-blue-600 checked:bg-blue-600"
+                        className="before:content[''] peer shadow relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-100 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:bg-blue-300 before:opacity-0 before:transition-opacity checked:border-blue-600 checked:bg-blue-600"
                         id="blue"
                         checked={answersSelected[index]}
                         onChange={() =>
@@ -180,7 +180,7 @@ export default function PaperQuestionPage({
                       </span>
                     </label>
                     <div
-                      className="bg-white p-3 rounded-xl w-full"
+                      className="bg-white p-3 rounded-xl w-full shadow"
                       dangerouslySetInnerHTML={{ __html: answer.answer }}
                     />
                   </div>

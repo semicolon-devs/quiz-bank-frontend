@@ -61,7 +61,7 @@ export default function PapersPage() {
         {qPaperList &&
           qPaperList.map((qpaper) => (
             <div
-              className="bg-white rounded-xl overflow-hidden shadow-lg w-full p-4 flex flex-col justify-between"
+              className="bg-white rounded-xl overflow-hidden shadow w-full p-4 flex flex-col justify-between"
               key={qpaper._id}
             >
               <div className="flex items-center justify-between">

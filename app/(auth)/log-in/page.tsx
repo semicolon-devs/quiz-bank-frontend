@@ -75,7 +75,7 @@ export default function LoginPage() {
       .then((response) => {
         setAuthToken(response.data.accessToken);
         setRefreshToken(response.data.refreshToken);
-        router.push(UrlSlugType.HOME)
+        router.push(UrlSlugType.HOME);
       })
       .catch((err) => {
         setError("incorrect email or password. please try again");

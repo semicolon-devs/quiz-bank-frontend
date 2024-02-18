@@ -157,7 +157,7 @@ export default function DashboardHomePage() {
           {qPaperList &&
             qPaperList.slice(0, 4).map((qpaper) => (
               <div
-                className="bg-white rounded-xl overflow-hidden shadow-lg w-full p-2 flex flex-col justify-between h-40"
+                className="bg-white rounded-xl overflow-hidden shadow w-full p-2 flex flex-col justify-between h-40"
                 key={qpaper._id}
               >
                 <div className="flex flex-col">
@@ -168,7 +168,9 @@ export default function DashboardHomePage() {
                 </div>
                 <button
                   className="bg-blue-500 hover:bg-blue-700 hover:gap-3 transition duration-1000 rounded-lg px-2 py-1 w-full flex gap-2 items-center justify-center"
-                  onClick={() => router.push(`${UrlSlugType.PAPERS}/${qpaper._id}`)}
+                  onClick={() =>
+                    router.push(`${UrlSlugType.PAPERS}/${qpaper._id}`)
+                  }
                 >
                   <p className="text-white text-sm">View Details</p>
                   <RightArrowWithTailIcon classes="h-5 w-5 text-white" />
