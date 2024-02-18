@@ -2,128 +2,131 @@
 
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 
 import { BASE_URL } from "@/config/apiConfig";
 import { getAccess } from "@/helpers/token";
+import { getUserID } from "@/helpers/userDetails";
 
-import { PaperDetails } from "@/types";
-import { RightArrowWithTailIcon } from "@/components/icons";
+import { FilledCheckIcon } from "@/components/icons";
 
 export default function PaperDetailsPage({
   params,
 }: {
   params: { PaperID: string };
 }) {
-  const [qPaper, setQPaper] = useState<PaperDetails>();
-  const [loading, setLoading] = useState<boolean>(false);
-
-  const router = useRouter();
+  const [hasFinished, setHasFinished] = useState<boolean>(false);
+  const [correctAnswers, setCorrectAnswers] = useState<number>();
+  const [totalQuestions, setTotalQuestions] = useState<number>();
+  const [paperInfo, setPaperInfo] = useState<{
+    name: string;
+    paperId: string;
+  }>();
 
   useEffect(() => {
-    const getQPapers = async () => {
-      setLoading(true);
+    const hasFinishedQuiz = () => {
       const axiosConfig = {
         method: "GET",
-        url: `${BASE_URL}papers/${params.PaperID}`,
+        url: `${BASE_URL}answers/has-finished/${getUserID()}/${params.PaperID}`,
         headers: {
           Authorization: `Bearer ${getAccess()}`,
         },
       };
       axios(axiosConfig)
         .then((response) => {
-          setQPaper(response.data);
+          console.log(response);
+          setHasFinished(response.data);
         })
         .catch((err) => {
           console.log(err);
-        })
-        .finally(() => {
-          setLoading(false);
         });
     };
 
-    getQPapers();
-  }, []);
+    const getMarks = () => {
+      const axiosConfig = {
+        method: "GET",
+        url: `${BASE_URL}answers/marks/${getUserID()}/${params.PaperID}`,
+        headers: {
+          Authorization: `Bearer ${getAccess()}`,
+        },
+      };
+      axios(axiosConfig)
+        .then((response) => {
+          console.log(response);
+          setCorrectAnswers(response.data.totalMarks);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+
+    const getQuizInfo = () => {
+      const axiosConfig = {
+        method: "GET",
+        url: `${BASE_URL}papers/${params.PaperID}/info`,
+        headers: {
+          Authorization: `Bearer ${getAccess()}`,
+        },
+      };
+      axios(axiosConfig)
+        .then((response) => {
+          setPaperInfo(response.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+
+    const getQuizTotalQuestions = () => {
+      const axiosConfig = {
+        method: "GET",
+        url: `${BASE_URL}answers/status/${getUserID()}/${params.PaperID}`,
+        headers: {
+          Authorization: `Bearer ${getAccess()}`,
+        },
+      };
+      axios(axiosConfig)
+        .then((response) => {
+          setTotalQuestions(response.data.totalQuestions);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+
+    hasFinishedQuiz();
+    getMarks();
+    getQuizInfo();
+    getQuizTotalQuestions();
+  }, [params]);
 
   return (
-    <div className="w-full">
-      {qPaper ? (
-        <div className="w-full flex flex-col gap-4">
-          <div className="bg-white w-full flex items-center justify-between p-3 rounded-xl shadow-lg">
-            <p className="text-blue-600 capitalize text-3xl font-semibold">
-              {qPaper.name}
-            </p>
-            <button
-              className="bg-blue-500 hover:bg-blue-700 rounded-lg px-4 py-1 w-max flex gap-2 items-center justify-center"
-              onClick={() => router.push(`/papers/${params.PaperID}/1`)}
-            >
-              <p className="text-white text-base font-medium">Start Quiz</p>
-              <RightArrowWithTailIcon classes={"w-5 h-5 text-white"} />
-            </button>
-          </div>
-          <div className="grid grid-cols-2 gap-2">
-            <div className="bg-white p-3 rounded-xl shadow-lg">
-              <div className="flex">
-                <p className="w-1/2 font-medium">Paper code</p>
-                <p className="w-1/2">{qPaper.paperId}</p>
-              </div>
-              <div className="flex">
-                <p className="w-1/2 font-medium">Paper type</p>
-                <p className="w-1/2 lowercase">{qPaper.paperType}</p>
-              </div>
-              <div className="flex">
-                <p className="w-1/2 font-medium">No of questions</p>
-                <p className="w-1/2 lowercase">-</p>
-              </div>
-              <div className="flex">
-                <p className="w-1/2 font-medium">Paper</p>
-                <p className="w-1/2">
-                  {qPaper.isTimed ? "is timed" : "not timed"}
-                </p>
-              </div>
-              {qPaper.isTimed && (
-                <div className="flex">
-                  <p className="w-1/2 font-medium">Duration</p>
-                  <p className="w-1/2">{qPaper.timeInMinutes} minutes</p>
-                </div>
-              )}
-            </div>
-            <div className="flex flex-col gap-2">
-              <div className="bg-white p-3 rounded-xl shadow-lg">
-                <p className="text-blue-600 capitalize text-xl font-medium">
-                  Previous Attempts
-                </p>
-              </div>
-              <div className="bg-blue-50 p-3 rounded-xl shadow-lg flex items-center justify-between">
-                <div className="">
-                  <p className="text-blue-600 font-medium">
-                    {new Date("2023-03-03").toLocaleString()}
-                  </p>
-                </div>
-                <div className="w-1/5">
-                  <p className="text-blue-600 text-xl font-semibold text-end">
-                    12/20
-                  </p>
-                </div>
-              </div>
-              <div className="bg-blue-50 p-3 rounded-xl shadow-lg flex items-center justify-between">
-                <div className="">
-                  <p className="text-blue-600 font-medium">
-                    {new Date("2023-05-03").toLocaleString()}
-                  </p>
-                </div>
-                <div className="w-1/5">
-                  <p className="text-blue-600 text-xl font-semibold text-end">
-                    18/20
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+    <div className="flex flex-col h-full w-full">
+      <div className="bg-white w-full flex items-center justify-between p-3 rounded-xl shadow-lg">
+        <p className="text-blue-600 capitalize text-3xl font-semibold">
+          {paperInfo?.name} -{" "}
+          <span className="uppercase">{paperInfo?.paperId}</span>
+        </p>
+      </div>
+      <div className="w-full h-full flex items-center justify-center">
+        {/* {hasFinished ? ( */}
+        <div className="bg-white w-72 h-max flex justify-center items-center flex-col rounded-xl shadow-lg p-3">
+          <FilledCheckIcon classes="text-green-500 w-16 h-16 mt-5" />
+          <p className="uppercase font-semibold text-sm mt-5">Results</p>
+          <p className="text-3xl uppercase font-extrabold">
+            {correctAnswers}/{totalQuestions}
+          </p>
+          <button className="w-full mt-5 uppercase font-semibold bg-blue-600 rounded-md py-2 text-white">
+            Review Answers
+          </button>
         </div>
-      ) : (
-        <div className=""></div>
-      )}
+      </div>
+      {/* ) : (
+        <div className="p-5">
+          <p className="uppercase font-bold text-lg">
+            You haven't taken this quiz
+          </p>
+        </div>
+      )} */}
     </div>
   );
 }

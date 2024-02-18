@@ -23,6 +23,7 @@ import SectionTitle from "@/components/sectionTitle";
 
 import { BASE_URL } from "@/config/apiConfig";
 import { getAccess } from "@/helpers/token";
+import { UrlSlugType } from "@/utils/enums/UrlSlug";
 
 interface Question {
   answers: any[];
@@ -127,7 +128,9 @@ export default async function ManageQuestionsPage() {
             <div className="relative flex items-center gap-2">
               <span
                 className="text-lg text-blue-500 cursor-pointer active:opacity-50"
-                onClick={() => router.push(`/preview/question/${question._id}`)}
+                onClick={() =>
+                  router.push(`${UrlSlugType.PREVIEW_QUESTION}/${question._id}`)
+                }
               >
                 <EyeOpenIcon classes="w-4 h-4" />
               </span>

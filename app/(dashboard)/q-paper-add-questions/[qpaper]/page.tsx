@@ -21,6 +21,7 @@ import { getAccess } from "@/helpers/token";
 import SectionTitle from "@/components/sectionTitle";
 import AddQuestionModal from "./modals/addQuestionModal";
 import RemoveQuestionModal from "./modals/removeQuestionModal";
+import { UrlSlugType } from "@/utils/enums/UrlSlug";
 
 const columns = [
   { name: "QUESTION", uid: "question" },
@@ -212,7 +213,9 @@ export default async function CreateQPackPage({
                 <span
                   className="text-lg text-white cursor-pointer active:opacity-50 flex items-center gap-2"
                   onClick={() =>
-                    router.push(`/preview/question/${question._id}`)
+                    router.push(
+                      `${UrlSlugType.PREVIEW_QUESTION}/${question._id}`
+                    )
                   }
                 >
                   <EyeOpenIcon classes="h-3 w-3" />
@@ -253,7 +256,7 @@ export default async function CreateQPackPage({
                 <span
                   className="text-lg text-white cursor-pointer active:opacity-50 flex items-center gap-2"
                   onClick={() =>
-                    router.push(`/preview/question/${question._id}`)
+                    router.push(`${UrlSlugType.PREVIEW_QUESTION}/${question._id}`)
                   }
                 >
                   <EyeOpenIcon classes="h-3 w-3" />

@@ -110,9 +110,9 @@ export default function QuizLayout({
                       ? "text-white bg-blue-500 hover:bg-blue-500/90"
                       : "hover:bg-blue-500/20"
                   }`}
-                  onClick={() =>
-                    router.push(`/preview/quiz/${params.quizId}/${i + 1}`)
-                  }
+                  // onClick={() =>
+                  //   router.push(`/preview/quiz/${params.quizId}/${i + 1}`)
+                  // }
                 >
                   {i + 1}
                 </div>

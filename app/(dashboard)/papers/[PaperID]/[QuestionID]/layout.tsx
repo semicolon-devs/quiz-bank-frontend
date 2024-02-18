@@ -16,6 +16,7 @@ import {
 import { BASE_URL } from "@/config/apiConfig";
 import { getAccess } from "@/helpers/token";
 import { getUserDetails, getUserID } from "@/helpers/userDetails";
+import { UrlSlugType } from "@/utils/enums/UrlSlug";
 
 export default function PaperTemplate({
   children,
@@ -44,13 +45,13 @@ export default function PaperTemplate({
       data: {
         userId: getUserID(),
         paperId: params.PaperID,
-        submitAt: "2023-02-02",
+        submitAt: new Date(),
       },
     };
     axios(axiosConfig)
       .then((response) => {
         console.log(response);
-        router.push(`/paper/review/${params.PaperID}`);
+        router.push(`${UrlSlugType.PAPERS_REVIEW}/${params.PaperID}`);
       })
       .catch((err) => {
         console.log(err);
@@ -73,7 +74,7 @@ export default function PaperTemplate({
           setTotalQuestions(response.data.totalQuestions);
           setAnsweredArray(response.data.answered);
           if (parseInt(params.QuestionID) > response.data.totalQuestions) {
-            router.push(`/papers/${params.PaperID}/1`);
+            router.push(`${UrlSlugType.PAPERS}/${params.PaperID}/1`);
           }
         })
         .catch((err) => {
@@ -147,7 +148,7 @@ export default function PaperTemplate({
                       </p>
                     </button>
                   }
-                  handleSubmit={() => router.push(`/papers/${params.PaperID}`)}
+                  handleSubmit={() => router.push(`${UrlSlugType.PAPERS}/${params.PaperID}`)}
                 />
               </div>
               <p className="font-bold text-lg uppercase text-blue-600">

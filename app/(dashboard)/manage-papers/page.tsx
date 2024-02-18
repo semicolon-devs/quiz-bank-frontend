@@ -23,6 +23,7 @@ import SectionTitle from "@/components/sectionTitle";
 
 import { BASE_URL } from "@/config/apiConfig";
 import { getAccess } from "@/helpers/token";
+import { UrlSlugType } from "@/utils/enums/UrlSlug";
 
 interface QPaper {
   paperId: string;
@@ -75,7 +76,9 @@ export default async function CreateQPackPage() {
               <span
                 className="text-lg text-default-400 cursor-pointer active:opacity-50"
                 onClick={() =>
-                  router.push(`/q-paper-add-questions/${QPaper._id}`)
+                  router.push(
+                    `${UrlSlugType.PAPER_ADD_QUESTIONS}/${QPaper._id}`
+                  )
                 }
               >
                 <Chip className="uppercase" color="secondary" size="sm">
@@ -87,12 +90,12 @@ export default async function CreateQPackPage() {
         case "actions":
           return (
             <div className="relative flex items-center gap-2">
-              <span
+              {/* <span
                 className="text-lg text-default-400 cursor-pointer active:opacity-50"
                 onClick={() => router.push(`/preview/quiz/${QPaper._id}/1`)}
               >
                 <EyeOpenIcon classes="h-4 w-4" />
-              </span>
+              </span> */}
               <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                 <EditQPaperModal qPaper={QPaper} />
               </span>

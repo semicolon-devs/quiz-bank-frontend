@@ -10,6 +10,7 @@ import Spinner from "@/components/spinner";
 import { BASE_URL } from "@/config/apiConfig";
 import { getAccess } from "@/helpers/token";
 import { getUserID } from "@/helpers/userDetails";
+import { UrlSlugType } from "@/utils/enums/UrlSlug";
 
 interface Question {
   answers: { number: number; answer: string; _id: string }[];
@@ -48,7 +49,8 @@ export default function PaperQuestionPage({
       axios(axiosConfig)
         .then((response) => {
           setQuestion(response.data.question);
-          setSubmittedAnswers(response.data.answer.answer);
+          response.data.answer?.answer &&
+            setSubmittedAnswers(response.data.answer.answer);
         })
         .catch((err) => {
           console.log(err);
@@ -107,7 +109,9 @@ export default function PaperQuestionPage({
           }`
         );
         router.push(
-          `/papers/${params.PaperID}/${parseInt(params.QuestionID) + 1}`
+          `${UrlSlugType.PAPERS}/${params.PaperID}/${
+            parseInt(params.QuestionID) + 1
+          }`
         );
       })
       .catch((err) => {

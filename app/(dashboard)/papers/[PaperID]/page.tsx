@@ -9,6 +9,7 @@ import { getAccess } from "@/helpers/token";
 
 import { PaperDetails } from "@/types";
 import { RightArrowWithTailIcon } from "@/components/icons";
+import { UrlSlugType } from "@/utils/enums/UrlSlug";
 
 export default function PaperDetailsPage({
   params,
@@ -55,7 +56,9 @@ export default function PaperDetailsPage({
             </p>
             <button
               className="bg-blue-500 hover:bg-blue-700 rounded-lg px-4 py-1 w-max flex gap-2 items-center justify-center"
-              onClick={() => router.push(`/papers/${params.PaperID}/1`)}
+              onClick={() =>
+                router.push(`${UrlSlugType.PAPERS}/${params.PaperID}/1`)
+              }
             >
               <p className="text-white text-base font-medium">Start Quiz</p>
               <RightArrowWithTailIcon classes={"w-5 h-5 text-white"} />

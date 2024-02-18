@@ -70,7 +70,9 @@ export default function PapersPage() {
                 </p>
                 <button
                   className="bg-blue-500 hover:bg-blue-700 rounded-lg px-4 py-1 w-max flex gap-2 items-center justify-center"
-                  onClick={() => router.push(`papers/${qpaper._id}`)}
+                  onClick={() =>
+                    router.push(`${UrlSlugType.PAPERS}/${qpaper._id}`)
+                  }
                 >
                   <p className="text-white text-base">View Details</p>
                 </button>
