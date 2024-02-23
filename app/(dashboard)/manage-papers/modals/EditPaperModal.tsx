@@ -63,7 +63,7 @@ const EditPaperModal = ({ paper }: EditPaperModalProps) => {
   const editPaper = (values: FormValues) => {
     const axiosConfig = {
       method: "PATCH",
-      url: `${BASE_URL}papers`,
+      url: `${BASE_URL}papers/${paper._id}`,
       headers: {
         Authorization: `Bearer ${getAccess()}`,
       },
@@ -134,7 +134,7 @@ const EditPaperModal = ({ paper }: EditPaperModalProps) => {
                     as="h3"
                     className="text-xl font-semibold leading-6"
                   >
-                    Add Paper
+                    Edit Paper
                   </Dialog.Title>
 
                   <div
@@ -278,7 +278,7 @@ const EditPaperModal = ({ paper }: EditPaperModalProps) => {
                             disabled={isSubmitting}
                             className={form().button()}
                           >
-                            <p className="">add paper</p>
+                            <p className="">save changes</p>
                           </button>
                         </form>
                       )}
