@@ -86,26 +86,28 @@ export default function Modal({
 
                   <div className="mt-4">{children}</div>
 
-                  <div className="mt-4 flex justify-end gap-2">
-                    <button
-                      type="button"
-                      className="inline-flex capitalize outline-none justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200"
-                      onClick={closeModal}
-                    >
-                      {closeBtn ? "close" : "cancel"}
-                    </button>
-                    {submitBtn && (
-                      <div
-                        className=""
-                        onClick={() => {
-                          handleSubmit && handleSubmit();
-                          closeModal();
-                        }}
+                  {!closeBtn && (
+                    <div className="mt-4 flex justify-end gap-2">
+                      <button
+                        type="button"
+                        className="inline-flex capitalize outline-none justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200"
+                        onClick={closeModal}
                       >
-                        {submitBtn}
-                      </div>
-                    )}
-                  </div>
+                        cancel
+                      </button>
+                      {submitBtn && (
+                        <div
+                          className=""
+                          onClick={() => {
+                            handleSubmit && handleSubmit();
+                            closeModal();
+                          }}
+                        >
+                          {submitBtn}
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </Dialog.Panel>
               </Transition.Child>
             </div>

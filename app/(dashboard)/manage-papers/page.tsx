@@ -3,116 +3,54 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+
 import {
-  Table,
-  TableHeader,
-  TableBody,
-  TableColumn,
-  TableRow,
-  TableCell,
-  getKeyValue,
-} from "@nextui-org/table";
-import { Chip, ChipProps } from "@nextui-org/chip";
-import { EditIcon, DeleteIcon, EyeOpenIcon } from "@/components/icons";
+  EditIcon,
+  DeleteIcon,
+  EyeOpenIcon,
+  SearchIcon,
+  PlusIcon,
+} from "@/components/icons";
 
-import DeleteQPaperModal from "./modals/deleteQPaperModal";
-import EditQPaperModal from "./modals/editQPaperModal";
-import CreateQPaperModal from "./modals/CreateQPaperModal";
-
+import PaginationComponent from "@/components/pagination";
 import SectionTitle from "@/components/sectionTitle";
+
+import Modal from "@/components/modal";
+import AddPaperModal from "./modals/AddPaperModal";
+import EditPaperModal from "./modals/EditPaperModal";
+
+import { table } from "@/variants/table";
 
 import { BASE_URL } from "@/config/apiConfig";
 import { getAccess } from "@/helpers/token";
 import { UrlSlugType } from "@/utils/enums/UrlSlug";
+import { PaperType } from "@/utils/enums";
 
-interface QPaper {
-  paperId: string;
-  name: string;
-  timeInMinutes: number;
-  isTimed: boolean;
-  paperType: string;
-  questions: any[];
-  _id: string;
-  __v: number;
-}
+import { PaperDetails } from "@/types";
 
-const columns = [
-  { name: "PAPER NAME", uid: "name" },
-  { name: "PAPER CODE", uid: "paperId" },
-  { name: "PAPER TYPE", uid: "paperType" },
-  { name: "TIMING", uid: "timing" },
-  { name: "QUESTIONS", uid: "questions" },
-  { name: "ACTIONS", uid: "actions" },
+const headers = [
+  "paper name",
+  "paper id",
+  "paper type",
+  "timing",
+  "questions",
+  "actions",
 ];
 
-export default async function CreateQPackPage() {
+export default function ManagePapersPage() {
   const [loading, setLoading] = useState<boolean>(false);
-  const [QPaperList, setQPaperList] = useState<QPaper[]>([]);
+  const [paperList, setPaperList] = useState<PaperDetails[]>([]);
+  const [pageNumber, setPageNumber] = useState<number>(1);
+  const [numberOfPages, setNumberOfPages] = useState<number>(1);
+  const [tableSearch, setTableSearch] = useState<string>("");
+  const [modalShowPaper, setModalShowPaper] = useState<PaperDetails>();
+
+  const page_size = 10;
 
   const router = useRouter();
 
-  const renderCell = React.useCallback(
-    (QPaper: QPaper, columnKey: React.Key) => {
-      const cellValue = QPaper[columnKey as keyof QPaper];
-
-      switch (columnKey) {
-        case "name":
-          return <div>{QPaper.name}</div>;
-        case "paperId":
-          return (
-            <div className="flex flex-col">
-              <p className="text-bold text-sm uppercase font-semibold">
-                {cellValue}
-              </p>
-            </div>
-          );
-        case "paperType":
-          return <p className="">{cellValue}</p>;
-        case "timing":
-          return <p className="">{cellValue ? "Timed" : "Not Timed"}</p>;
-        case "questions":
-          return (
-            <div className="relative flex items-center gap-2">
-              <span
-                className="text-lg text-default-400 cursor-pointer active:opacity-50"
-                onClick={() =>
-                  router.push(
-                    `${UrlSlugType.PAPER_ADD_QUESTIONS}/${QPaper._id}`
-                  )
-                }
-              >
-                <Chip className="uppercase" color="secondary" size="sm">
-                  <p className="font-semibold text-xs">manage questions</p>
-                </Chip>
-              </span>
-            </div>
-          );
-        case "actions":
-          return (
-            <div className="relative flex items-center gap-2">
-              {/* <span
-                className="text-lg text-default-400 cursor-pointer active:opacity-50"
-                onClick={() => router.push(`/preview/quiz/${QPaper._id}/1`)}
-              >
-                <EyeOpenIcon classes="h-4 w-4" />
-              </span> */}
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                <EditQPaperModal qPaper={QPaper} />
-              </span>
-              <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                <DeleteQPaperModal qPaper={QPaper} />
-              </span>
-            </div>
-          );
-        default:
-          return cellValue;
-      }
-    },
-    []
-  );
-
   useEffect(() => {
-    const getQPapers = async () => {
+    const getPapers = async () => {
       setLoading(true);
       const axiosConfig = {
         method: "GET",
@@ -123,7 +61,7 @@ export default async function CreateQPackPage() {
       };
       axios(axiosConfig)
         .then((response) => {
-          setQPaperList(response.data);
+          setPaperList(response.data);
         })
         .catch((err) => {
           console.log(err);
@@ -133,16 +71,187 @@ export default async function CreateQPackPage() {
         });
     };
 
-    getQPapers();
+    getPapers();
   }, []);
+
+  const deletePaper = (id: string) => {
+    setLoading(true);
+    const axiosConfig = {
+      method: "DELETE",
+      url: `${BASE_URL}papers/${id}`,
+      headers: {
+        Authorization: `Bearer ${getAccess()}`,
+      },
+    };
+    axios(axiosConfig)
+      .then((response) => {
+        // console.log(response);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  const filteredPapers: PaperDetails[] =
+    paperList &&
+    paperList.filter((paper) => {
+      return paper.name.includes(tableSearch);
+    });
 
   return (
     <div>
       <div className="flex justify-between">
         <SectionTitle title="Manage Papers" />
-        <CreateQPaperModal />
       </div>
-      <Table aria-label="Example table with custom cells" className="mt-5">
+      <div className={table().base()}>
+        <div className={table().featuresRow({ className: "grid grid-cols-4" })}>
+          <div
+            className={table().featuresSearchDiv({ className: "col-span-2" })}
+          >
+            <input
+              type="text"
+              onChange={(e) => setTableSearch(e.target.value)}
+              value={tableSearch}
+              className={table().featuresSearchInput()}
+              placeholder="Search questions"
+            />
+            <div className={table().featuresSearchButton()}>
+              <SearchIcon classes={"h-4 w-4 text-white"} />
+            </div>
+          </div>
+          <div className=""></div>
+
+          <AddPaperModal />
+        </div>
+        <div
+          className={table().headerRow({
+            className: "grid grid-cols-6",
+          })}
+        >
+          {headers.map((header) => (
+            <div className={table().headerItem({ className: "" })} key={header}>
+              {header}
+            </div>
+          ))}
+        </div>
+        <div className={table().tableContent()}>
+          {
+            paperList &&
+              filteredPapers.map((row: PaperDetails) => {
+                return (
+                  <div
+                    className={table().tableRow({
+                      className: "grid grid-cols-6",
+                    })}
+                    key={row._id}
+                  >
+                    <div
+                      className={table().rowItem({
+                        className: "font-medium",
+                      })}
+                    >
+                      {row.name}
+                    </div>
+                    <div
+                      className={table().rowItem({ className: "uppercase" })}
+                    >
+                      {row.paperId}
+                    </div>
+                    <div className={table().rowItem()}>{row.paperType}</div>
+                    <div className={table().rowItem()}>
+                      {row.isTimed ? `${row.timeInMinutes} mins` : "Not timed"}
+                    </div>
+                    <div className={table().rowItem()}>
+                      <div className="bg-blue-400 px-3 py-1 rounded-full flex items-center justify-center cursor-pointer">
+                        <p className="text-white text-xs font-medium">
+                          Manage questions
+                        </p>
+                      </div>
+                    </div>
+                    <div className={table().rowItem({ className: "gap-3" })}>
+                      {/* <div
+                        className="p-1 cursor-pointer"
+                        onClick={() =>
+                          router.push(
+                            `${UrlSlugType.PREVIEW_QUESTION}/${row._id}`
+                          )
+                        }
+                      >
+                        <EyeOpenIcon classes={"w-4 h-5 text-blue-600"} />
+                      </div> */}
+                      <div className="" onClick={() => setModalShowPaper(row)}>
+                        <EditPaperModal
+                          paper={modalShowPaper && modalShowPaper}
+                        />
+                      </div>
+                      <div className="cursor-pointer">
+                        <Modal
+                          viewButton={
+                            <DeleteIcon classes="h-4 w-4 text-red-600" />
+                          }
+                          modalTitle={"Alert!"}
+                          children={
+                            <p className="">
+                              Are you sure you want to delete
+                              <span className="font-medium space-x-1">
+                                {" "}
+                                {row.name}
+                              </span>{" "}
+                              from the system?
+                            </p>
+                          }
+                          submitBtn={
+                            <button className="bg-red-100 hover:bg-red-200 rounded-md px-4 py-2">
+                              <p className="capitalize text-red-600 font-medium">
+                                delete
+                              </p>
+                            </button>
+                          }
+                          handleSubmit={() => deletePaper(row._id)}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                );
+              })
+            // ) : (
+            //   <div className="w-full h-96 flex items-center justify-center">
+            //     <div className="flex items-center flex-col max-w-[641px]">
+            //       <div className="h-12 w-12 flex items-center justify-center bg-primary-1-50 rounded-xl">
+            //         <MenuIcon
+            //           className="fill-primary-1-500"
+            //           width={"30px"}
+            //           height={"30px"}
+            //           viewBox="0 0 20 20"
+            //         />
+            //       </div>
+            //       <p className="text-gray-primary text-3.3xl font-medium">
+            //         {myOrdersType == "upcoming"
+            //           ? "No upcoming orders!"
+            //           : "No past orders!"}
+            //       </p>
+            //       <p className="text-gray-tertiary">
+            //         Lorem ipsum dolor sit amet consectetur. Placerat urna volutpat
+            //         risus elit sit tempus nunc. Ut in nam tempus quam volutpat.
+            //         Blandit purus lorem laoreet eleifend eu dui sit faucibu
+            //       </p>
+            //     </div>
+            //   </div>
+            // )}
+          }
+        </div>
+        <div className={table().paginationDiv()}>
+          <PaginationComponent
+            numberOfPages={numberOfPages}
+            pageNumber={pageNumber}
+            setPageNumber={setPageNumber}
+          />
+        </div>
+      </div>
+      {/* <Table aria-label="Example table with custom cells" className="mt-5">
         <TableHeader columns={columns}>
           {(column) => (
             <TableColumn
@@ -162,7 +271,7 @@ export default async function CreateQPackPage() {
             </TableRow>
           )}
         </TableBody>
-      </Table>
+      </Table> */}
     </div>
   );
 }

@@ -234,7 +234,7 @@ export default function RegisterPage() {
                 {!loading ? (
                   <p className="">register</p>
                 ) : (
-                  <Spinner size={30} />
+                  <Spinner />
                 )}
               </button>
             </form>

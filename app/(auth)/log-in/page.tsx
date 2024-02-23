@@ -158,7 +158,7 @@ export default function LoginPage() {
                 disabled={isSubmitting}
                 className={button()}
               >
-                {!loading ? <p className="">log in</p> : <Spinner size={30} />}
+                {!loading ? <p className="">log in</p> : <Spinner />}
               </button>
             </form>
           )}

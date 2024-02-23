@@ -1,7 +1,7 @@
-import { nextui } from "@nextui-org/theme";
+const { withTV } = require("tailwind-variants/transformer");
 
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+module.exports = withTV({
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -60,4 +60,4 @@ module.exports = {
   },
   darkMode: "class",
   plugins: [],
-};
+});

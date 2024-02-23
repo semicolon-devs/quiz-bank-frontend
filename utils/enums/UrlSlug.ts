@@ -9,7 +9,7 @@ export enum UrlSlugType {
   MANAGE_PAPERS = "/manage-papers",
   PAPERS = "/papers",
   PAPERS_REVIEW = "/papers/review",
-  PAPER_ADD_QUESTIONS= "/paper-add-questions",
+  PAPER_MANAGE_QUESTIONS= "/paper-manage-questions",
   MANAGE_QUESTIONS = "/manage-questions",
   ADD_QUESTION = "/add-question",
   EDIT_QUESTION = "/edit-question",

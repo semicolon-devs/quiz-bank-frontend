@@ -182,7 +182,7 @@ export default function ManageQuestionsPage() {
                     </div>
                     <div className={table().rowItem()}>{row.module.name}</div>
                     <div className={table().rowItem()}>{row.difficulty}</div>
-                    <div className={table().rowItem({ className: "gap-2" })}>
+                    <div className={table().rowItem({ className: "gap-3" })}>
                       <div
                         className="p-1 cursor-pointer"
                         onClick={() =>
