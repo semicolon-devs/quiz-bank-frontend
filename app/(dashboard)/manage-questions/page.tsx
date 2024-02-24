@@ -19,6 +19,7 @@ import {
 } from "@/components/icons";
 
 import SectionTitle from "@/components/sectionTitle";
+import EntriesPerPage from "@/components/pagination/EntriesPerPage";
 
 import { BASE_URL } from "@/config/apiConfig";
 import { getAccess } from "@/helpers/token";
@@ -47,14 +48,15 @@ const headers = [
   "actions",
 ];
 
+const pageSizeArray = [5, 10, 20];
+
 export default function ManageQuestionsPage() {
   const [loading, setLoading] = useState<boolean>(false);
   const [questionList, setQuestionList] = useState<Question[]>([]);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [numberOfPages, setNumberOfPages] = useState<number>(1);
   const [tableSearch, setTableSearch] = useState<string>("");
-
-  const page_size = 10;
+  const [pageSize, setPageSize] = useState<number>(pageSizeArray[1]);
 
   const router = useRouter();
 
@@ -63,14 +65,26 @@ export default function ManageQuestionsPage() {
       setLoading(true);
       const axiosConfig = {
         method: "GET",
-        url: `${BASE_URL}questions`,
+        url: `${BASE_URL}questions/filter`,
+        params: {
+          page: pageNumber,
+          limit: pageSize,
+          // subject: "Biology",
+          // module: "Mendelian Genetics",
+        },
         headers: {
           Authorization: `Bearer ${getAccess()}`,
         },
       };
       axios(axiosConfig)
         .then((response) => {
-          setQuestionList(response.data);
+          setQuestionList(response.data.result);
+          setNumberOfPages(
+            Math.ceil(
+              response?.data?.pagination?.totalQuestions /
+                response?.data?.pagination?.limit
+            )
+          );
         })
         .catch((err) => {
           console.log(err);
@@ -81,7 +95,7 @@ export default function ManageQuestionsPage() {
     };
 
     getQuestions();
-  }, []);
+  }, [pageNumber, pageSize]);
 
   const deleteQuestion = (id: string) => {
     setLoading(true);
@@ -115,7 +129,11 @@ export default function ManageQuestionsPage() {
     <div className="flex flex-col">
       <SectionTitle title="Manage Questions" />
       <div className={table().base()}>
-        <div className={table().featuresRow({ className: "grid grid-cols-4" })}>
+        <div
+          className={table().featuresRow({
+            className: "grid grid-cols-4",
+          })}
+        >
           <div
             className={table().featuresSearchDiv({ className: "col-span-2" })}
           >
@@ -130,7 +148,19 @@ export default function ManageQuestionsPage() {
               <SearchIcon classes={"h-4 w-4 text-white"} />
             </div>
           </div>
-          <div className=""></div>
+          {/* <div className="h-full flex items-center gap-2">
+            <p className="text-xs font-medium w-1/3">Questions per page</p>
+            <Select
+              value={pageSize}
+              setValue={setPageSize}
+              array={pageSizeArray}
+            />
+          </div> */}
+          <EntriesPerPage
+            value={pageSize}
+            setValue={setPageSize}
+            array={pageSizeArray}
+          />
           <button
             className={table().featuresButton()}
             onClick={() => router.push(UrlSlugType.ADD_QUESTION)}

@@ -9,12 +9,13 @@ type Props = {
   array: any[] | undefined;
 };
 
-const Select = ({ value, setValue, array }: Props) => {
+const EntriesPerPage = ({ value, setValue, array }: Props) => {
   return (
-    <div className="w-full h-full">
+    <div className="w-full bg-white flex ps-4 justify-between items-center rounded-xl shadow">
+      <p className="text-sm font-medium py-3">Entries per page</p>
       <Listbox value={value} onChange={setValue}>
         <div className="relative">
-          <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow focus:outline-none focus-visible:border-blue-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-blue-300">
+          <Listbox.Button className="relative w-full cursor-default pl-3 pr-10 text-left">
             <span className="block truncate">
               {value?.name ? value.name : value ? value : "Select option"}
             </span>
@@ -37,7 +38,7 @@ const Select = ({ value, setValue, array }: Props) => {
                   <Listbox.Option
                     key={index}
                     className={({ active }) =>
-                      `relative cursor-default select-none py-2 pl-10 pr-4 ${
+                      `relative cursor-default select-none py-2 px-4 ${
                         active ? "bg-blue-50 text-blue-600" : "text-blue-600"
                       }`
                     }
@@ -64,4 +65,4 @@ const Select = ({ value, setValue, array }: Props) => {
   );
 };
 
-export default Select;
+export default EntriesPerPage;

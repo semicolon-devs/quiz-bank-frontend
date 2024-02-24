@@ -3,7 +3,7 @@ import { tv } from "tailwind-variants";
 export const table = tv({
   slots: {
     base: "w-full flex flex-col items-center gap-3",
-    featuresRow: "w-full gap-3",
+    featuresRow: "w-full gap-3 max-h-10 h-10",
     featuresSearchDiv: "flex gap-3 w-full h-full",
     featuresSearchInput:
       "outline-none text-sm bg-white rounded-xl shadow px-3 py-2 w-full",
