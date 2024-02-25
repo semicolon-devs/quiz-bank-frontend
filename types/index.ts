@@ -35,15 +35,19 @@ export type PaperDetails = {
 export type Course = {
   _id: string;
   name: string;
-  subCategories: {
-    _id: string;
-    name: string;
-    __v: number;
-    moduleList: {
-      _id: string;
-      name: string;
-      __v: number;
-    }[];
-  }[];
+  subCategories: subjectCategory[];
+  __v: number;
+};
+
+export type subjectCategory = {
+  _id: string;
+  name: string;
+  __v: number;
+  moduleList: module[];
+};
+
+export type module = {
+  _id: string;
+  name: string;
   __v: number;
 };

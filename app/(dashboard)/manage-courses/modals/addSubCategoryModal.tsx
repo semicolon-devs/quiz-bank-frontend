@@ -1,5 +1,5 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, ReactNode, useState, useEffect } from "react";
+import { Fragment, ReactNode, useState } from "react";
 import axios from "axios";
 import {
   Formik,
@@ -9,28 +9,29 @@ import {
   FormikHelpers,
 } from "formik";
 
-import { CloseIcon, EditIcon } from "../../../../components/icons";
+import { CloseIcon, PlusIcon } from "../../../../components/icons";
 
 import { form } from "@/variants/form";
 
-import { subjectValidationSchema } from "@/schema/subjectValidation";
+import { subjectCategoryValidationSchema } from "@/schema/subjectCategoryValidation";
 
 import { BASE_URL } from "@/config/apiConfig";
 import { getAccess } from "@/helpers/token";
-
 import { Course } from "@/types";
 
 interface FormValues {
-  subject: string;
+  subjectCategory: string;
 }
 
 const initialValues: FormValues = {
-  subject: "",
+  subjectCategory: "",
 };
 
-type Props = { subject: Course };
+type Props = {
+  subject: Course;
+};
 
-const EditSubjectModal = ({ subject }: Props) => {
+const AddSubCategoryModal = ({ subject }: Props) => {
   const [loading, setLoading] = useState<boolean>(false);
   let [isOpen, setIsOpen] = useState(false);
 
@@ -42,16 +43,16 @@ const EditSubjectModal = ({ subject }: Props) => {
     setIsOpen(true);
   }
 
-  const editSubject = (values: FormValues) => {
+  const addNewSubjectCategory = (values: FormValues) => {
     setLoading(true);
     const axiosConfig = {
-      method: "PATCH",
-      url: `${BASE_URL}subjects/${subject._id}`,
+      method: "POST",
+      url: `${BASE_URL}subjects/courses/${subject._id}`,
       headers: {
         Authorization: `Bearer ${getAccess()}`,
       },
       data: {
-        name: values.subject,
+        subCategory: values.subjectCategory,
       },
     };
     axios(axiosConfig)
@@ -67,15 +68,12 @@ const EditSubjectModal = ({ subject }: Props) => {
       });
   };
 
-  useEffect(() => {
-    initialValues.subject = subject.name;
-  }, [subject]);
-
   return (
     <>
       <div className="" onClick={openModal}>
-        <div className="cursor-pointer">
-          <EditIcon classes={"h-4 w-4 text-blue-600"} />
+        <div className="w-full rounded-lg cursor-pointer bg-blue-100 py-2 px-4 text-base text-start font-medium leading-5 flex justify-center gap-2 items-center outline-none text-blue-400">
+          <PlusIcon classes={"h-3 w-3"} />
+          <p className="">Add subject Category</p>
         </div>
       </div>
 
@@ -111,7 +109,7 @@ const EditSubjectModal = ({ subject }: Props) => {
                     as="h3"
                     className="text-xl font-semibold leading-6"
                   >
-                    Edit subject
+                    Add subject category to {subject.name}
                   </Dialog.Title>
 
                   <div
@@ -124,8 +122,8 @@ const EditSubjectModal = ({ subject }: Props) => {
                   <div className="mt-4">
                     <Formik
                       initialValues={initialValues}
-                      validationSchema={subjectValidationSchema}
-                      onSubmit={editSubject}
+                      validationSchema={subjectCategoryValidationSchema}
+                      onSubmit={addNewSubjectCategory}
                     >
                       {({
                         isSubmitting,
@@ -139,21 +137,25 @@ const EditSubjectModal = ({ subject }: Props) => {
                           className={form().innerForm()}
                         >
                           <div className={form().formDiv()}>
-                            <label htmlFor="subject" className={form().label()}>
-                              Subject name
+                            <label
+                              htmlFor="subjectCategory"
+                              className={form().label()}
+                            >
+                              Subject Category name
                             </label>
                             <Field
-                              name="subject"
+                              name="subjectCategory"
                               type="text"
                               className={`${form().input()} ${
-                                errors.subject && touched.subject
+                                errors.subjectCategory &&
+                                touched.subjectCategory
                                   ? form().labelError()
                                   : ""
                               }`}
                             />
                             <ErrorMessage
                               className={form().errorMessage()}
-                              name="subject"
+                              name="subjectCategory"
                               component="div"
                             />
                           </div>
@@ -163,7 +165,7 @@ const EditSubjectModal = ({ subject }: Props) => {
                             disabled={isSubmitting}
                             className={form().button()}
                           >
-                            <p className="">Confirm changes</p>
+                            <p className="">Add subject</p>
                           </button>
                         </form>
                       )}
@@ -179,4 +181,4 @@ const EditSubjectModal = ({ subject }: Props) => {
   );
 };
 
-export default EditSubjectModal;
+export default AddSubCategoryModal;

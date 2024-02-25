@@ -4,15 +4,14 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Tab } from "@headlessui/react";
 
+import Modal from "@/components/modal";
 import AddSubjectModal from "./modals/addSubjectModal";
-import AddSubjectCategoryModal from "./modals/addSubjectCategoryModal";
+import AddSubCategoryModal from "./modals/addSubCategoryModal";
 import AddModuleModal from "./modals/addModuleModal";
 import EditSubjectModal from "./modals/editSubjectModal";
-import DeleteSubjectCategoryModal from "./modals/deleteSubjectCategoryModal";
 import EditSubjectCategoryModal from "./modals/editSubjectCategoryModal";
 import DeleteModuleModal from "./modals/deleteModuleModal";
 import EditModuleModal from "./modals/editModuleModal";
-import Modal from "@/components/modal";
 
 import SectionTitle from "@/components/sectionTitle";
 
@@ -98,6 +97,33 @@ export default function ManageCoursesPage() {
       });
   };
 
+  const deleteSubjectCategory = ({
+    subjectId,
+    subCategoryId,
+  }: {
+    subjectId: string;
+    subCategoryId: string;
+  }) => {
+    setLoading(true);
+    const axiosConfig = {
+      method: "DELETE",
+      url: `${BASE_URL}subjects/courses/${subjectId}/${subCategoryId}`,
+      headers: {
+        Authorization: `Bearer ${getAccess()}`,
+      },
+    };
+    axios(axiosConfig)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
   function classNames(...classes: (string | boolean | undefined)[]): string {
     return classes.filter(Boolean).join(" ");
   }
@@ -114,12 +140,13 @@ export default function ManageCoursesPage() {
         <Tab.Group>
           <div className="flex w-full">
             <Tab.List className="flex flex-col rounded-xl bg-blue-50 p-1 w-1/2">
+              <AddSubjectModal />
               {courses.map((subject) => (
                 <Tab
                   key={subject._id}
                   className={({ selected }) =>
                     classNames(
-                      "w-full rounded-lg py-2 px-4 text-base text-start font-medium leading-5 flex justify-between items-center",
+                      "w-full rounded-lg py-2 px-4 text-base text-start font-medium leading-5 flex justify-between items-center duration-200 ease-in-out",
                       "outline-none text-blue-600",
                       selected
                         ? "bg-white shadow"
@@ -131,7 +158,7 @@ export default function ManageCoursesPage() {
                     <>
                       <p className="">{subject.name}</p>
                       {selected && (
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 duration-200 ease-in-out">
                           <EditSubjectModal subject={subject} />
                           <Modal
                             viewButton={
@@ -164,7 +191,6 @@ export default function ManageCoursesPage() {
                   )}
                 </Tab>
               ))}
-              <AddSubjectModal />
             </Tab.List>
             <Tab.Panels className="ms-2 w-full">
               {courses.map((subject, idx) => (
@@ -172,20 +198,66 @@ export default function ManageCoursesPage() {
                   <Tab.Group>
                     <div className="flex w-full">
                       <Tab.List className="flex flex-col rounded-xl bg-blue-50 p-1 w-1/2">
+                        <AddSubCategoryModal subject={subject} />
                         {subject.subCategories.map((subCategory) => (
                           <Tab
                             key={subCategory._id}
                             className={({ selected }) =>
                               classNames(
-                                "w-full rounded-lg py-2 px-4 text-base text-start font-medium leading-5",
-                                "outline-none text-blue-600",
+                                "w-full rounded-lg py-2 px-4 text-base text-start font-medium leading-5 flex items-center justify-between",
+                                "outline-none text-blue-600 duration-200 ease-in-out",
                                 selected
                                   ? "bg-white shadow"
                                   : "hover:bg-white/[0.12] hover:text-blue-800"
                               )
                             }
                           >
-                            {subCategory.name}
+                            {({ selected }) => (
+                              <>
+                                <p className="">{subCategory.name}</p>
+                                {selected && (
+                                  <div className="flex items-center gap-2 duration-200 ease-in-out">
+                                    <EditSubjectCategoryModal
+                                      subjectCategory={subCategory}
+                                    />
+                                    <Modal
+                                      viewButton={
+                                        <div className="cursor-pointer">
+                                          <DeleteIcon
+                                            classes={"h-4 w-4 text-red-600"}
+                                          />
+                                        </div>
+                                      }
+                                      modalTitle={"Alert !"}
+                                      children={
+                                        <p className="">
+                                          Are you sure you want to remove
+                                          subject category{" "}
+                                          <span className="font-medium">
+                                            {subCategory.name}{" "}
+                                          </span>{" "}
+                                          of subject {subject.name} from the
+                                          system?
+                                        </p>
+                                      }
+                                      handleSubmit={() =>
+                                        deleteSubjectCategory({
+                                          subjectId: subject._id,
+                                          subCategoryId: subject._id,
+                                        })
+                                      }
+                                      submitBtn={
+                                        <div className="flex  capitalize outline-none justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 hover:bg-red-200">
+                                          <p className="text-sm font-medium text-red-900">
+                                            Remove
+                                          </p>
+                                        </div>
+                                      }
+                                    />
+                                  </div>
+                                )}
+                              </>
+                            )}
                           </Tab>
                         ))}
                       </Tab.List>
