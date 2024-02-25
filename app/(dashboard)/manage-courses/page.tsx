@@ -106,7 +106,7 @@ export default function ManageCoursesPage() {
     <div>
       <SectionTitle title="Manage Courses" />
       <div className="grid grid-cols-3 mb-2 bg-white rounded-xl shadow py-2 px-4">
-        <p className="font-semibold text-blue-600">Subject</p>
+        <p className="px-1 font-semibold text-blue-600">Subject</p>
         <p className="px-5 font-semibold text-blue-600">Subject Category</p>
         <p className="px-9 font-semibold text-blue-600">Module</p>
       </div>
@@ -127,33 +127,41 @@ export default function ManageCoursesPage() {
                     )
                   }
                 >
-                  <p className="">{subject.name}</p>
-                  <div className="flex items-center gap-2">
-                    <EditSubjectModal subject={subject} />
-                    <Modal
-                      viewButton={
-                        <div className="cursor-pointer">
-                          <DeleteIcon classes={"h-4 w-4 text-red-600"} />
+                  {({ selected }) => (
+                    <>
+                      <p className="">{subject.name}</p>
+                      {selected && (
+                        <div className="flex items-center gap-2">
+                          <EditSubjectModal subject={subject} />
+                          <Modal
+                            viewButton={
+                              <div className="cursor-pointer">
+                                <DeleteIcon classes={"h-4 w-4 text-red-600"} />
+                              </div>
+                            }
+                            modalTitle={"Alert !"}
+                            children={
+                              <p className="">
+                                Are you sure you want to remove subject{" "}
+                                <span className="font-medium">
+                                  {subject.name}{" "}
+                                </span>
+                                from the system?
+                              </p>
+                            }
+                            handleSubmit={() => deleteSubject(subject._id)}
+                            submitBtn={
+                              <div className="flex  capitalize outline-none justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 hover:bg-red-200">
+                                <p className="text-sm font-medium text-red-900">
+                                  Remove
+                                </p>
+                              </div>
+                            }
+                          />
                         </div>
-                      }
-                      modalTitle={"Alert !"}
-                      children={
-                        <p className="">
-                          Are you sure you want to remove subject{" "}
-                          <span className="font-medium">{subject.name} </span>
-                          from the system?
-                        </p>
-                      }
-                      handleSubmit={() => deleteSubject(subject._id)}
-                      submitBtn={
-                        <div className="flex  capitalize outline-none justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 hover:bg-red-200">
-                          <p className="text-sm font-medium text-red-900">
-                            Remove
-                          </p>
-                        </div>
-                      }
-                    />
-                  </div>
+                      )}
+                    </>
+                  )}
                 </Tab>
               ))}
               <AddSubjectModal />
