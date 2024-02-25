@@ -1,4 +1,4 @@
-import { UserRole } from "@/utils/enums";
+import { PaperType, UserRole } from "@/utils/enums";
 import { UrlSlugType } from "@/utils/enums/UrlSlug";
 import { SVGProps } from "react";
 
@@ -32,6 +32,17 @@ export type PaperDetails = {
   _id: string;
 };
 
+export type Paper = {
+  isTimed: boolean;
+  name: string;
+  paperId: string;
+  paperType: PaperType;
+  questions: Question[];
+  timeInMinutes: number;
+  __v: number;
+  _id: string;
+};
+
 export type Course = {
   _id: string;
   name: string;
@@ -50,4 +61,18 @@ export type Module = {
   _id: string;
   name: string;
   __v: number;
+};
+
+export type Question = {
+  answers: any[];
+  correctAnswer: number[];
+  difficulty: string;
+  explaination: string;
+  module: Module;
+  question: string;
+  subCategory: SubjectCategory;
+  subject: Course;
+  type: string;
+  __v: number;
+  _id: string;
 };

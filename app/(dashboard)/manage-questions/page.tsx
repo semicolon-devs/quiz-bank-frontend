@@ -1,13 +1,14 @@
 "use client";
 import { useRouter } from "next/navigation";
-
 import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 
 import PaginationComponent from "@/components/pagination";
 import Modal from "@/components/modal";
+import EntriesPerPage from "@/components/pagination/EntriesPerPage";
 
+import SectionTitle from "@/components/sectionTitle";
 import { table } from "@/variants/table";
 
 import {
@@ -18,26 +19,12 @@ import {
   SearchIcon,
 } from "@/components/icons";
 
-import SectionTitle from "@/components/sectionTitle";
-import EntriesPerPage from "@/components/pagination/EntriesPerPage";
 
 import { BASE_URL } from "@/config/apiConfig";
 import { getAccess } from "@/helpers/token";
 import { UrlSlugType } from "@/utils/enums/UrlSlug";
 
-interface Question {
-  answers: any[];
-  correctAnswer: number[];
-  difficulty: string;
-  explaination: string;
-  module: { _id: string; name: string; __v: number };
-  question: string;
-  subCategory: { _id: string; name: string; __v: number; moduleList: any[] };
-  subject: { _id: string; name: string; subCategories: any[]; __v: number };
-  type: string;
-  __v: number;
-  _id: string;
-}
+import { Question } from "@/types";
 
 const headers = [
   "question",

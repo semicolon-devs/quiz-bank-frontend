@@ -165,7 +165,14 @@ export default function ManagePapersPage() {
                       {row.isTimed ? `${row.timeInMinutes} mins` : "Not timed"}
                     </div>
                     <div className={table().rowItem()}>
-                      <div className="bg-blue-400 px-3 py-1 rounded-full flex items-center justify-center cursor-pointer">
+                      <div
+                        className="bg-blue-400 px-3 py-1 rounded-full flex items-center justify-center cursor-pointer"
+                        onClick={() =>
+                          router.push(
+                            `${UrlSlugType.MANAGE_PAPER_QUESTIONS}/${row._id}`
+                          )
+                        }
+                      >
                         <p className="text-white text-xs font-medium">
                           Manage questions
                         </p>
