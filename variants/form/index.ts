@@ -15,7 +15,7 @@ export const form = tv({
     eyeBox:
       "cursor-pointer rounded-lg border border-blue-50 px-2 py-1 outline-none flex items-center justify-center",
     eyeIcons: "h-5 w-5 text-blue-500/75",
-    errorMessage: "text-sm text-red-500",
+    errorMessage: "text-sm text-red-600",
     button:
       "mt-2 flex items-center cursor-pointer justify-center rounded-md border border-transparent bg-blue-500 px-4 py-2 text-sm font-medium capitalize text-white hover:bg-darkBlue/75 focus:outline-none",
   },

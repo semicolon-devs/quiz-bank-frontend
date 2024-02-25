@@ -21,7 +21,7 @@ import { getAccess } from "@/helpers/token";
 import { UrlSlugType } from "@/utils/enums/UrlSlug";
 import { PaperType } from "@/utils/enums";
 
-import { addPaperValidationSchema } from "@/schema/addPaperValidation";
+import { paperValidationSchema } from "@/schema/paperValidation";
 
 import { PaperDetails } from "@/types";
 
@@ -147,7 +147,7 @@ const EditPaperModal = ({ paper }: EditPaperModalProps) => {
                   <div className="mt-4">
                     <Formik
                       initialValues={initialValues}
-                      validationSchema={addPaperValidationSchema}
+                      validationSchema={paperValidationSchema}
                       onSubmit={editPaper}
                     >
                       {({

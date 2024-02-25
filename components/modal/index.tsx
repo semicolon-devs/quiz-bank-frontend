@@ -97,7 +97,7 @@ export default function Modal({
                       </button>
                       {submitBtn && (
                         <div
-                          className=""
+                          className="cursor-pointer"
                           onClick={() => {
                             handleSubmit && handleSubmit();
                             closeModal();

@@ -2,7 +2,7 @@ import * as yup from "yup";
 
 import { PaperType } from "@/utils/enums";
 
-export const addPaperValidationSchema = yup.object().shape({
+export const paperValidationSchema = yup.object().shape({
   name: yup
     .string()
     .min(2, "Name must be minimum 2 characters")

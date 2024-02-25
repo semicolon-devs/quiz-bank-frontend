@@ -21,7 +21,7 @@ import { getAccess } from "@/helpers/token";
 import { UrlSlugType } from "@/utils/enums/UrlSlug";
 import { PaperType } from "@/utils/enums";
 
-import { addPaperValidationSchema } from "@/schema/addPaperValidation";
+import { paperValidationSchema } from "@/schema/paperValidation";
 
 interface FormValues {
   name: string;
@@ -132,7 +132,7 @@ const AddPaperModal = () => {
                   <div className="mt-4">
                     <Formik
                       initialValues={initialValues}
-                      validationSchema={addPaperValidationSchema}
+                      validationSchema={paperValidationSchema}
                       onSubmit={addPaper}
                     >
                       {({
@@ -263,7 +263,7 @@ const AddPaperModal = () => {
                             disabled={isSubmitting}
                             className={form().button()}
                           >
-                            <p className="">add paper</p>
+                            <p className="">Add paper</p>
                           </button>
                         </form>
                       )}

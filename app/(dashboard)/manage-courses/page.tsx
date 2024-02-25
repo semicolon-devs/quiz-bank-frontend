@@ -7,33 +7,21 @@ import { Tab } from "@headlessui/react";
 import AddSubjectModal from "./modals/addSubjectModal";
 import AddSubjectCategoryModal from "./modals/addSubjectCategoryModal";
 import AddModuleModal from "./modals/addModuleModal";
-import DeleteSubjectModal from "./modals/deleteSubjectModal";
 import EditSubjectModal from "./modals/editSubjectModal";
 import DeleteSubjectCategoryModal from "./modals/deleteSubjectCategoryModal";
 import EditSubjectCategoryModal from "./modals/editSubjectCategoryModal";
 import DeleteModuleModal from "./modals/deleteModuleModal";
 import EditModuleModal from "./modals/editModuleModal";
+import Modal from "@/components/modal";
 
 import SectionTitle from "@/components/sectionTitle";
+
+import { DeleteIcon, PlusIcon } from "@/components/icons";
 
 import { BASE_URL } from "@/config/apiConfig";
 import { getAccess } from "@/helpers/token";
 
-interface Course {
-  _id: string;
-  name: string;
-  subCategories: {
-    _id: string;
-    name: string;
-    __v: number;
-    moduleList: {
-      _id: string;
-      name: string;
-      __v: number;
-    }[];
-  }[];
-  __v: number;
-}
+import { Course } from "@/types";
 
 export default function ManageCoursesPage() {
   const [selectedSubject, setSelectedSubject] = useState<string>();
@@ -78,7 +66,6 @@ export default function ManageCoursesPage() {
       axios(axiosConfig)
         .then((response) => {
           setCourses(response.data);
-          console.log(response.data);
         })
         .catch((err) => {
           console.log(err);
@@ -90,6 +77,27 @@ export default function ManageCoursesPage() {
     getCourses();
   }, []);
 
+  const deleteSubject = (id: string) => {
+    setLoading(true);
+    const axiosConfig = {
+      method: "DELETE",
+      url: `${BASE_URL}subjects/${id}`,
+      headers: {
+        Authorization: `Bearer ${getAccess()}`,
+      },
+    };
+    axios(axiosConfig)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
   function classNames(...classes: (string | boolean | undefined)[]): string {
     return classes.filter(Boolean).join(" ");
   }
@@ -97,6 +105,11 @@ export default function ManageCoursesPage() {
   return (
     <div>
       <SectionTitle title="Manage Courses" />
+      <div className="grid grid-cols-3 mb-2 bg-white rounded-xl shadow py-2 px-4">
+        <p className="font-semibold text-blue-600">Subject</p>
+        <p className="px-5 font-semibold text-blue-600">Subject Category</p>
+        <p className="px-9 font-semibold text-blue-600">Module</p>
+      </div>
       <div className="w-full">
         <Tab.Group>
           <div className="flex w-full">
@@ -106,7 +119,7 @@ export default function ManageCoursesPage() {
                   key={subject._id}
                   className={({ selected }) =>
                     classNames(
-                      "w-full rounded-lg py-2 px-4 text-base text-start font-medium leading-5",
+                      "w-full rounded-lg py-2 px-4 text-base text-start font-medium leading-5 flex justify-between items-center",
                       "outline-none text-blue-600",
                       selected
                         ? "bg-white shadow"
@@ -114,9 +127,36 @@ export default function ManageCoursesPage() {
                     )
                   }
                 >
-                  {subject.name}
+                  <p className="">{subject.name}</p>
+                  <div className="flex items-center gap-2">
+                    <EditSubjectModal subject={subject} />
+                    <Modal
+                      viewButton={
+                        <div className="cursor-pointer">
+                          <DeleteIcon classes={"h-4 w-4 text-red-600"} />
+                        </div>
+                      }
+                      modalTitle={"Alert !"}
+                      children={
+                        <p className="">
+                          Are you sure you want to remove subject{" "}
+                          <span className="font-medium">{subject.name} </span>
+                          from the system?
+                        </p>
+                      }
+                      handleSubmit={() => deleteSubject(subject._id)}
+                      submitBtn={
+                        <div className="flex  capitalize outline-none justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 hover:bg-red-200">
+                          <p className="text-sm font-medium text-red-900">
+                            Remove
+                          </p>
+                        </div>
+                      }
+                    />
+                  </div>
                 </Tab>
               ))}
+              <AddSubjectModal />
             </Tab.List>
             <Tab.Panels className="ms-2 w-full">
               {courses.map((subject, idx) => (

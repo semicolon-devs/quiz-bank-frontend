@@ -27,7 +27,23 @@ export type PaperDetails = {
   paperId: string;
   paperType: string;
   timeInMinutes: number;
-  questionsCount:number;
+  questionsCount: number;
   __v: number;
   _id: string;
+};
+
+export type Course = {
+  _id: string;
+  name: string;
+  subCategories: {
+    _id: string;
+    name: string;
+    __v: number;
+    moduleList: {
+      _id: string;
+      name: string;
+      __v: number;
+    }[];
+  }[];
+  __v: number;
 };
