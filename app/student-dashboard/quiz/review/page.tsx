@@ -1,3 +1,3 @@
 export default function QuizReviewPage() {
-  return <div>quizes details</div>;
+  return <div>review paged</div>;
 }

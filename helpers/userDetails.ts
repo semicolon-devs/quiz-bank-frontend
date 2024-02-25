@@ -3,14 +3,7 @@ import { BASE_URL } from "@/config/apiConfig";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { getAccess } from "./token";
-
-interface UserDetails {
-  firstname: string;
-  lastname: string;
-  email: string;
-  roles: ("USER" | "MODERATOR" | "ADMIN")[];
-  _id: string;
-}
+import { UserDetails } from "@/types";
 
 export const getUserDetails = (): UserDetails | null => {
   const userDetails = Cookies.get("userDetails");
@@ -38,6 +31,16 @@ export const clearUserDetails = () => {
     path: "/",
     domain,
   });
+};
+
+export const getUserID = (): string | null => {
+  const userDetails = Cookies.get("userDetails");
+  if (userDetails) {
+    const userDetailsObj: UserDetails = JSON.parse(userDetails);
+    return userDetailsObj._id;
+  } else {
+    return null;
+  }
 };
 
 export const getUser = () => {

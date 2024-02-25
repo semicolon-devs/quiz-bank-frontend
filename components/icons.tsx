@@ -157,30 +157,19 @@ export const HeartFilledIcon = ({
   </svg>
 );
 
-export const SearchIcon = (props: IconSvgProps) => (
+export const SearchIcon = (props: { classes: string }) => (
   <svg
+    className={props.classes}
     aria-hidden="true"
+    xmlns="http://www.w3.org/2000/svg"
     fill="none"
-    focusable="false"
-    height="1em"
-    role="presentation"
     viewBox="0 0 24 24"
-    width="1em"
-    {...props}
   >
     <path
-      d="M11.5 21C16.7467 21 21 16.7467 21 11.5C21 6.25329 16.7467 2 11.5 2C6.25329 2 2 6.25329 2 11.5C2 16.7467 6.25329 21 11.5 21Z"
       stroke="currentColor"
       strokeLinecap="round"
-      strokeLinejoin="round"
       strokeWidth="2"
-    />
-    <path
-      d="M22 22L20 20"
-      stroke="currentColor"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth="2"
+      d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"
     />
   </svg>
 );
@@ -231,17 +220,74 @@ export const MailIcon = (props: any) => (
   </svg>
 );
 
-export const ChevronDownIcon = () => (
+export const ChevronDownIcon = (props: { classes: string }) => (
   <svg
-    fill="none"
-    height="14"
-    viewBox="0 0 24 24"
-    width="14"
+    className={props.classes}
+    aria-hidden="true"
     xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
   >
     <path
-      d="M17.9188 8.17969H11.6888H6.07877C5.11877 8.17969 4.63877 9.33969 5.31877 10.0197L10.4988 15.1997C11.3288 16.0297 12.6788 16.0297 13.5088 15.1997L15.4788 13.2297L18.6888 10.0197C19.3588 9.33969 18.8788 8.17969 17.9188 8.17969Z"
-      fill="currentColor"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      d="m8 10 4 4 4-4"
+    />
+  </svg>
+);
+
+export const ChevronLeftIcon = (props: { classes: string }) => (
+  <svg
+    className={props.classes}
+    aria-hidden="true"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+  >
+    <path
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      d="m14 8-4 4 4 4"
+    />
+  </svg>
+);
+
+export const ChevronRightIcon = (props: { classes: string }) => (
+  <svg
+    className={props.classes}
+    aria-hidden="true"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+  >
+    <path
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      d="m10 16 4-4-4-4"
+    />
+  </svg>
+);
+
+export const CloseIcon = (props: { classes: string }) => (
+  <svg
+    className={props.classes}
+    aria-hidden="true"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+  >
+    <path
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      d="M6 18 18 6m0 12L6 6"
     />
   </svg>
 );
@@ -267,6 +313,27 @@ export const CreateQBankIcon = () => (
     viewBox="0 0 18 18"
   >
     <path d="M9.043.8a2.009 2.009 0 0 0-1.6-.8H2a2 2 0 0 0-2 2v2h11.443L9.043.8ZM0 6v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6H0Zm11 7h-1v1a1 1 0 1 1-2 0v-1H7a1 1 0 0 1 0-2h1v-1a1 1 0 0 1 2 0v1h1a1 1 0 0 1 0 2Z" />
+  </svg>
+);
+
+export const ManagePapersIcon = () => (
+  <svg
+    className="w-5 h-5 text-white"
+    aria-hidden="true"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="currentColor"
+    viewBox="0 0 24 24"
+  >
+    <path
+      fillRule="evenodd"
+      d="M6 5c0-1.1.9-2 2-2h4.2a2 2 0 0 1 1.6.9L15.2 6H19a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2v-5a3 3 0 0 0-3-3h-3.2l-1.2-1.7A3 3 0 0 0 9.2 6H6V5Z"
+      clipRule="evenodd"
+    />
+    <path
+      fillRule="evenodd"
+      d="M3 9c0-1.1.9-2 2-2h4.2a2 2 0 0 1 1.6.9l1.4 2.1H3V9Zm0 3v7c0 1.1.9 2 2 2h11a2 2 0 0 0 2-2v-7H3Z"
+      clipRule="evenodd"
+    />
   </svg>
 );
 
@@ -345,9 +412,44 @@ export const ProfileIcon = () => (
   </svg>
 );
 
+export const LogoutIcon = () => (
+  <svg
+    className="w-6 h-6 text-white"
+    aria-hidden="true"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+  >
+    <path
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      d="M20 12H8m12 0-4 4m4-4-4-4M9 4H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h2"
+    />
+  </svg>
+);
+
+export const MenuIcon = () => (
+  <svg
+    className="w-6 h-6 text-white"
+    aria-hidden="true"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+  >
+    <path
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeWidth="2"
+      d="M5 7h14M5 12h14M5 17h14"
+    />
+  </svg>
+);
+
 export const RightArrowIcon = (props: { classes: string }) => (
   <svg
-    className={`${props.classes} text-white`}
+    className={`${props.classes}`}
     aria-hidden="true"
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
@@ -458,6 +560,54 @@ export const PlusIcon = (props: { classes: string }) => (
       strokeLinejoin="round"
       strokeWidth="2"
       d="M9 1v16M1 9h16"
+    />
+  </svg>
+);
+
+export const ExclamationMarkIcon = (props: { classes: string }) => (
+  <svg
+    className={props.classes}
+    aria-hidden="true"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="currentColor"
+    viewBox="0 0 20 20"
+  >
+    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM10 15a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm1-4a1 1 0 0 1-2 0V6a1 1 0 0 1 2 0v5Z" />
+  </svg>
+);
+
+export const RightArrowWithTailIcon = (props: { classes: string }) => (
+  <svg
+    className={props.classes}
+    aria-hidden="true"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+  >
+    <path
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      d="M19 12H5m14 0-4 4m4-4-4-4"
+    />
+  </svg>
+);
+
+export const ClockIcon = (props: { classes: string }) => (
+  <svg
+    className={props.classes}
+    aria-hidden="true"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+  >
+    <path
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
     />
   </svg>
 );

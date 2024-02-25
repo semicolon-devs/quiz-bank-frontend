@@ -1,13 +1,34 @@
-export default function DahboardHomeLayout({
-  children,
+"use client";
+
+import React, { useState, useEffect } from "react";
+import { getUserDetails } from "@/helpers/userDetails";
+import { UserRole } from "@/utils/enums";
+
+export default function DashboardHomeLayout({
+  admin,
+  student,
 }: {
-  children: React.ReactNode;
+  admin: React.ReactNode;
+  student: React.ReactNode;
 }) {
-  return (
-    <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-      <div className="inline-block max-w-lg text-center justify-center">
-        {children}
-      </div>
-    </section>
-  );
+  const [role, setRole] = useState<UserRole | undefined>(undefined);
+
+  useEffect(() => {
+    const getHighestRole = (): UserRole => {
+      const userDetails = getUserDetails();
+
+      if (userDetails?.roles.includes(UserRole.ADMIN)) {
+        return UserRole.ADMIN;
+      } else if (userDetails?.roles.includes(UserRole.MODERATOR)) {
+        return UserRole.MODERATOR;
+      } else {
+        return UserRole.USER;
+      }
+    };
+
+    setRole(getHighestRole());
+  }, []);
+
+  return student;
+  // return role === UserRole.ADMIN ? admin : student;
 }

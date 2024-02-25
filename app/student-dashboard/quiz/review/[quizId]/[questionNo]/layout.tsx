@@ -33,11 +33,11 @@ export default function QuizLayout({
 
   const questionBlockStatus = (status: string) => {
     if (status === "incorrect") {
-      return "text-white bg-red border-red/25";
+      return "text-white bg-red-500 border-red-500/25";
     } else if (status === "correct") {
-      return "text-white bg-blue border-blue/25";
+      return "text-white bg-blue-500 border-blue-500/25";
     } else {
-      return "text-blue bg-white";
+      return "text-blue-500 bg-white";
     }
   };
 

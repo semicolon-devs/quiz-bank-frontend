@@ -8,7 +8,7 @@ export default function StudentDashboardLayout({
 }) {
   return (
     <div className="flex h-screen">
-      <Sidebar admin={false} />
+      <Sidebar />
       <div className="relative flex flex-col flex-grow">
         <Navbar />
         <main className="p-6 overflow-y-auto h-full">{children}</main>

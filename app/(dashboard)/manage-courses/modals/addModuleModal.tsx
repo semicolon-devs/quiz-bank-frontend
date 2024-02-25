@@ -1,82 +1,67 @@
-import { useState, useEffect } from "react";
+import { Dialog, Transition } from "@headlessui/react";
+import { Fragment, ReactNode, useState } from "react";
 import axios from "axios";
-
 import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  useDisclosure,
-} from "@nextui-org/modal";
-import { Button } from "@nextui-org/button";
-import { Input } from "@nextui-org/input";
-// import { Select, SelectSection, SelectItem } from "@nextui-org/select";
+  Formik,
+  Field,
+  ErrorMessage,
+  FormikValues,
+  FormikHelpers,
+} from "formik";
+
+import { CloseIcon, PlusIcon } from "../../../../components/icons";
+
+import { form } from "@/variants/form";
+
+import { moduleValidationSchema } from "@/schema/moduleValidation";
 
 import { BASE_URL } from "@/config/apiConfig";
+import { getAccess } from "@/helpers/token";
+import { SubjectCategory } from "@/types";
 
-interface SubjectWithSubCategories {
-  _id: string;
-  name: string;
-  subCategories: {
-    _id: string;
-    name: string;
-  }[];
+interface FormValues {
+  module: string;
 }
 
-interface AddModuleModalProps {
-  subjects: SubjectWithSubCategories[];
-}
+const initialValues: FormValues = {
+  module: "",
+};
 
-const AddModuleModal: React.FC<AddModuleModalProps> = ({ subjects }) => {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [subject, setSubject] = useState<string>();
-  const [subjectCategoryList, setSubjectCategoryList] = useState<
-    { name: string; _id: string }[] | undefined
-  >();
-  const [subjectCategory, setSubjectCategory] = useState<string>();
-  const [module, setModule] = useState<string>();
+type Props = {
+  subjectCategory: SubjectCategory;
+};
+
+const AddSubCategoryModal = ({ subjectCategory }: Props) => {
   const [loading, setLoading] = useState<boolean>(false);
+  let [isOpen, setIsOpen] = useState(false);
 
-  useEffect(() => {
-    const filterAndMapSubCategories = (
-      subjects: SubjectWithSubCategories[]
-    ): { name: string; _id: string }[] | undefined => {
-      const targetSubject = subjects.find(
-        (subjectFind) => subjectFind._id === subject
-      );
+  function closeModal() {
+    setIsOpen(false);
+  }
 
-      if (!targetSubject) {
-        return undefined;
-      }
+  function openModal() {
+    setIsOpen(true);
+  }
 
-      return targetSubject.subCategories.map(({ _id, name }) => ({
-        _id,
-        name,
-      }));
-    };
-
-    setSubjectCategoryList(filterAndMapSubCategories(subjects));
-  }, [subject, subjects]);
-
-  const addNewModule = () => {
+  const addNewModule = (values: FormValues) => {
     setLoading(true);
     const axiosConfig = {
       method: "POST",
-      url: `${BASE_URL}subjects/module/${subjectCategory}`,
-      // headers: {
-      //   Authorization: `Bearer ${token}`,
-      // },
+      url: `${BASE_URL}subjects/module/${subjectCategory._id}`,
+      headers: {
+        Authorization: `Bearer ${getAccess()}`,
+      },
       data: {
-        name: module,
+        name: values.module,
       },
     };
     axios(axiosConfig)
       .then((response) => {
-        console.log(response);
+        // console.log(response);
+        closeModal();
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       })
       .finally(() => {
         setLoading(false);
@@ -85,74 +70,115 @@ const AddModuleModal: React.FC<AddModuleModalProps> = ({ subjects }) => {
 
   return (
     <>
-      <Button onPress={onOpen} color="primary">
-        Add Module
-      </Button>
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center">
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col gap-1">
-                Add New Module
-              </ModalHeader>
-              <ModalBody>
-                <select
-                  value={subject}
-                  onChange={(e) => setSubject(e.target.value)}
-                  className="border border-dark p-3 rounded-xl"
+      <div className="" onClick={openModal}>
+        <div className="w-full rounded-lg cursor-pointer bg-blue-100 py-2 px-4 text-base text-start font-medium leading-5 flex justify-center gap-2 items-center outline-none text-blue-400">
+          <PlusIcon classes={"h-3 w-3"} />
+          <p className="">Add module</p>
+        </div>
+      </div>
+
+      <Transition appear show={isOpen} as={Fragment}>
+        <Dialog as="div" className="relative z-10" onClose={closeModal}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-blue-900/50" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel
+                  className={`w-full max-w-md transform relative overflow-hidden rounded-xl bg-white p-4 text-left align-middle shadow transition-all`}
                 >
-                  <option value="">Select subject</option>
-                  {subjects.map((item) => (
-                    <option value={item._id} key={item._id}>
-                      {item.name}
-                    </option>
-                  ))}
-                </select>
-                <select
-                  value={subjectCategory}
-                  onChange={(e) => setSubjectCategory(e.target.value)}
-                  className="border border-dark p-3 rounded-xl"
-                >
-                  <option value="">Select subject Category</option>
-                  {subjectCategoryList &&
-                    subjectCategoryList.map((item) => (
-                      <option value={item._id} key={item._id}>
-                        {item.name}
-                      </option>
-                    ))}
-                </select>
-                <Input
-                  autoFocus
-                  // endContent={
-                  //   <MailIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
-                  // }
-                  label="Module Name"
-                  placeholder="Enter module name"
-                  variant="bordered"
-                  value={module}
-                  onValueChange={setModule}
-                />
-              </ModalBody>
-              <ModalFooter>
-                <Button color="secondary" variant="flat" onPress={onClose}>
-                  Close
-                </Button>
-                <Button
-                  color="primary"
-                  onPress={() => {
-                    addNewModule();
-                    onClose();
-                  }}
-                >
-                  Add
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
+                  <Dialog.Title
+                    as="h3"
+                    className="text-xl font-semibold leading-6"
+                  >
+                    Add module to {subjectCategory.name}
+                  </Dialog.Title>
+
+                  <div
+                    className="absolute top-4 right-4 p-1 rounded-full cursor-pointer flex items-center justify-center"
+                    onClick={closeModal}
+                  >
+                    <CloseIcon classes={"h-4 w-4 text-blue-900"} />
+                  </div>
+
+                  <div className="mt-4">
+                    <Formik
+                      initialValues={initialValues}
+                      validationSchema={moduleValidationSchema}
+                      onSubmit={addNewModule}
+                    >
+                      {({
+                        isSubmitting,
+                        errors,
+                        handleSubmit,
+                        touched,
+                        values,
+                      }) => (
+                        <form
+                          onSubmit={handleSubmit}
+                          className={form().innerForm()}
+                        >
+                          <div className={form().formDiv()}>
+                            <label
+                              htmlFor="module"
+                              className={form().label()}
+                            >
+                              Module name
+                            </label>
+                            <Field
+                              name="module"
+                              type="text"
+                              className={`${form().input()} ${
+                                errors.module &&
+                                touched.module
+                                  ? form().labelError()
+                                  : ""
+                              }`}
+                            />
+                            <ErrorMessage
+                              className={form().errorMessage()}
+                              name="module"
+                              component="div"
+                            />
+                          </div>
+
+                          <button
+                            type="submit"
+                            disabled={isSubmitting}
+                            className={form().button()}
+                          >
+                            <p className="">Add module</p>
+                          </button>
+                        </form>
+                      )}
+                    </Formik>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
     </>
   );
 };
 
-export default AddModuleModal;
+export default AddSubCategoryModal;
