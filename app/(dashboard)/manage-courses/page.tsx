@@ -10,7 +10,6 @@ import AddSubCategoryModal from "./modals/addSubCategoryModal";
 import AddModuleModal from "./modals/addModuleModal";
 import EditSubjectModal from "./modals/editSubjectModal";
 import EditSubjectCategoryModal from "./modals/editSubjectCategoryModal";
-import DeleteModuleModal from "./modals/deleteModuleModal";
 import EditModuleModal from "./modals/editModuleModal";
 
 import SectionTitle from "@/components/sectionTitle";
@@ -124,6 +123,33 @@ export default function ManageCoursesPage() {
       });
   };
 
+  const deleteModule = ({
+    subCategoryId,
+    moduleId,
+  }: {
+    subCategoryId: string;
+    moduleId: string;
+  }) => {
+    setLoading(true);
+    const axiosConfig = {
+      method: "DELETE",
+      url: `${BASE_URL}subjects/module/${subCategoryId}/${moduleId}`,
+      headers: {
+        Authorization: `Bearer ${getAccess()}`,
+      },
+    };
+    axios(axiosConfig)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
   function classNames(...classes: (string | boolean | undefined)[]): string {
     return classes.filter(Boolean).join(" ");
   }
@@ -139,7 +165,7 @@ export default function ManageCoursesPage() {
       <div className="w-full">
         <Tab.Group>
           <div className="flex w-full">
-            <Tab.List className="flex flex-col rounded-xl bg-blue-50 p-1 w-1/2">
+            <Tab.List className="flex flex-col rounded-xl bg-blue-50 p-1 w-1/2 gap-1">
               <AddSubjectModal />
               {courses.map((subject) => (
                 <Tab
@@ -197,7 +223,7 @@ export default function ManageCoursesPage() {
                 <Tab.Panel key={idx} className={classNames("outline-none")}>
                   <Tab.Group>
                     <div className="flex w-full">
-                      <Tab.List className="flex flex-col rounded-xl bg-blue-50 p-1 w-1/2">
+                      <Tab.List className="flex flex-col rounded-xl bg-blue-50 p-1 w-1/2 gap-1">
                         <AddSubCategoryModal subject={subject} />
                         {subject.subCategories.map((subCategory) => (
                           <Tab
@@ -265,28 +291,55 @@ export default function ManageCoursesPage() {
                         {subject.subCategories.map((subCategory, idx) => (
                           <Tab.Panel
                             key={idx}
-                            className="outline-none flex flex-col rounded-xl bg-blue-50 p-1 w-full"
+                            className="outline-none flex flex-col rounded-xl bg-blue-50 p-1 w-full gap-1"
                           >
-                            <div className="w-full">
-                              {subCategory.moduleList.map((module) => (
-                                <div
-                                  key={module._id}
-                                  className="relative w-full rounded-lg py-2 px-4 text-base text-start font-medium leading-5 bg-white shadow"
-                                >
-                                  <h3 className="text-sm font-medium leading-5">
-                                    {module.name}
-                                  </h3>
-
-                                  <a
-                                    href="#"
-                                    className={classNames(
-                                      "absolute inset-0 rounded-md",
-                                      "ring-blue-400 focus:z-10 focus:outline-none focus:ring-2"
-                                    )}
+                            <AddModuleModal subjectCategory={subCategory} />
+                            {subCategory.moduleList.map((module) => (
+                              <div
+                                key={module._id}
+                                className="relative w-full rounded-lg py-2 px-4 text-base text-start font-medium leading-5 bg-white shadow flex items-center justify-between"
+                              >
+                                <p className="text-sm font-medium leading-5">
+                                  {module.name}
+                                </p>
+                                <div className="flex items-center gap-2 duration-200 ease-in-out">
+                                  <EditModuleModal module={module} />
+                                  <Modal
+                                    viewButton={
+                                      <div className="cursor-pointer">
+                                        <DeleteIcon
+                                          classes={"h-4 w-4 text-red-600"}
+                                        />
+                                      </div>
+                                    }
+                                    modalTitle={"Alert !"}
+                                    children={
+                                      <p className="">
+                                        Are you sure you want to remove module{" "}
+                                        <span className="font-medium">
+                                          {module.name}{" "}
+                                        </span>{" "}
+                                        of subject category {subCategory.name}{" "}
+                                        from the system?
+                                      </p>
+                                    }
+                                    handleSubmit={() =>
+                                      deleteModule({
+                                        subCategoryId: subCategory._id,
+                                        moduleId: module._id,
+                                      })
+                                    }
+                                    submitBtn={
+                                      <div className="flex  capitalize outline-none justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 hover:bg-red-200">
+                                        <p className="text-sm font-medium text-red-900">
+                                          Remove
+                                        </p>
+                                      </div>
+                                    }
                                   />
                                 </div>
-                              ))}
-                            </div>
+                              </div>
+                            ))}
                           </Tab.Panel>
                         ))}
                       </Tab.Panels>

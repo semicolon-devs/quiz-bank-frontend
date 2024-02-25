@@ -18,7 +18,7 @@ import { subjectCategoryValidationSchema } from "@/schema/subjectCategoryValidat
 import { BASE_URL } from "@/config/apiConfig";
 import { getAccess } from "@/helpers/token";
 
-import { subjectCategory } from "@/types";
+import { SubjectCategory } from "@/types";
 
 interface FormValues {
   subjectCategory: string;
@@ -29,7 +29,7 @@ const initialValues: FormValues = {
 };
 
 type Props = {
-  subjectCategory: subjectCategory;
+  subjectCategory: SubjectCategory;
 };
 
 const EditSubjectModal = ({ subjectCategory }: Props) => {
