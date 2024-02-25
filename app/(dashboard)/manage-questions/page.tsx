@@ -148,14 +148,6 @@ export default function ManageQuestionsPage() {
               <SearchIcon classes={"h-4 w-4 text-white"} />
             </div>
           </div>
-          {/* <div className="h-full flex items-center gap-2">
-            <p className="text-xs font-medium w-1/3">Questions per page</p>
-            <Select
-              value={pageSize}
-              setValue={setPageSize}
-              array={pageSizeArray}
-            />
-          </div> */}
           <EntriesPerPage
             value={pageSize}
             setValue={setPageSize}

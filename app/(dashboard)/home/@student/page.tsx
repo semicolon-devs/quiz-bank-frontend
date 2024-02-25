@@ -3,19 +3,11 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card";
-import {
-  Table,
-  TableHeader,
-  TableBody,
-  TableColumn,
-  TableRow,
-  TableCell,
-  getKeyValue,
-} from "@nextui-org/table";
 
 import SectionTitle from "@/components/sectionTitle";
 import SectionSubTitle from "@/components/sectionSubTitle";
+
+import { table } from "@/variants/table";
 
 import { RightArrowWithTailIcon, RightArrowIcon } from "@/components/icons";
 
@@ -74,27 +66,12 @@ const rows = [
   },
 ];
 
-const columns = [
-  {
-    key: "quiz_no",
-    label: "QUIZ NO",
-  },
-  {
-    key: "quiz_name",
-    label: "QUIZ NAME",
-  },
-  {
-    key: "score",
-    label: "SCORE",
-  },
-  {
-    key: "questions_completed",
-    label: "QUESTIONS COMPLETED",
-  },
-  {
-    key: "status",
-    label: "STATUS",
-  },
+const headers = [
+  "QUIZ NO",
+  "QUIZ NAME",
+  "SCORE",
+  "QUESTIONS COMPLETED",
+  "STATUS",
 ];
 
 interface QPaper {
@@ -182,56 +159,56 @@ export default function DashboardHomePage() {
       <SectionSubTitle title="Stats" />
       <div className="grid grid-cols-3 gap-3">
         <div className="flex flex-col gap-3">
-          <Card>
-            <CardBody>
-              <div className="flex justify-between">
-                <p className="font-semibold uppercase">quizes completed</p>
-                <p className="font-bold uppercase">14</p>
-              </div>
-            </CardBody>
-          </Card>
-          <Card>
-            <CardBody>
-              <div className="flex justify-between">
-                <p className="font-semibold uppercase">quizes in progress</p>
-                <p className="font-bold uppercase">2</p>
-              </div>
-            </CardBody>
-          </Card>
-          <Card>
-            <CardBody>
-              <div className="flex justify-between">
-                <p className="font-semibold uppercase">average score</p>
-                <p className="font-bold uppercase">89/100</p>
-              </div>
-            </CardBody>
-          </Card>
-          <Card>
-            <CardBody>
-              <div className="flex justify-between">
-                <p className="font-semibold uppercase">aggregated points</p>
-                <p className="font-bold uppercase">1450</p>
-              </div>
-            </CardBody>
-          </Card>
+          <div className=" bg-white rounded-xl p-3 shadow flex justify-between">
+            <p className="font-semibold uppercase">quizes completed</p>
+            <p className="font-bold uppercase">14</p>
+          </div>
+          <div className=" bg-white rounded-xl p-3 shadow flex justify-between">
+            <p className="font-semibold uppercase">quizes in progress</p>
+            <p className="font-bold uppercase">2</p>
+          </div>
+          <div className=" bg-white rounded-xl p-3 shadow flex justify-between">
+            <p className="font-semibold uppercase">average score</p>
+            <p className="font-bold uppercase">89/100</p>
+          </div>
+          <div className=" bg-white rounded-xl p-3 shadow flex justify-between">
+            <p className="font-semibold uppercase">aggregated points</p>
+            <p className="font-bold uppercase">1450</p>
+          </div>
         </div>
         <div className="col-span-2">
-          <Table aria-label="Example table with dynamic content">
-            <TableHeader columns={columns}>
-              {(column) => (
-                <TableColumn key={column.key}>{column.label}</TableColumn>
-              )}
-            </TableHeader>
-            <TableBody items={rows}>
-              {(item) => (
-                <TableRow key={item.key}>
-                  {(columnKey) => (
-                    <TableCell>{getKeyValue(item, columnKey)}</TableCell>
-                  )}
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
+          <div className={table().base()}>
+            <div
+              className={table().headerRow({ className: "grid grid-cols-5" })}
+            >
+              {headers.map((header) => (
+                <div
+                  className={table().headerItem({ className: "text-sm" })}
+                  key={header}
+                >
+                  {header}
+                </div>
+              ))}
+            </div>
+            <div className={table().tableContent()}>
+              {rows.map((item) => (
+                <div
+                  className={table().tableRow({
+                    className: "grid grid-cols-5",
+                  })}
+                  key={item.key}
+                >
+                  <div className={table().rowItem()}>{item.quiz_no}</div>
+                  <div className={table().rowItem()}>{item.quiz_name}</div>
+                  <div className={table().rowItem()}>{item.score}</div>
+                  <div className={table().rowItem()}>
+                    {item.questions_completed}
+                  </div>
+                  <div className={table().rowItem()}>{item.status}</div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </>
