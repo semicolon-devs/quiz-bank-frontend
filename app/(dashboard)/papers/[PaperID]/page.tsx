@@ -16,7 +16,7 @@ export default function PaperDetailsPage({
 }: {
   params: { PaperID: string };
 }) {
-  const [qPaper, setQPaper] = useState<PaperDetails>();
+  const [paper, setPaper] = useState<PaperDetails>();
   const [loading, setLoading] = useState<boolean>(false);
 
   const router = useRouter();
@@ -33,7 +33,7 @@ export default function PaperDetailsPage({
       };
       axios(axiosConfig)
         .then((response) => {
-          setQPaper(response.data);
+          setPaper(response.data[0]);
         })
         .catch((err) => {
           console.log(err);
@@ -48,11 +48,11 @@ export default function PaperDetailsPage({
 
   return (
     <div className="w-full">
-      {qPaper ? (
+      {paper ? (
         <div className="w-full flex flex-col gap-4">
           <div className="bg-white w-full flex items-center justify-between p-3 rounded-xl shadow">
             <p className="text-blue-600 capitalize text-3xl font-semibold">
-              {qPaper.name}
+              {paper.name}
             </p>
             <button
               className="bg-blue-500 hover:bg-blue-700 rounded-lg px-4 py-1 w-max flex gap-2 items-center justify-center"
@@ -68,26 +68,26 @@ export default function PaperDetailsPage({
             <div className="bg-white p-3 rounded-xl shadow">
               <div className="flex">
                 <p className="w-1/2 font-medium">Paper code</p>
-                <p className="w-1/2 uppercase">{qPaper.paperId}</p>
+                <p className="w-1/2 uppercase">{paper.paperId}</p>
               </div>
               <div className="flex">
                 <p className="w-1/2 font-medium">Paper type</p>
-                <p className="w-1/2 lowercase">{qPaper.paperType}</p>
+                <p className="w-1/2 lowercase">{paper.paperType}</p>
               </div>
               <div className="flex">
                 <p className="w-1/2 font-medium">No of questions</p>
-                <p className="w-1/2 lowercase">-</p>
+                <p className="w-1/2 lowercase">{paper.questionsCount}</p>
               </div>
               <div className="flex">
                 <p className="w-1/2 font-medium">Paper</p>
                 <p className="w-1/2">
-                  {qPaper.isTimed ? "is timed" : "not timed"}
+                  {paper.isTimed ? "is timed" : "not timed"}
                 </p>
               </div>
-              {qPaper.isTimed && (
+              {paper.isTimed && (
                 <div className="flex">
                   <p className="w-1/2 font-medium">Duration</p>
-                  <p className="w-1/2">{qPaper.timeInMinutes} minutes</p>
+                  <p className="w-1/2">{paper.timeInMinutes} minutes</p>
                 </div>
               )}
             </div>

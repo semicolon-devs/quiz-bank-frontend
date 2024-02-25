@@ -27,6 +27,7 @@ export type PaperDetails = {
   paperId: string;
   paperType: string;
   timeInMinutes: number;
+  questionsCount:number;
   __v: number;
   _id: string;
 };
