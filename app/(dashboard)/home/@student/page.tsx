@@ -87,7 +87,7 @@ interface QPaper {
 
 export default function DashboardHomePage() {
   const [loading, setLoading] = useState<boolean>(false);
-  const [qPaperList, setQPaperList] = useState<QPaper[]>();
+  const [paperList, setPaperList] = useState<QPaper[]>();
 
   const router = useRouter();
 
@@ -103,7 +103,7 @@ export default function DashboardHomePage() {
       };
       axios(axiosConfig)
         .then((response) => {
-          setQPaperList(response.data);
+          setPaperList(response.data.result);
         })
         .catch((err) => {
           console.log(err);
@@ -131,22 +131,22 @@ export default function DashboardHomePage() {
           </div>
         </div>
         <div className="w-full grid grid-cols-4 gap-5">
-          {qPaperList &&
-            qPaperList.slice(0, 4).map((qpaper) => (
+          {paperList &&
+            paperList.slice(0, 4).map((paper) => (
               <div
                 className="bg-white rounded-xl overflow-hidden shadow w-full p-2 flex flex-col justify-between h-40"
-                key={qpaper._id}
+                key={paper._id}
               >
                 <div className="flex flex-col">
-                  <p className="text-sm uppercase">{qpaper.paperId}</p>
+                  <p className="text-sm uppercase">{paper.paperId}</p>
                   <p className="text-xl font-semibold uppercase leading-6">
-                    {qpaper.name}
+                    {paper.name}
                   </p>
                 </div>
                 <button
                   className="bg-blue-500 hover:bg-blue-700 hover:gap-3 transition duration-1000 rounded-lg px-2 py-1 w-full flex gap-2 items-center justify-center"
                   onClick={() =>
-                    router.push(`${UrlSlugType.PAPERS}/${qpaper._id}`)
+                    router.push(`${UrlSlugType.PAPERS}/${paper._id}`)
                   }
                 >
                   <p className="text-white text-sm">View Details</p>

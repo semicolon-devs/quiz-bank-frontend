@@ -15,7 +15,7 @@ const EntriesPerPage = ({ value, setValue, array }: Props) => {
       <p className="text-sm font-medium py-3">Entries per page</p>
       <Listbox value={value} onChange={setValue}>
         <div className="relative">
-          <Listbox.Button className="relative w-full cursor-default pl-3 pr-10 text-left">
+          <Listbox.Button className="relative w-full pl-3 pr-10 text-left cursor-pointer">
             <span className="block truncate">
               {value?.name ? value.name : value ? value : "Select option"}
             </span>

@@ -19,6 +19,7 @@ import { UrlSlugType } from "@/utils/enums/UrlSlug";
 import { Paper } from "@/types";
 
 import { Question } from "@/types";
+import toast from "react-hot-toast";
 
 const allQuestionsHeaders = [
   "question",
@@ -150,10 +151,12 @@ const ManagePaperQuestionsPage = ({
     };
     axios(axiosConfig)
       .then((response) => {
-        console.log(response);
+        toast.success("Question added to the paper successfully");
       })
       .catch((err) => {
-        console.log(err);
+        err.response.data.message ===
+          "Duplicate id, 65bc78b5bf33faf33d699199 already exists in question list" &&
+          toast.error("Question already added to the paper");
       })
       .finally(() => {
         setLoading(false);
@@ -174,6 +177,7 @@ const ManagePaperQuestionsPage = ({
             ? `${paper?.name} : ${paper?.paperId}`
             : "Loading..."
         }
+        backBtn
       />
       <SectionSubTitle
         title={`Selected questions : count ${paper?.questions.length}`}

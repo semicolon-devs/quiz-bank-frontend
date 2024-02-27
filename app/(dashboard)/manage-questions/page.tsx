@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import PaginationComponent from "@/components/pagination";
 import Modal from "@/components/modal";
 import EntriesPerPage from "@/components/pagination/EntriesPerPage";
+import { entriesArray } from "@/components/pagination/entriesArray";
 
 import SectionTitle from "@/components/sectionTitle";
 import { table } from "@/variants/table";
@@ -43,7 +44,7 @@ export default function ManageQuestionsPage() {
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [numberOfPages, setNumberOfPages] = useState<number>(1);
   const [tableSearch, setTableSearch] = useState<string>("");
-  const [pageSize, setPageSize] = useState<number>(pageSizeArray[1]);
+  const [pageSize, setPageSize] = useState<number>(entriesArray[1]);
 
   const router = useRouter();
 
@@ -138,7 +139,7 @@ export default function ManageQuestionsPage() {
           <EntriesPerPage
             value={pageSize}
             setValue={setPageSize}
-            array={pageSizeArray}
+            array={entriesArray}
           />
           <button
             className={table().featuresButton()}

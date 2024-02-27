@@ -25,7 +25,7 @@ interface QPaper {
 
 export default function PapersPage() {
   const [loaiding, setLoading] = useState<boolean>(false);
-  const [qPaperList, setQPaperList] = useState<QPaper[]>();
+  const [paperList, setPaperList] = useState<QPaper[]>();
 
   const router = useRouter();
 
@@ -41,7 +41,7 @@ export default function PapersPage() {
       };
       axios(axiosConfig)
         .then((response) => {
-          setQPaperList(response.data);
+          setPaperList(response.data.result);
         })
         .catch((err) => {
           console.log(err);
@@ -56,42 +56,42 @@ export default function PapersPage() {
 
   return (
     <div>
-      <SectionTitle title="papers" />
+      <SectionTitle title="papers" backBtn />
       <div className="w-full flex flex-col gap-3">
-        {qPaperList &&
-          qPaperList.map((qpaper) => (
+        {paperList &&
+          paperList.map((paper) => (
             <div
               className="bg-white rounded-xl overflow-hidden shadow w-full p-4 flex flex-col justify-between"
-              key={qpaper._id}
+              key={paper._id}
             >
               <div className="flex items-center justify-between">
                 <p className="text-xl font-semibold uppercase leading-6">
-                  {qpaper.name}
+                  {paper.name}
                 </p>
                 <button
                   className="bg-blue-500 hover:bg-blue-700 rounded-lg px-4 py-1 w-max flex gap-2 items-center justify-center"
                   onClick={() =>
-                    router.push(`${UrlSlugType.PAPERS}/${qpaper._id}`)
+                    router.push(`${UrlSlugType.PAPERS}/${paper._id}`)
                   }
                 >
                   <p className="text-white text-base">View Details</p>
                 </button>
               </div>
               <div className="grid grid-cols-4">
-                <p className="text-sm uppercase">{qpaper.paperId}</p>
+                <p className="text-sm uppercase">{paper.paperId}</p>
                 <div className="flex gap-2 items-center">
                   <ClockIcon
                     classes={`h-4 w-4 ${
-                      qpaper.isTimed ? "text-blue-600" : "text-red-600"
+                      paper.isTimed ? "text-blue-600" : "text-red-600"
                     }`}
                   />
                   <p
                     className={`${
-                      qpaper.isTimed ? "text-blue-600" : "text-red-600"
+                      paper.isTimed ? "text-blue-600" : "text-red-600"
                     } capitalize`}
                   >
-                    {qpaper.isTimed
-                      ? `${qpaper.timeInMinutes} minutes`
+                    {paper.isTimed
+                      ? `${paper.timeInMinutes} minutes`
                       : "not timed"}
                   </p>
                 </div>
