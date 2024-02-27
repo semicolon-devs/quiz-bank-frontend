@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { Reorder } from "framer-motion";
 
 import Modal from "@/components/modal";
 import PaginationComponent from "@/components/pagination";
@@ -11,7 +12,13 @@ import SectionSubTitle from "@/components/sectionSubTitle";
 import SectionTitle from "@/components/sectionTitle";
 import { table } from "@/variants/table";
 
-import { MinusIcon, PlusIcon, SearchIcon } from "@/components/icons";
+import {
+  MinusIcon,
+  PlusIcon,
+  SearchIcon,
+  CloseIcon,
+  InfoIcon,
+} from "@/components/icons";
 
 import { BASE_URL } from "@/config/apiConfig";
 import { getAccess } from "@/helpers/token";
@@ -31,6 +38,7 @@ const allQuestionsHeaders = [
 ];
 
 const selectedQuestionsHeaders = [
+  "question no",
   "question",
   "module",
   "difficulty",
@@ -48,7 +56,10 @@ const ManagePaperQuestionsPage = ({
 }) => {
   const [paper, setPaper] = useState<Paper>();
   const [loading, setLoading] = useState<boolean>(false);
-  const [questionList, setQuestionList] = useState<Question[]>([]);
+  const [allQuestionsList, setAllQuestionsList] = useState<Question[]>([]);
+  const [selectedQuestionsList, setSelectedQuestionsList] = useState<
+    Question[]
+  >([]);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [numberOfPages, setNumberOfPages] = useState<number>(1);
   const [tableSearch, setTableSearch] = useState<string>("");
@@ -68,7 +79,7 @@ const ManagePaperQuestionsPage = ({
       axios(axiosConfig)
         .then((response) => {
           setPaper(response.data);
-          console.log(response.data);
+          setSelectedQuestionsList(response.data.questions);
         })
         .catch((err) => {
           console.log(err);
@@ -97,7 +108,7 @@ const ManagePaperQuestionsPage = ({
       };
       axios(axiosConfig)
         .then((response) => {
-          setQuestionList(response.data.result);
+          setAllQuestionsList(response.data.result);
           setNumberOfPages(
             Math.ceil(
               response?.data?.pagination?.totalQuestions /
@@ -163,9 +174,37 @@ const ManagePaperQuestionsPage = ({
       });
   };
 
+  const updateQuestionOrder = () => {
+    const selectedQuestionIdArray = selectedQuestionsList
+      .filter((question) => question._id)
+      .map((question) => question._id);
+
+    setLoading(true);
+    const axiosConfig = {
+      method: "PATCH",
+      url: `${BASE_URL}papers/update-questions/${params.paperID}`,
+      headers: {
+        Authorization: `Bearer ${getAccess()}`,
+      },
+      data: {
+        questionIdArray: selectedQuestionIdArray,
+      },
+    };
+    axios(axiosConfig)
+      .then((response) => {
+        toast.success("Question order updated successfully");
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
   const filteredQuestions: Question[] =
-    questionList &&
-    questionList.filter((item) => {
+    allQuestionsList &&
+    allQuestionsList.filter((item) => {
       return item.question.includes(tableSearch);
     });
 
@@ -180,39 +219,62 @@ const ManagePaperQuestionsPage = ({
         backBtn
       />
       <SectionSubTitle
-        title={`Selected questions : count ${paper?.questions.length}`}
+        title={`Added questions : count ${paper?.questions.length}`}
       />
+      <div className="flex justify-between items-center w-full gap-3 mb-3">
+        <div className="flex justify-between items-center bg-blue-50 px-4 py-2 rounded-xl gap-2 flex-grow">
+          <p className="text-blue-600 text-sm italic">
+            Arrange the questions in the desired order by simply dragging them
+            into place.
+          </p>
+        </div>
+        <div
+          className="h-full w-max bg-blue-600 rounded-xl shadow px-6 py-2 cursor-pointer"
+          onClick={updateQuestionOrder}
+        >
+          <p className="text-sm text-white">Update question order</p>
+        </div>
+      </div>
       <div className={table().base({ className: "mb-5" })}>
         <div
           className={table().headerRow({
-            className: "grid grid-cols-5",
+            className: "grid grid-cols-8",
           })}
         >
           {selectedQuestionsHeaders.map((header) => (
             <div
-              className={table().headerItem({ className: "first:col-span-2" })}
+              className={table().headerItem({
+                className: `${header === "question" && "col-span-4"}`,
+              })}
               key={header}
             >
               {header}
             </div>
           ))}
         </div>
-        <div className={table().tableContent()}>
-          {paper?.questions.map((row: Question) => {
+        <Reorder.Group
+          axis="y"
+          values={selectedQuestionsList}
+          onReorder={setSelectedQuestionsList}
+          className="flex flex-col gap-2 w-full"
+        >
+          {selectedQuestionsList.map((row: Question, index: number) => {
             const regex: RegExp = /(<([^>]+)>)/gi;
 
             const questionToView = row.question.replace(regex, "");
 
             return (
-              <div
-                className={table().tableRow({
-                  className: "grid grid-cols-5",
-                })}
+              <Reorder.Item
                 key={row._id}
+                value={row}
+                className="bg-white p-3 w-full grid grid-cols-8 gap-3 rounded-xl shadow cursor-pointer"
               >
+                <div className={table().rowItem({ className: "font-medium" })}>
+                  {index + 1}
+                </div>
                 <div
                   className={table().rowItem({
-                    className: "col-span-2 font-medium",
+                    className: "col-span-4 font-medium",
                   })}
                 >
                   {questionToView}
@@ -248,10 +310,10 @@ const ManagePaperQuestionsPage = ({
                     }
                   />
                 </div>
-              </div>
+              </Reorder.Item>
             );
           })}
-        </div>
+        </Reorder.Group>
       </div>
       <SectionSubTitle title={"All questions"} />
       <div className={table().base()}>
@@ -296,7 +358,7 @@ const ManagePaperQuestionsPage = ({
           ))}
         </div>
         <div className={table().tableContent()}>
-          {questionList &&
+          {allQuestionsList &&
             filteredQuestions.map((row: Question) => {
               const regex: RegExp = /(<([^>]+)>)/gi;
 
@@ -323,33 +385,51 @@ const ManagePaperQuestionsPage = ({
                   <div className={table().rowItem()}>{row.module.name}</div>
                   <div className={table().rowItem()}>{row.difficulty}</div>
                   <div className={table().rowItem()}>
-                    <Modal
-                      viewButton={
-                        <div className="bg-blue-600 py-1 px-4 rounded-full flex items-center justify-center gap-2 cursor-pointer">
-                          <PlusIcon classes="h-3 w-3 text-white" />
-                          <p className="text-white text-xs">Add</p>
-                        </div>
-                      }
-                      modalTitle={"Add question"}
-                      children={
-                        <p className="">
-                          Are you sure want to add{" "}
-                          <span className="font-medium">
-                            {questionToView.slice(0, 40)}
-                            {questionToView.length >= 40 && "... "}
-                          </span>
-                          to the paper?
-                        </p>
-                      }
-                      handleSubmit={() => addQuestion(row._id)}
-                      submitBtn={
-                        <div className="flex outline-none justify-center rounded-md bg-green-100 px-4 py-2 hover:bg-green-200">
-                          <p className="capitalize text-sm font-medium text-green-900">
-                            confirm
+                    {!selectedQuestionsList.some(
+                      (item) => item._id === row._id
+                    ) ? (
+                      <Modal
+                        viewButton={
+                          <div className="bg-blue-600 py-1 px-4 rounded-full flex items-center justify-center gap-2 cursor-pointer">
+                            <PlusIcon classes="h-3 w-3 text-white" />
+                            <p className="text-white text-xs">Add</p>
+                          </div>
+                        }
+                        modalTitle={"Add question"}
+                        children={
+                          <p className="">
+                            Are you sure want to add{" "}
+                            <span className="font-medium">
+                              {questionToView.slice(0, 40)}{" "}
+                              {questionToView.length >= 40 && "... "}
+                            </span>
+                            to the paper?
                           </p>
-                        </div>
-                      }
-                    />
+                        }
+                        handleSubmit={() => addQuestion(row._id)}
+                        submitBtn={
+                          <div className="flex outline-none justify-center rounded-md bg-green-100 px-4 py-2 hover:bg-green-200">
+                            <p className="capitalize text-sm font-medium text-green-900">
+                              confirm
+                            </p>
+                          </div>
+                        }
+                      />
+                    ) : (
+                      // <div
+                      //   className="bg-blue-600 py-1 px-4 rounded-full flex items-center justify-center gap-2 cursor-pointer"
+                      //   onClick={() => handleAddQuestionClick(row)}
+                      // >
+                      //   <PlusIcon classes="h-3 w-3 text-white" />
+                      //   <p className="text-white text-xs">Add</p>
+                      // </div>
+                      <div className="flex items-center justify-center gap-2 cursor-not-allowed">
+                        <CloseIcon classes="w-3 h-3 text-red-600" />
+                        <p className="text-red-600 font-bold text-xs">
+                          Already added
+                        </p>
+                      </div>
+                    )}
                   </div>
                 </div>
               );

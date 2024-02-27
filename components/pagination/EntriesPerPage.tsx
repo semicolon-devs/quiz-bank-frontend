@@ -11,8 +11,8 @@ type Props = {
 
 const EntriesPerPage = ({ value, setValue, array }: Props) => {
   return (
-    <div className="w-full bg-white flex ps-4 justify-between items-center rounded-xl shadow">
-      <p className="text-sm font-medium py-3">Entries per page</p>
+    <div className="w-full bg-white flex ps-4 justify-between items-center rounded-xl shadow h-10">
+      <p className="text-sm font-medium py-2">Entries per page</p>
       <Listbox value={value} onChange={setValue}>
         <div className="relative">
           <Listbox.Button className="relative w-full pl-3 pr-10 text-left cursor-pointer">
