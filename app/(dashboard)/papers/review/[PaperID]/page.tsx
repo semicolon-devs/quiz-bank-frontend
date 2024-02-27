@@ -2,12 +2,14 @@
 
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 import { BASE_URL } from "@/config/apiConfig";
 import { getAccess } from "@/helpers/token";
 import { getUserID } from "@/helpers/userDetails";
 
 import { FilledCheckIcon } from "@/components/icons";
+import { UrlSlugType } from "@/utils/enums/UrlSlug";
 
 export default function PaperDetailsPage({
   params,
@@ -21,6 +23,8 @@ export default function PaperDetailsPage({
     name: string;
     paperId: string;
   }>();
+
+  const router = useRouter();
 
   useEffect(() => {
     const hasFinishedQuiz = () => {
@@ -108,25 +112,30 @@ export default function PaperDetailsPage({
         </p>
       </div>
       <div className="w-full h-full flex items-center justify-center">
-        {/* {hasFinished ? ( */}
-        <div className="bg-white w-72 h-max flex justify-center items-center flex-col rounded-xl shadow p-3">
-          <FilledCheckIcon classes="text-green-500 w-16 h-16 mt-5" />
-          <p className="uppercase font-semibold text-sm mt-5">Results</p>
-          <p className="text-3xl uppercase font-extrabold">
-            {correctAnswers}/{totalQuestions}
-          </p>
-          <button className="w-full mt-5 uppercase font-semibold bg-blue-600 rounded-md py-2 text-white">
-            Review Answers
-          </button>
-        </div>
+        {hasFinished ? (
+          <div className="bg-white w-72 h-max flex justify-center items-center flex-col rounded-xl shadow p-3">
+            <FilledCheckIcon classes="text-green-500 w-16 h-16 mt-5" />
+            <p className="uppercase font-semibold text-sm mt-5">Results</p>
+            <p className="text-3xl uppercase font-extrabold">
+              {correctAnswers}/{totalQuestions}
+            </p>
+            <button
+              className="w-full mt-5 uppercase font-semibold bg-blue-600 rounded-md py-2 text-white"
+              onClick={() =>
+                router.push(`${UrlSlugType.PAPERS_REVIEW}/${params.PaperID}/1`)
+              }
+            >
+              Review Answers
+            </button>
+          </div>
+        ) : (
+          <div className="p-5">
+            <p className="uppercase font-bold text-lg">
+              You haven't taken this quiz
+            </p>
+          </div>
+        )}
       </div>
-      {/* ) : (
-        <div className="p-5">
-          <p className="uppercase font-bold text-lg">
-            You haven't taken this quiz
-          </p>
-        </div>
-      )} */}
     </div>
   );
 }

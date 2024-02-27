@@ -13,8 +13,9 @@ import {
 } from "@/components/icons";
 
 import PaginationComponent from "@/components/pagination";
+import EntriesPerPage from "@/components/pagination/EntriesPerPage";
+import { entriesArray } from "@/components/pagination/entriesArray";
 import SectionTitle from "@/components/sectionTitle";
-
 import Modal from "@/components/modal";
 import AddPaperModal from "./modals/AddPaperModal";
 import EditPaperModal from "./modals/EditPaperModal";
@@ -44,8 +45,7 @@ export default function ManagePapersPage() {
   const [numberOfPages, setNumberOfPages] = useState<number>(1);
   const [tableSearch, setTableSearch] = useState<string>("");
   const [modalShowPaper, setModalShowPaper] = useState<PaperDetails>();
-
-  const page_size = 10;
+  const [pageSize, setPageSize] = useState<number>(entriesArray[1]);
 
   const router = useRouter();
 
@@ -54,14 +54,26 @@ export default function ManagePapersPage() {
       setLoading(true);
       const axiosConfig = {
         method: "GET",
-        url: `${BASE_URL}papers`,
+        url: `${BASE_URL}papers/admin`,
+        params: {
+          page: pageNumber,
+          limit: pageSize,
+          // subject: "Biology",
+          // module: "Mendelian Genetics",
+        },
         headers: {
           Authorization: `Bearer ${getAccess()}`,
         },
       };
       axios(axiosConfig)
         .then((response) => {
-          setPaperList(response.data);
+          setPaperList(response.data.result);
+          setNumberOfPages(
+            Math.ceil(
+              response?.data?.pagination?.totalPapers /
+                response?.data?.pagination?.limit
+            )
+          );
         })
         .catch((err) => {
           console.log(err);
@@ -72,7 +84,7 @@ export default function ManagePapersPage() {
     };
 
     getPapers();
-  }, []);
+  }, [pageNumber, pageSize]);
 
   const deletePaper = (id: string) => {
     setLoading(true);
@@ -122,8 +134,11 @@ export default function ManagePapersPage() {
               <SearchIcon classes={"h-4 w-4 text-white"} />
             </div>
           </div>
-          <div className=""></div>
-
+          <EntriesPerPage
+            value={pageSize}
+            setValue={setPageSize}
+            array={entriesArray}
+          />
           <AddPaperModal />
         </div>
         <div
@@ -165,7 +180,14 @@ export default function ManagePapersPage() {
                       {row.isTimed ? `${row.timeInMinutes} mins` : "Not timed"}
                     </div>
                     <div className={table().rowItem()}>
-                      <div className="bg-blue-400 px-3 py-1 rounded-full flex items-center justify-center cursor-pointer">
+                      <div
+                        className="bg-blue-400 px-3 py-1 rounded-full flex items-center justify-center cursor-pointer"
+                        onClick={() =>
+                          router.push(
+                            `${UrlSlugType.MANAGE_PAPER_QUESTIONS}/${row._id}`
+                          )
+                        }
+                      >
                         <p className="text-white text-xs font-medium">
                           Manage questions
                         </p>
@@ -251,27 +273,6 @@ export default function ManagePapersPage() {
           />
         </div>
       </div>
-      {/* <Table aria-label="Example table with custom cells" className="mt-5">
-        <TableHeader columns={columns}>
-          {(column) => (
-            <TableColumn
-              key={column.uid}
-              align={column.uid === "actions" ? "center" : "start"}
-            >
-              {column.name}
-            </TableColumn>
-          )}
-        </TableHeader>
-        <TableBody items={QPaperList}>
-          {(item) => (
-            <TableRow key={item._id}>
-              {(columnKey) => (
-                <TableCell>{renderCell(item, columnKey)}</TableCell>
-              )}
-            </TableRow>
-          )}
-        </TableBody>
-      </Table> */}
     </div>
   );
 }

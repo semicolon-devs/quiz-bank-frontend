@@ -2,19 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 
-import {
-  Navbar as NextUINavbar,
-  NavbarContent,
-  NavbarMenu,
-  NavbarMenuToggle,
-  NavbarBrand,
-  NavbarItem,
-  NavbarMenuItem,
-} from "@nextui-org/navbar";
-import { Kbd } from "@nextui-org/kbd";
-import { Input } from "@nextui-org/input";
-import { Avatar, AvatarGroup, AvatarIcon } from "@nextui-org/avatar";
-
 import { getUser, getUserDetails } from "@/helpers/userDetails";
 
 import NextLink from "next/link";

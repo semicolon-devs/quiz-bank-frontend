@@ -284,7 +284,7 @@ export default function EditQuestionPage({
 
   return (
     <div className="flex flex-col gap-3">
-      <SectionTitle title="Edit Question" />
+      <SectionTitle title="Edit Question" backBtn />
       <div className="flex flex-col gap-1">
         <p className="font-semibold">Select Difficulty Level</p>
         <Select

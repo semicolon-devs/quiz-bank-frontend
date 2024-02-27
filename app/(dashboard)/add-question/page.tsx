@@ -242,7 +242,7 @@ export default function AddQuestionPage() {
 
   return (
     <div className="flex flex-col gap-3">
-      <SectionTitle title="Add Question" />
+      <SectionTitle title="Add Question" backBtn />
       <div className="flex flex-col gap-1">
         <p className="font-semibold">Select Difficulty Level</p>
         <Select

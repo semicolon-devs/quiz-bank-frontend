@@ -4,6 +4,7 @@ import React from "react";
 type Props = {
   totalQuestions: number;
   answeredArray?: number[];
+  correctAnswersArray?: number[];
   review?: boolean;
   directingURL: string;
   activeQuestion: string;
@@ -12,6 +13,7 @@ type Props = {
 const QuestionBlock = ({
   totalQuestions,
   answeredArray = [],
+  correctAnswersArray = [],
   review = false,
   directingURL,
   activeQuestion,
@@ -25,9 +27,19 @@ const QuestionBlock = ({
           key={i}
           className={` border border-blue-100 ${
             parseInt(activeQuestion) == i + 1 &&
-            "outline outline-offset-1 outline-2 outline-blue-600"
-          } rounded-md w-9 h-7 flex justify-center items-center font-semibold cursor-pointer hover:bg-blue-200 ${
-            !review && answeredArray.includes(i + 1)
+            `outline outline-offset-1 outline-2 ${
+              review
+                ? correctAnswersArray.includes(i + 1)
+                  ? "outline-green-400"
+                  : "outline-red-400"
+                : "outline-blue-600"
+            }`
+          } rounded-md w-9 h-7 flex justify-center items-center font-semibold cursor-pointer ${
+            review
+              ? correctAnswersArray.includes(i + 1)
+                ? "text-white bg-green-400"
+                : "text-white bg-red-400"
+              : answeredArray.includes(i + 1)
               ? "text-white bg-blue-600 hover:bg-blue-400"
               : "hover:bg-blue-400"
           }`}

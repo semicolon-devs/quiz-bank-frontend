@@ -1,13 +1,15 @@
 "use client";
 import { useRouter } from "next/navigation";
-
 import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 
 import PaginationComponent from "@/components/pagination";
 import Modal from "@/components/modal";
+import EntriesPerPage from "@/components/pagination/EntriesPerPage";
+import { entriesArray } from "@/components/pagination/entriesArray";
 
+import SectionTitle from "@/components/sectionTitle";
 import { table } from "@/variants/table";
 
 import {
@@ -18,26 +20,12 @@ import {
   SearchIcon,
 } from "@/components/icons";
 
-import SectionTitle from "@/components/sectionTitle";
-import EntriesPerPage from "@/components/pagination/EntriesPerPage";
 
 import { BASE_URL } from "@/config/apiConfig";
 import { getAccess } from "@/helpers/token";
 import { UrlSlugType } from "@/utils/enums/UrlSlug";
 
-interface Question {
-  answers: any[];
-  correctAnswer: number[];
-  difficulty: string;
-  explaination: string;
-  module: { _id: string; name: string; __v: number };
-  question: string;
-  subCategory: { _id: string; name: string; __v: number; moduleList: any[] };
-  subject: { _id: string; name: string; subCategories: any[]; __v: number };
-  type: string;
-  __v: number;
-  _id: string;
-}
+import { Question } from "@/types";
 
 const headers = [
   "question",
@@ -56,7 +44,7 @@ export default function ManageQuestionsPage() {
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [numberOfPages, setNumberOfPages] = useState<number>(1);
   const [tableSearch, setTableSearch] = useState<string>("");
-  const [pageSize, setPageSize] = useState<number>(pageSizeArray[1]);
+  const [pageSize, setPageSize] = useState<number>(entriesArray[1]);
 
   const router = useRouter();
 
@@ -148,18 +136,10 @@ export default function ManageQuestionsPage() {
               <SearchIcon classes={"h-4 w-4 text-white"} />
             </div>
           </div>
-          {/* <div className="h-full flex items-center gap-2">
-            <p className="text-xs font-medium w-1/3">Questions per page</p>
-            <Select
-              value={pageSize}
-              setValue={setPageSize}
-              array={pageSizeArray}
-            />
-          </div> */}
           <EntriesPerPage
             value={pageSize}
             setValue={setPageSize}
-            array={pageSizeArray}
+            array={entriesArray}
           />
           <button
             className={table().featuresButton()}

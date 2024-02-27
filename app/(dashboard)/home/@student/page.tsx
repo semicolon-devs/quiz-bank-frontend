@@ -3,19 +3,11 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card";
-import {
-  Table,
-  TableHeader,
-  TableBody,
-  TableColumn,
-  TableRow,
-  TableCell,
-  getKeyValue,
-} from "@nextui-org/table";
 
 import SectionTitle from "@/components/sectionTitle";
 import SectionSubTitle from "@/components/sectionSubTitle";
+
+import { table } from "@/variants/table";
 
 import { RightArrowWithTailIcon, RightArrowIcon } from "@/components/icons";
 
@@ -74,27 +66,12 @@ const rows = [
   },
 ];
 
-const columns = [
-  {
-    key: "quiz_no",
-    label: "QUIZ NO",
-  },
-  {
-    key: "quiz_name",
-    label: "QUIZ NAME",
-  },
-  {
-    key: "score",
-    label: "SCORE",
-  },
-  {
-    key: "questions_completed",
-    label: "QUESTIONS COMPLETED",
-  },
-  {
-    key: "status",
-    label: "STATUS",
-  },
+const headers = [
+  "QUIZ NO",
+  "QUIZ NAME",
+  "SCORE",
+  "QUESTIONS COMPLETED",
+  "STATUS",
 ];
 
 interface QPaper {
@@ -110,7 +87,7 @@ interface QPaper {
 
 export default function DashboardHomePage() {
   const [loading, setLoading] = useState<boolean>(false);
-  const [qPaperList, setQPaperList] = useState<QPaper[]>();
+  const [paperList, setPaperList] = useState<QPaper[]>();
 
   const router = useRouter();
 
@@ -126,7 +103,7 @@ export default function DashboardHomePage() {
       };
       axios(axiosConfig)
         .then((response) => {
-          setQPaperList(response.data);
+          setPaperList(response.data.result);
         })
         .catch((err) => {
           console.log(err);
@@ -153,23 +130,23 @@ export default function DashboardHomePage() {
             <RightArrowIcon classes={"w-2.5 h-2.5 text-blue-600"} />
           </div>
         </div>
-        <div className="w-full grid grid-cols-4 gap-5">
-          {qPaperList &&
-            qPaperList.slice(0, 4).map((qpaper) => (
+        <div className="w-full grid grid-cols-5 gap-3">
+          {paperList &&
+            paperList.slice(0, 5).map((paper) => (
               <div
                 className="bg-white rounded-xl overflow-hidden shadow w-full p-2 flex flex-col justify-between h-40"
-                key={qpaper._id}
+                key={paper._id}
               >
                 <div className="flex flex-col">
-                  <p className="text-sm uppercase">{qpaper.paperId}</p>
+                  <p className="text-sm uppercase">{paper.paperId}</p>
                   <p className="text-xl font-semibold uppercase leading-6">
-                    {qpaper.name}
+                    {paper.name}
                   </p>
                 </div>
                 <button
                   className="bg-blue-500 hover:bg-blue-700 hover:gap-3 transition duration-1000 rounded-lg px-2 py-1 w-full flex gap-2 items-center justify-center"
                   onClick={() =>
-                    router.push(`${UrlSlugType.PAPERS}/${qpaper._id}`)
+                    router.push(`${UrlSlugType.PAPERS}/${paper._id}`)
                   }
                 >
                   <p className="text-white text-sm">View Details</p>
@@ -182,56 +159,56 @@ export default function DashboardHomePage() {
       <SectionSubTitle title="Stats" />
       <div className="grid grid-cols-3 gap-3">
         <div className="flex flex-col gap-3">
-          <Card>
-            <CardBody>
-              <div className="flex justify-between">
-                <p className="font-semibold uppercase">quizes completed</p>
-                <p className="font-bold uppercase">14</p>
-              </div>
-            </CardBody>
-          </Card>
-          <Card>
-            <CardBody>
-              <div className="flex justify-between">
-                <p className="font-semibold uppercase">quizes in progress</p>
-                <p className="font-bold uppercase">2</p>
-              </div>
-            </CardBody>
-          </Card>
-          <Card>
-            <CardBody>
-              <div className="flex justify-between">
-                <p className="font-semibold uppercase">average score</p>
-                <p className="font-bold uppercase">89/100</p>
-              </div>
-            </CardBody>
-          </Card>
-          <Card>
-            <CardBody>
-              <div className="flex justify-between">
-                <p className="font-semibold uppercase">aggregated points</p>
-                <p className="font-bold uppercase">1450</p>
-              </div>
-            </CardBody>
-          </Card>
+          <div className=" bg-white rounded-xl p-3 shadow flex justify-between">
+            <p className="font-semibold uppercase">quizes completed</p>
+            <p className="font-bold uppercase">14</p>
+          </div>
+          <div className=" bg-white rounded-xl p-3 shadow flex justify-between">
+            <p className="font-semibold uppercase">quizes in progress</p>
+            <p className="font-bold uppercase">2</p>
+          </div>
+          <div className=" bg-white rounded-xl p-3 shadow flex justify-between">
+            <p className="font-semibold uppercase">average score</p>
+            <p className="font-bold uppercase">89/100</p>
+          </div>
+          <div className=" bg-white rounded-xl p-3 shadow flex justify-between">
+            <p className="font-semibold uppercase">aggregated points</p>
+            <p className="font-bold uppercase">1450</p>
+          </div>
         </div>
         <div className="col-span-2">
-          <Table aria-label="Example table with dynamic content">
-            <TableHeader columns={columns}>
-              {(column) => (
-                <TableColumn key={column.key}>{column.label}</TableColumn>
-              )}
-            </TableHeader>
-            <TableBody items={rows}>
-              {(item) => (
-                <TableRow key={item.key}>
-                  {(columnKey) => (
-                    <TableCell>{getKeyValue(item, columnKey)}</TableCell>
-                  )}
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
+          <div className={table().base()}>
+            <div
+              className={table().headerRow({ className: "grid grid-cols-5" })}
+            >
+              {headers.map((header) => (
+                <div
+                  className={table().headerItem({ className: "text-sm" })}
+                  key={header}
+                >
+                  {header}
+                </div>
+              ))}
+            </div>
+            <div className={table().tableContent()}>
+              {rows.map((item) => (
+                <div
+                  className={table().tableRow({
+                    className: "grid grid-cols-5",
+                  })}
+                  key={item.key}
+                >
+                  <div className={table().rowItem()}>{item.quiz_no}</div>
+                  <div className={table().rowItem()}>{item.quiz_name}</div>
+                  <div className={table().rowItem()}>{item.score}</div>
+                  <div className={table().rowItem()}>
+                    {item.questions_completed}
+                  </div>
+                  <div className={table().rowItem()}>{item.status}</div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </>
