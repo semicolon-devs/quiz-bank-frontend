@@ -130,9 +130,9 @@ export default function DashboardHomePage() {
             <RightArrowIcon classes={"w-2.5 h-2.5 text-blue-600"} />
           </div>
         </div>
-        <div className="w-full grid grid-cols-4 gap-5">
+        <div className="w-full grid grid-cols-5 gap-3">
           {paperList &&
-            paperList.slice(0, 4).map((paper) => (
+            paperList.slice(0, 5).map((paper) => (
               <div
                 className="bg-white rounded-xl overflow-hidden shadow w-full p-2 flex flex-col justify-between h-40"
                 key={paper._id}
