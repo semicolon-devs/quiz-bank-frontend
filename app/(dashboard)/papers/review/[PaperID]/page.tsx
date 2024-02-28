@@ -90,6 +90,7 @@ export default function PaperDetailsPage({
       };
       axios(axiosConfig)
         .then((response) => {
+          console.log(response)
           setTotalQuestions(response.data.totalQuestions);
         })
         .catch((err) => {

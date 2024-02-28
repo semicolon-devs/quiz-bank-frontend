@@ -6,10 +6,13 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 
 import Spinner from "@/components/spinner";
+import Modal from "@/components/modal";
+
+import { CheckIcon, CloseIcon } from "@/components/icons";
 
 import { BASE_URL } from "@/config/apiConfig";
 import { getAccess } from "@/helpers/token";
-import { getUserID } from "@/helpers/userDetails";
+import { getUserDetails, getUserID } from "@/helpers/userDetails";
 import { UrlSlugType } from "@/utils/enums/UrlSlug";
 
 interface Question {
@@ -34,6 +37,10 @@ export default function PaperQuestionPage({
     false,
   ]);
   const [correctAnswer, setCorrectAnswer] = useState<number[]>([]);
+  const [explanation, setExplanation] = useState<string>("");
+  const [correctAnswersArray, setCorrectAnswersArray] = useState<
+    { index: number; isCorrect: boolean }[]
+  >([]);
 
   const router = useRouter();
 
@@ -73,6 +80,7 @@ export default function PaperQuestionPage({
       axios(axiosConfig)
         .then((response) => {
           setCorrectAnswer(response.data.correctAnswer);
+          setExplanation(response.data.explaination);
         })
         .catch((err) => {
           console.log(err);
@@ -82,6 +90,26 @@ export default function PaperQuestionPage({
         });
     };
 
+    const getQuestionBlockSubmitted = () => {
+      const userID = getUserDetails()?._id;
+      const axiosConfig = {
+        method: "GET",
+        url: `${BASE_URL}answers/answers-status/${userID}/${params.PaperID}`,
+        headers: {
+          Authorization: `Bearer ${getAccess()}`,
+        },
+      };
+      axios(axiosConfig)
+        .then((response) => {
+          setCorrectAnswersArray(response.data.answers);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {});
+    };
+
+    getQuestionBlockSubmitted();
     getQuestion();
     getAnswer();
   }, []);
@@ -126,6 +154,44 @@ export default function PaperQuestionPage({
                 />
               )}
             </div>
+            <div className="w-full flex justify-between">
+              {correctAnswersArray[parseInt(params.QuestionID) - 1]
+                ?.isCorrect &&
+              correctAnswersArray[parseInt(params.QuestionID) - 1]
+                ?.isCorrect ? (
+                <div className="flex gap-2 items-center">
+                  <CheckIcon classes="h-4 w-4 text-green-600" />
+                  <p className="text-green-600 font-medium">Correct Answer</p>
+                </div>
+              ) : (
+                <div className="flex gap-2 items-center">
+                  <CloseIcon classes="h-4 w-4 text-red-600" />
+                  <p className="text-red-600 font-medium">Incorrect Answer</p>
+                </div>
+              )}
+
+              {explanation && (
+                <Modal
+                  viewButton={
+                    <button className="bg-blue-300 rounded-xl shadow px-4 py-1 flex items-center justify-center">
+                      <p className="text-white font-medium capitalize">
+                        view explanation
+                      </p>
+                    </button>
+                  }
+                  modalTitle={"Explanation"}
+                  children={
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: explanation,
+                      }}
+                    />
+                  }
+                  closeBtn
+                  modalMaxWidth="max-w-3xl"
+                />
+              )}
+            </div>
             <div className="flex flex-col gap-2">
               {question &&
                 question?.answers.length > 0 &&
@@ -133,20 +199,19 @@ export default function PaperQuestionPage({
                   <div className="flex gap-5 items-center" key={answer._id}>
                     <label
                       className="relative flex items-start cursor-pointer"
-                      htmlFor="blue"
+                      htmlFor="answered"
                     >
                       <input
                         type="checkbox"
-                        className="before:content[''] peer shadow relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-green-100 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:bg-green-300 before:opacity-0 before:transition-opacity checked:border-green-600 checked:bg-green-600"
-                        id="blue"
-                        checked={correctAnswer && correctAnswer.includes(index)}
-                        // onChange={() =>
-                        //   setAnswersSelected((prev) => {
-                        //     let newArray = [...prev];
-                        //     newArray[index] = !newArray[index];
-                        //     return newArray;
-                        //   })
-                        // }
+                        className={`before:content[''] peer shadow relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-100 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:opacity-0 before:transition-opacity ${
+                          correctAnswer &&
+                          correctAnswer.includes(index) &&
+                          answersSelected[index]
+                            ? "checked:border-green-600 checked:bg-green-600 before:bg-green-300"
+                            : "checked:border-red-600 checked:bg-red-600 before:bg-red-300"
+                        }`}
+                        id="answered"
+                        checked={answersSelected[index]}
                         readOnly
                       />
                       <span className="absolute text-white transition-opacity opacity-0 pointer-events-none top-2.5 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
@@ -167,7 +232,11 @@ export default function PaperQuestionPage({
                       </span>
                     </label>
                     <div
-                      className="bg-white p-3 rounded-xl w-full shadow"
+                      className={`bg-white p-3 rounded-xl w-full shadow ${
+                        correctAnswer &&
+                        correctAnswer.includes(index) &&
+                        "border border-green-600"
+                      }`}
                       dangerouslySetInnerHTML={{ __html: answer.answer }}
                     />
                   </div>
