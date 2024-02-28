@@ -139,6 +139,7 @@ const ManagePaperQuestionsPage = ({
     axios(axiosConfig)
       .then((response) => {
         console.log(response);
+        toast.success("Question succesfully removed from the paper");
       })
       .catch((err) => {
         console.log(err);
@@ -224,15 +225,15 @@ const ManagePaperQuestionsPage = ({
       <div className="flex justify-between items-center w-full gap-3 mb-3">
         <div className="flex justify-between items-center bg-blue-50 px-4 py-2 rounded-xl gap-2 flex-grow">
           <p className="text-blue-600 text-sm italic">
-            Arrange the questions in the desired order by simply dragging them
-            into place.
+            Make sure to save changes after rearranging the order of the
+            questions
           </p>
         </div>
         <div
           className="h-full w-max bg-blue-600 rounded-xl shadow px-6 py-2 cursor-pointer"
           onClick={updateQuestionOrder}
         >
-          <p className="text-sm text-white">Update question order</p>
+          <p className="text-sm text-white">Save updated question order</p>
         </div>
       </div>
       <div className={table().base({ className: "mb-5" })}>

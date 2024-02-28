@@ -39,6 +39,23 @@ export default function PaperTemplate({
   const router = useRouter();
 
   useEffect(() => {
+    const hasFinishedQuiz = () => {
+      const axiosConfig = {
+        method: "GET",
+        url: `${BASE_URL}answers/has-finished/${getUserID()}/${params.PaperID}`,
+        headers: {
+          Authorization: `Bearer ${getAccess()}`,
+        },
+      };
+      axios(axiosConfig)
+        .then((response) => {
+          // console.log(response);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+
     const getQuestionBlockSubmitted = () => {
       setLoadingQBlocks(true);
       const userID = getUserDetails()?._id;
@@ -78,7 +95,6 @@ export default function PaperTemplate({
           setQPaperId(response.data.paperId);
         })
         .catch((err) => {
-          console.log(err);
           setQPaperError(true);
         })
         .finally(() => {
@@ -86,6 +102,7 @@ export default function PaperTemplate({
         });
     };
 
+    hasFinishedQuiz();
     getQPaperInfo();
     getQuestionBlockSubmitted();
   }, [params]);
