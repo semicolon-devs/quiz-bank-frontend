@@ -2,7 +2,7 @@ import { tv } from "tailwind-variants";
 
 export const form = tv({
   slots: {
-    base: "flex w-full max-w-sm flex-col gap-4 rounded-xl bg-white p-5 shadow shadow-blue-500",
+    base: "flex w-full max-w-md flex-col gap-4 rounded-xl bg-white p-5 shadow shadow-blue-500",
     title: "text-2xl font-bold capitalize",
     innerForm: "flex flex-col gap-2",
     formDiv: "flex w-full flex-col gap-px",

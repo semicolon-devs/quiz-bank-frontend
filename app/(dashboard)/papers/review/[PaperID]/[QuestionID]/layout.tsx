@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, use } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
@@ -70,6 +70,9 @@ export default function PaperTemplate({
         .then((response) => {
           setTotalQuestions(response.data.totalQuestions);
           setCorrectAnswersArray(response.data.answers);
+          if (parseInt(params.QuestionID) > response.data.totalQuestions) {
+            router.push(`${UrlSlugType.PAPERS_REVIEW}/${params.PaperID}/1`);
+          }
         })
         .catch((err) => {
           console.log(err);

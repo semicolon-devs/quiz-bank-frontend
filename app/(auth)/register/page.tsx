@@ -231,11 +231,7 @@ export default function RegisterPage() {
                 disabled={isSubmitting}
                 className={button()}
               >
-                {!loading ? (
-                  <p className="">register</p>
-                ) : (
-                  <Spinner />
-                )}
+                {!loading ? <p className="">register</p> : <Spinner />}
               </button>
             </form>
           )}

@@ -244,7 +244,24 @@ export default function PaperQuestionPage({
             </div>
           </div>
           <div className="w-full flex justify-end items-center gap-3">
-            <button className="bg-blue-600 hover:bg-blue-500 px-4 py-1 outline-none rounded-md">
+            <button
+              className="bg-blue-600 hover:bg-blue-500 px-4 py-1 outline-none rounded-md"
+              onClick={() =>
+                router.push(
+                  `${
+                    parseInt(params.QuestionID) > 1
+                      ? parseInt(params.QuestionID) - 1
+                      : 1
+                  }`
+                )
+              }
+            >
+              <p className="text-white font-medium">Prev</p>
+            </button>
+            <button
+              className="bg-blue-600 hover:bg-blue-500 px-4 py-1 outline-none rounded-md"
+              onClick={() => router.push(`${parseInt(params.QuestionID) + 1}`)}
+            >
               <p className="text-white font-medium">Next</p>
             </button>
           </div>
