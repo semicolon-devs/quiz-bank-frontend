@@ -20,7 +20,6 @@ import {
   SearchIcon,
 } from "@/components/icons";
 
-
 import { BASE_URL } from "@/config/apiConfig";
 import { getAccess } from "@/helpers/token";
 import { UrlSlugType } from "@/utils/enums/UrlSlug";
