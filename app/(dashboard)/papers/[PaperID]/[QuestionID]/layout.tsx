@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import Countdown, { CountdownRenderProps } from "react-countdown";
 
 import Modal from "@/components/modal";
 import QuestionBlock from "@/components/questionBlock";
@@ -17,6 +18,7 @@ import { BASE_URL } from "@/config/apiConfig";
 import { getAccess } from "@/helpers/token";
 import { getUserDetails, getUserID } from "@/helpers/userDetails";
 import { UrlSlugType } from "@/utils/enums/UrlSlug";
+import toast from "react-hot-toast";
 
 export default function PaperTemplate({
   children,
@@ -32,6 +34,7 @@ export default function PaperTemplate({
   const [QPaperError, setQPaperError] = useState<boolean>(false);
   const [QPaperName, setQPaperName] = useState<string>();
   const [QPaperId, setQPaperId] = useState<string>();
+  const [PaperMinutes, setPaperMinutes] = useState<number>();
 
   const router = useRouter();
 
@@ -99,6 +102,7 @@ export default function PaperTemplate({
         .then((response) => {
           setQPaperName(response.data.name);
           setQPaperId(response.data.paperId);
+          setPaperMinutes(response.data.timeInMinutes);
         })
         .catch((err) => {
           console.log(err);
@@ -112,6 +116,30 @@ export default function PaperTemplate({
     getQPaperInfo();
     getQuestionBlocks();
   }, [params]);
+
+  const renderer = ({
+    hours,
+    minutes,
+    seconds,
+    completed,
+  }: CountdownRenderProps) => {
+    if (completed) {
+      return (
+        <div className="bg-red-400 px-4 py-1 rounded-md shadow w-40 flex items-center justify-center text-white font-medium">
+          timer complete
+        </div>
+      );
+    } else {
+      return (
+        <div className="bg-red-400 px-4 py-1 rounded-md shadow w-40 flex items-center justify-center">
+          <span className="text-white font-medium">
+            {String(hours).padStart(2, "0")}:{String(minutes).padStart(2, "0")}:
+            {String(seconds).padStart(2, "0")}
+          </span>
+        </div>
+      );
+    }
+  };
 
   return (
     <section className="w-full h-[calc(100vh-96px)]">
@@ -148,13 +176,25 @@ export default function PaperTemplate({
                       </p>
                     </button>
                   }
-                  handleSubmit={() => router.push(`${UrlSlugType.PAPERS}/${params.PaperID}`)}
+                  handleSubmit={() =>
+                    router.push(`${UrlSlugType.PAPERS}/${params.PaperID}`)
+                  }
                 />
               </div>
               <p className="font-bold text-lg uppercase text-blue-600">
                 {!loadingQPaper ? QPaperName : "Loading..."} - {QPaperId}
               </p>
             </div>
+            {PaperMinutes && (
+              <Countdown
+                date={Date.now() + PaperMinutes * 60000}
+                renderer={renderer}
+                onComplete={() => {
+                  toast.success("Allocated time is over");
+                  handleCompleteQuiz();
+                }}
+              />
+            )}
             <Modal
               viewButton={
                 <button className="bg-blue-600 hover:bg-blue-500 px-4 py-1 outline-none rounded-md">
