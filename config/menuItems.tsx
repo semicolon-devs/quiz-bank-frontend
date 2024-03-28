@@ -63,13 +63,12 @@ export const menuItems = (): MenuItems[] => {
       icon: <AddQuestionIcon />,
       users: [UserRole.ADMIN, UserRole.MODERATOR],
     },
-
-    // {
-    //   name: "manage users",
-    //   path: UrlSlugType.MANAGE_USERS,
-    //   icon: <ManageUsersIcon />,
-    //   users: [UserRole.ADMIN],
-    // },
+    {
+      name: "manage users",
+      path: UrlSlugType.MANAGE_USERS,
+      icon: <ManageUsersIcon />,
+      users: [UserRole.ADMIN],
+    },
     // {
     //   name: "subscriptions",
     //   path: UrlSlugType.SUBSCRIPTIONS,

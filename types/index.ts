@@ -21,6 +21,12 @@ export type UserDetails = {
   _id: string;
 };
 
+export type LMSStdDetails = {
+  name: string;
+  password: string;
+  email: string;
+};
+
 export type PaperDetails = {
   isTimed: boolean;
   name: string;

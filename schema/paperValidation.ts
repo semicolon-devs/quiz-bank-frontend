@@ -13,6 +13,16 @@ export const paperValidationSchema = yup.object().shape({
     .min(4, "Code must be minimum 4 characters")
     .max(10, "Code must not be more than 10 characters")
     .required("Code is required"),
+
+  email: yup
+    .string()
+    // .min(4, "Code must be minimum 4 characters")
+    // .max(10, "Code must not be more than 10 characters")
+    .required("Email is required"),
+  password: yup
+    .string()
+    .min(6, "Password must be minimum 4 characters")
+    .required("Password is required"),
   paperType: yup
     .string()
     .oneOf(Object.values(PaperType), "Invalid paper type")
