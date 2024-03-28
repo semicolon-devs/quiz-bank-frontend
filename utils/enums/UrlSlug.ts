@@ -21,5 +21,7 @@ export enum UrlSlugType {
   PAYMENT_DETAILS = "/payment-details",
   ADD_PDF_PAPERS = "/add-pdf-papers",
   ADD_NOTES = "/add-notes",
-  LMS_SETTINGS = "/lms-settings"
+  LMS_SETTINGS = "/lms-settings",
+  PDF_PAPERS = "/pdf-papers",
+  NOTES = "/notes"
 }

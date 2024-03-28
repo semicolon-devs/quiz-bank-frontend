@@ -29,8 +29,20 @@ export const menuItems = (): MenuItems[] => {
       users: [UserRole.ADMIN, UserRole.MODERATOR],
     },
     {
-      name: "papers",
+      name: "quiz",
       path: UrlSlugType.PAPERS,
+      icon: <ManagePapersIcon />,
+      users: [UserRole.USER],
+    },
+    {
+      name: "pdf-papers",
+      path: UrlSlugType.PDF_PAPERS,
+      icon: <ManagePapersIcon />,
+      users: [UserRole.USER],
+    },
+    {
+      name: "notes",
+      path: UrlSlugType.NOTES,
       icon: <ManagePapersIcon />,
       users: [UserRole.USER],
     },
@@ -82,12 +94,12 @@ export const menuItems = (): MenuItems[] => {
     //   icon: <SubscriptionIcon />,
     //   users: [UserRole.ADMIN],
     // },
-    {
-      name: "profile",
-      path: UrlSlugType.PROFILE,
-      icon: <ProfileIcon />,
-      users: [UserRole.ADMIN, UserRole.MODERATOR, UserRole.USER],
-    },
+    // {
+    //   name: "profile",
+    //   path: UrlSlugType.PROFILE,
+    //   icon: <ProfileIcon />,
+    //   users: [UserRole.ADMIN, UserRole.MODERATOR, UserRole.USER],
+    // },
     // {
     //   name: "payment details",
     //   path: UrlSlugType.PAYMENT_DETAILS,
