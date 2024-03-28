@@ -52,28 +52,41 @@ export const menuItems = (): MenuItems[] => {
       users: [UserRole.ADMIN, UserRole.MODERATOR],
     },
     {
-      name: "manage users",
-      path: UrlSlugType.MANAGE_USERS,
-      icon: <ManageUsersIcon />,
-      users: [UserRole.ADMIN],
+      name: "add pdf papers",
+      path: UrlSlugType.ADD_PDF_PAPERS,
+      icon: <AddQuestionIcon />,
+      users: [UserRole.ADMIN, UserRole.MODERATOR],
     },
     {
-      name: "subscriptions",
-      path: UrlSlugType.SUBSCRIPTIONS,
-      icon: <SubscriptionIcon />,
-      users: [UserRole.ADMIN],
+      name: "add notes",
+      path: UrlSlugType.ADD_NOTES,
+      icon: <AddQuestionIcon />,
+      users: [UserRole.ADMIN, UserRole.MODERATOR],
     },
+
+    // {
+    //   name: "manage users",
+    //   path: UrlSlugType.MANAGE_USERS,
+    //   icon: <ManageUsersIcon />,
+    //   users: [UserRole.ADMIN],
+    // },
+    // {
+    //   name: "subscriptions",
+    //   path: UrlSlugType.SUBSCRIPTIONS,
+    //   icon: <SubscriptionIcon />,
+    //   users: [UserRole.ADMIN],
+    // },
     {
       name: "profile",
       path: UrlSlugType.PROFILE,
       icon: <ProfileIcon />,
       users: [UserRole.ADMIN, UserRole.MODERATOR, UserRole.USER],
     },
-    {
-      name: "payment details",
-      path: UrlSlugType.PAYMENT_DETAILS,
-      icon: <ProfileIcon />,
-      users: [UserRole.USER],
-    },
+    // {
+    //   name: "payment details",
+    //   path: UrlSlugType.PAYMENT_DETAILS,
+    //   icon: <ProfileIcon />,
+    //   users: [UserRole.USER],
+    // },
   ];
 };
