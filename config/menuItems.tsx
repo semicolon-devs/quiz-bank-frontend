@@ -11,6 +11,7 @@ import {
   ManageUsersIcon,
   SubscriptionIcon,
   ProfileIcon,
+  EditIcon
 } from "@/components/icons";
 
 export const menuItems = (): MenuItems[] => {
@@ -64,9 +65,15 @@ export const menuItems = (): MenuItems[] => {
       users: [UserRole.ADMIN, UserRole.MODERATOR],
     },
     {
-      name: "manage users",
+      name: "manage lms users",
       path: UrlSlugType.MANAGE_USERS,
       icon: <ManageUsersIcon />,
+      users: [UserRole.ADMIN],
+    },
+    {
+      name: "lms settings",
+      path: UrlSlugType.LMS_SETTINGS,
+      icon: <SubscriptionIcon />,
       users: [UserRole.ADMIN],
     },
     // {

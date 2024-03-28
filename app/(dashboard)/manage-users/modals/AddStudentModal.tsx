@@ -42,7 +42,7 @@ const AddStudentModal = () => {
   const addStudent = (values: FormValues) => {
     const axiosConfig = {
       method: "POST",
-      url: `${BASE_URL}papers`,
+      url: `${BASE_URL}lms/add-student`,
       headers: {
         Authorization: `Bearer ${getAccess()}`,
       },

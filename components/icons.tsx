@@ -465,6 +465,8 @@ export const EditIcon = (props: { classes: string }) => (
   </svg>
 );
 
+
+
 export const DeleteIcon = (props: { classes: string }) => (
   <svg
     className={props.classes}
