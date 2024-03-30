@@ -21,7 +21,7 @@ import { getAccess } from "@/helpers/token";
 import { UrlSlugType } from "@/utils/enums/UrlSlug";
 import { PaperType } from "@/utils/enums";
 
-import { paperValidationSchema } from "@/schema/paperValidation";
+import { lmsAddStudentValidation } from "@/schema/lmsAddStudentValidation";
 
 interface FormValues {
   name: string;
@@ -40,9 +40,10 @@ const AddStudentModal = () => {
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
 
   const addStudent = (values: FormValues) => {
+    console.log("clicked")
     const axiosConfig = {
       method: "POST",
-      url: `${BASE_URL}lms/add-student`,
+      url: `${BASE_URL}lms/auth/register`,
       headers: {
         Authorization: `Bearer ${getAccess()}`,
       },
@@ -55,15 +56,39 @@ const AddStudentModal = () => {
     axios(axiosConfig)
       .then((response) => {
         console.log(response);
-        closeModal();
+        if (response.status === 201) {
+          closeModal();
+        } else {
+          alert("Unexpected status code: " + response.status);
+        }
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((error) => {
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+          if (error.response.status === 500) {
+            alert("Duplicate Student emails found!!");
+          } else {
+            alert("Error: " + error.response.status);
+          }
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.log(error.request);
+          alert("No response received from the server");
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log('Error', error.message);
+          alert("An error occurred: " + error.message);
+        }
       })
       .finally(() => {
         // setLoading(false);
       });
-  };
+};
+
 
   const openModal = () => {
     setIsOpenModal(true);
@@ -127,7 +152,7 @@ const AddStudentModal = () => {
                   <div className="mt-4">
                     <Formik
                       initialValues={initialValues}
-                      validationSchema={paperValidationSchema}
+                      validationSchema={lmsAddStudentValidation}
                       onSubmit={addStudent}
                     >
                       {({
@@ -203,10 +228,10 @@ const AddStudentModal = () => {
 
                           <button
                             type="submit"
-                            disabled={isSubmitting}
+                            
                             className={form().button()}
                           >
-                            <p className="">Add Studnet</p>
+                            <p className="">Add Student</p>
                           </button>
                         </form>
                       )}

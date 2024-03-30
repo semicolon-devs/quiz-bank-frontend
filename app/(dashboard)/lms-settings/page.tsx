@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import * as Yup from 'yup';
+import * as Yup from "yup";
 import PaginationComponent from "@/components/pagination";
 import Modal from "@/components/modal";
 import EntriesPerPage from "@/components/pagination/EntriesPerPage";
@@ -39,38 +39,93 @@ interface FormValues {
   driveLink: string;
   batch: string;
   deleteText: string;
-  newBatch : string;
+  newBatch: string;
 }
 
-const initialValues: FormValues = {
-  driveLink: "",
-  batch: "",
-  deleteText: '',
-  newBatch:''
-};
-
 const validationSchema = Yup.object({
-    newBatch: Yup.string().required('Required'),
-    deleteText: Yup.string()
-  });
+  newBatch: Yup.string().required("Required"),
+  deleteText: Yup.string(),
+});
 
 export default function AddPDFPapers() {
+
   
-    const changeLMSSettings = (values: FormValues) => {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [driveLink, setdriveLink] = useState<string>("");
+  const [batch, setBatch] = useState<string>("");
+
+  
+  const [initialValues, setInitialValues] = useState<FormValues>({
+    driveLink: "Loading",
+    batch: "Loading",
+    deleteText: "",
+    newBatch: "",
+  });
+
+  
+
+  useEffect(() => {
+    const getSettings = async () => {
+      setLoading(true);
+      const axiosConfig = {
+        method: "GET",
+        url: `${BASE_URL}lms/settings/admin`,
+        headers: {
+          Authorization: `Bearer ${getAccess()}`,
+        },
+      };
+      axios(axiosConfig)
+        .then((response) => {
+          setdriveLink(response.data.driveLink);
+          setBatch(response.data.batch);
+          
+        })
+        .catch((err) => {
+          
+          console.log(err);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    };
+
+    getSettings();
+    
+  }, []);
+
+
+  useEffect(() => {
+    // Update initial values once data is fetched
+    setInitialValues(prevValues => ({
+      ...prevValues,
+      driveLink: driveLink,
+      batch: batch,
+      
+    }));
+    console.log(initialValues.driveLink)
+  }, [driveLink, batch, ]);
+
+
+  const changeLMSSettings = (values: FormValues) => {
     const axiosConfig = {
-      method: "POST",
-      url: `${BASE_URL}lms/change-settings`,
+      method: "PATCH",
+      url: `${BASE_URL}lms/settings`,
       headers: {
         Authorization: `Bearer ${getAccess()}`,
       },
       data: {
-        batch: values.driveLink,
-        driveLink: values.batch,
+        driveLink: values.driveLink,
+        batch: values.batch,
       },
     };
     axios(axiosConfig)
       .then((response) => {
         console.log(response);
+        if (response.status === 200) {
+          alert("Settings Updated");
+        } else {
+          alert("Unexpected status code: " + response.status);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -94,6 +149,11 @@ export default function AddPDFPapers() {
     axios(axiosConfig)
       .then((response) => {
         console.log(response);
+        if (response.status === 200) {
+          alert("Deleted");
+        } else {
+          alert("Unexpected status code: " + response.status);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -103,8 +163,6 @@ export default function AddPDFPapers() {
       });
   };
 
-
-
   return (
     <>
       <div className="flex justify-between">
@@ -113,37 +171,42 @@ export default function AddPDFPapers() {
 
       <div className="mt-5 flex gap-3">
         <div className="w-1/2 bg-white p-10 rounded-md">
-          <Formik initialValues={initialValues} onSubmit={changeLMSSettings}>
-            {({ isSubmitting, errors, handleSubmit, touched, values }) => (
-              <form onSubmit={handleSubmit} className={form().innerForm()}>
-                <div className={form().formDiv()}>
-                  <label htmlFor="driveLink" className={form().label()}>
-                    Drive Link
-                  </label>
-                  <Field
-                    name="drivelink"
-                    type="text"
-                    className={form().input()}
-                  />
-                </div>
+        
+  <Formik initialValues={initialValues} enableReinitialize onSubmit={changeLMSSettings}>
+    {({ isSubmitting, errors, handleSubmit, touched, values }) => (
+      <form onSubmit={handleSubmit} className={form().innerForm()}>
+        <div className={form().formDiv()}>
+          <label htmlFor="driveLink" className={form().label()}>
+            Drive Link
+          </label>
+          <Field
+            name="driveLink"
+            type="text"
+            className={form().input()}
+          />
+        </div>
 
-                <div className={form().formDiv()}>
-                  <label htmlFor="email" className={form().label()}>
-                    SMIT Batch
-                  </label>
-                  <Field name="batch" type="text" className={form().input()} />
-                </div>
+        <div className={form().formDiv()}>
+          <label htmlFor="batch" className={form().label()}>
+            SMIT Batch
+          </label>
+          <Field 
+            name="batch" 
+            type="text" 
+            className={form().input()} 
+          />
+        </div>
 
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className={form().button()}
-                >
-                  <p className="">Update Settings</p>
-                </button>
-              </form>
-            )}
-          </Formik>
+        <button
+          type="submit"
+          className={form().button()}
+        >
+          <p className="">Update Settings</p>
+        </button>
+      </form>
+    )}
+  </Formik>
+
         </div>
 
         <div className="w-1/2 bg-white p-10 rounded-md">
@@ -158,7 +221,9 @@ export default function AddPDFPapers() {
 
       <div className="mt-5 flex gap-3">
         <div className="w-1/2 bg-red-100 p-10 rounded-md">
-            <h1 className = "text-xl text-center text-red-500 p-5 font-black">DELETE ALL DATA</h1>
+          <h1 className="text-xl text-center text-red-500 p-5 font-black">
+            DELETE ALL DATA
+          </h1>
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
@@ -166,21 +231,35 @@ export default function AddPDFPapers() {
           >
             {({ isSubmitting, isValid, errors, touched, values }) => (
               <form>
-                
                 <div className={form().formDiv()}>
-                  <label htmlFor="newBatch" className={`${form().label()} font-bold mt-5`}>
+                  <label
+                    htmlFor="newBatch"
+                    className={`${form().label()} font-bold mt-5`}
+                  >
                     SMIT New Batch*
-                    <p className="p-3 font-medium pl-0 pt-0">You need to assign a new batch before delete the exiting one</p>
+                    <p className="p-3 font-medium pl-0 pt-0">
+                      You need to assign a new batch before delete the exiting
+                      one
+                    </p>
                   </label>
-                  <Field name="newBatch" type="text" className={form().input()} />
-                  
+                  <Field
+                    name="newBatch"
+                    type="text"
+                    className={form().input()}
+                  />
                 </div>
 
                 {/* New input field for delete text */}
                 <div className={form().formDiv()}>
-                  <label htmlFor="deleteText"  className={`${form().label()} font-bold mt-5`}>
-                    Delete ALL data of current batch such as papers, notes, users and their marks*
-                    <p className="p-3 font-medium pl-0 pt-0">Type 'DELETE ALL DaTa' </p>
+                  <label
+                    htmlFor="deleteText"
+                    className={`${form().label()} font-bold mt-5`}
+                  >
+                    Delete ALL data of current batch such as papers, notes,
+                    users and their marks*
+                    <p className="p-3 font-medium pl-0 pt-0">
+                      Type 'DELETE ALL DaTa'{" "}
+                    </p>
                   </label>
                   <Field
                     name="deleteText"
@@ -192,10 +271,13 @@ export default function AddPDFPapers() {
                 <button
                   type="submit"
                   disabled={
-                    isSubmitting || !isValid || values.deleteText !== "DELETE ALL DaTa"
+                    isSubmitting ||
+                    !isValid ||
+                    values.deleteText !== "DELETE ALL DaTa"
                   }
-                  className={`${form().button()} ${values.deleteText === 'DELETE ALL DaTa' ? 'bg-red-500' : ''}`}
-                  
+                  className={`${form().button()} ${
+                    values.deleteText === "DELETE ALL DaTa" ? "bg-red-500" : ""
+                  }`}
                 >
                   <p className="">DELETE ALL</p>
                 </button>
