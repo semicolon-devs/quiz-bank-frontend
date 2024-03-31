@@ -26,21 +26,34 @@ import { lmsAddPDFPaperValidation } from "@/schema/lmsAddPDFPaperValidation";
 interface FormValues {
   name: string;
   driveLink: string;
- 
-  
 }
 
 const initialValues: FormValues = {
   name: "",
-  driveLink :"",
-  
+  driveLink: "",
 };
 
 const AddPDFPaperModal = () => {
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
 
+  const getFileIdFromGoogleDriveUrl = (url: string) => {
+    const regex: RegExp =
+      /(?:https?:\/\/)?(?:drive\.google\.com\/(?:file\/d\/|open\?id=)|docs\.google\.com\/(?:.*\/)?d\/)([\w-]{25,})/;
+
+    // Attempt to match the URL with the regular expression
+    const match: RegExpMatchArray | null = url.match(regex);
+
+    if (match) {
+      // Return the file ID captured in the first capture group
+      return match[1];
+    } else {
+      // Handle invalid or unrecognized URLs
+      return null;
+    }
+  };
+
   const AddPDFPaper = (values: FormValues) => {
-    console.log("clicked")
+    console.log(getFileIdFromGoogleDriveUrl(values.driveLink));
     const axiosConfig = {
       method: "POST",
       url: `${BASE_URL}lms/auth/register`,
@@ -48,9 +61,8 @@ const AddPDFPaperModal = () => {
         Authorization: `Bearer ${getAccess()}`,
       },
       data: {
-        
         name: values.name,
-        driveLink: values.driveLink,
+        driveLink: getFileIdFromGoogleDriveUrl(values.driveLink),
       },
     };
     axios(axiosConfig)
@@ -80,15 +92,14 @@ const AddPDFPaperModal = () => {
           alert("No response received from the server");
         } else {
           // Something happened in setting up the request that triggered an Error
-          console.log('Error', error.message);
+          console.log("Error", error.message);
           alert("An error occurred: " + error.message);
         }
       })
       .finally(() => {
         // setLoading(false);
       });
-};
-
+  };
 
   const openModal = () => {
     setIsOpenModal(true);
@@ -206,11 +217,7 @@ const AddPDFPaperModal = () => {
                             />
                           </div>
 
-                          <button
-                            type="submit"
-                            
-                            className={form().button()}
-                          >
+                          <button type="submit" className={form().button()}>
                             <p className="">Add Paper</p>
                           </button>
                         </form>

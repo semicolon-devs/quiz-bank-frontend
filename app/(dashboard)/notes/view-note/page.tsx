@@ -8,16 +8,18 @@ import { useSearchParams } from 'next/navigation'
 export default function NotesPage() {
 
   const params = useSearchParams()
-  console.log(params.get('id')) // Logs "search"
+  console.log(params.get('id')) 
   
   const src = "https://drive.google.com/file/d/" + params.get('id') + "/preview";
   console.log(src)
   console.log(params)
+  const name: string = params.get('name')!;
+
 
   return (
     <>
       <div className="flex justify-center">
-        <SectionTitle title={params.get('name')} />
+        <SectionTitle title={name} />
       </div>
 
       <div className="bg-white shadow rounded-lg p-5 w-full h-full">
