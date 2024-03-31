@@ -25,15 +25,15 @@ import { lmsAddPDFPaperValidation } from "@/schema/lmsAddPDFPaperValidation";
 
 interface FormValues {
   name: string;
-  email: string;
-  password: string;
+  driveLink: string;
+ 
   
 }
 
 const initialValues: FormValues = {
   name: "",
-  email:"",
-  password:""
+  driveLink :"",
+  
 };
 
 const AddPDFPaperModal = () => {
@@ -48,9 +48,9 @@ const AddPDFPaperModal = () => {
         Authorization: `Bearer ${getAccess()}`,
       },
       data: {
-        password: values.password,
+        
         name: values.name,
-        email: values.email,
+        driveLink: values.driveLink,
       },
     };
     axios(axiosConfig)
@@ -194,7 +194,7 @@ const AddPDFPaperModal = () => {
                               name="driveLink"
                               type="text"
                               className={`${form().input()} ${
-                                errors.email && touched.email
+                                errors.driveLink && touched.driveLink
                                   ? form().labelError()
                                   : ""
                               }`}
