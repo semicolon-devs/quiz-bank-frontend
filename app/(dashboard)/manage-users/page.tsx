@@ -33,7 +33,7 @@ const headers = [
   "Student Name",
   "Email",
   "Passowrd",
-  "actions",
+  "Actions",
 ];
 
 export default function ManageUsersPage() {
@@ -44,6 +44,7 @@ export default function ManageUsersPage() {
   const [tableSearch, setTableSearch] = useState<string>("");
   const [modalShowPaper, setModalShowPaper] = useState<LMSStdDetails>();
   const [pageSize, setPageSize] = useState<number>(entriesArray[1]);
+  const [deleteUser, setDeleteUser] = useState<boolean>(false);
 
   const router = useRouter();
 
@@ -54,7 +55,7 @@ export default function ManageUsersPage() {
       setLoading(true);
       const axiosConfig = {
         method: "GET",
-        url: `${BASE_URL}lms/studnets`,
+        url: `${BASE_URL}lms/auth/users/all`,
         params: {
           page: pageNumber,
           limit: pageSize,
@@ -65,7 +66,7 @@ export default function ManageUsersPage() {
       };
       axios(axiosConfig)
         .then((response) => {
-          setStudentList(response.data.result);
+          setStudentList(response.data);
           setNumberOfPages(
             Math.ceil(
               response?.data?.pagination?.totalPapers /
@@ -78,19 +79,20 @@ export default function ManageUsersPage() {
         })
         .finally(() => {
           setLoading(false);
+          setDeleteUser(false);
         });
     };
 
     getPapers();
-  }, [pageNumber, pageSize]);
+  }, [deleteUser , setLoading]);
 
 
   //delete student
-  const deleteStudent = (email: string) => {
+  const deleteStudent = (_id: string) => {
     setLoading(true);
     const axiosConfig = {
       method: "DELETE",
-      url: `${BASE_URL}lms/students/${email}`,
+      url: `${BASE_URL}lms/auth/${_id}`,
       headers: {
         Authorization: `Bearer ${getAccess()}`,
       },
@@ -104,6 +106,7 @@ export default function ManageUsersPage() {
       })
       .finally(() => {
         setLoading(false);
+        setDeleteUser(true);
       });
   };
 
@@ -143,7 +146,7 @@ export default function ManageUsersPage() {
         </div>
         <div
           className={table().headerRow({
-            className: "grid grid-cols-6",
+            className: "grid grid-cols-4",
           })}
         >
           {headers.map((header) => (
@@ -159,9 +162,9 @@ export default function ManageUsersPage() {
                 return (
                   <div
                     className={table().tableRow({
-                      className: "grid grid-cols-6",
+                      className: "grid grid-cols-4",
                     })}
-                    key={row.email}
+                    key={row.key}
                   >
                     <div
                       className={table().rowItem({
@@ -171,14 +174,14 @@ export default function ManageUsersPage() {
                       {row.name}
                     </div>
                     <div
-                      className={table().rowItem({ className: "uppercase" })}
+                      className={table().rowItem({ className: "lowercase" })}
                     >
                       {row.email}
                     </div>
                     <div
                       className={table().rowItem({ className: "uppercase" })}
                     >
-                      {row.password}
+                      {row.key}
                     </div>
                     
                     <div className={table().rowItem({ className: "gap-3" })}>
@@ -216,7 +219,7 @@ export default function ManageUsersPage() {
                               </p>
                             </button>
                           }
-                          handleSubmit={() => deleteStudent(row.email)}
+                          handleSubmit={() => deleteStudent(row._id)}
                         />
                       </div>
                     </div>

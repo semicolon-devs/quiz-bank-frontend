@@ -11,8 +11,7 @@ export default function NotesPage() {
   console.log(params.get('id')) 
   
   const src = "https://drive.google.com/file/d/" + params.get('id') + "/preview";
-  console.log(src)
-  console.log(params)
+  
   const name: string = params.get('name')!;
 
 
