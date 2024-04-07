@@ -1,6 +1,8 @@
+"use client";
+
 import SectionTitle from "@/components/sectionTitle";
 
-export default async function SubscriptionsPage() {
+export default function SubscriptionsPage() {
   return (
     <div>
       <SectionTitle title="Subscription" />
