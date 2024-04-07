@@ -22,6 +22,7 @@ export type UserDetails = {
 };
 
 export type LMSStdDetails = {
+  _id: string;
   name: string;
   password: string;
   email: string;

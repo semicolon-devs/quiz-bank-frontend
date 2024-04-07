@@ -108,7 +108,7 @@ export default function PaperTemplate({
     hasFinishedQuiz();
     getQPaperInfo();
     getQuestionBlockSubmitted();
-  }, [params]);
+  }, [params, router]);
 
   const getCorrectAnswersArray = () => {
     const correctAnswerBlocks = correctAnswersArray

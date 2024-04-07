@@ -112,7 +112,9 @@ export default function PaperQuestionPage({
     getQuestionBlockSubmitted();
     getQuestion();
     getAnswer();
-  }, []);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params]);
 
   function setSubmittedAnswers(submittedAnswers: number[]) {
     for (let i = 0; i < answersSelected.length; i++) {
@@ -180,16 +182,15 @@ export default function PaperQuestionPage({
                     </button>
                   }
                   modalTitle={"Explanation"}
-                  children={
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: explanation,
-                      }}
-                    />
-                  }
                   closeBtn
                   modalMaxWidth="max-w-3xl"
-                />
+                >
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: explanation,
+                    }}
+                  />
+                </Modal>
               )}
             </div>
             <div className="flex flex-col gap-2">

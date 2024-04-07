@@ -205,9 +205,9 @@ export default function ManagePapersPage() {
                         <EyeOpenIcon classes={"w-4 h-5 text-blue-600"} />
                       </div> */}
                       <div className="" onClick={() => setModalShowPaper(row)}>
-                        <EditPaperModal
-                          paper={modalShowPaper && modalShowPaper}
-                        />
+                        {modalShowPaper && (
+                          <EditPaperModal paper={modalShowPaper} />
+                        )}
                       </div>
                       <div className="cursor-pointer">
                         <Modal
@@ -215,16 +215,6 @@ export default function ManagePapersPage() {
                             <DeleteIcon classes="h-4 w-4 text-red-600" />
                           }
                           modalTitle={"Alert!"}
-                          children={
-                            <p className="">
-                              Are you sure you want to delete
-                              <span className="font-medium space-x-1">
-                                {" "}
-                                {row.name}
-                              </span>{" "}
-                              from the system?
-                            </p>
-                          }
                           submitBtn={
                             <button className="bg-red-100 hover:bg-red-200 rounded-md px-4 py-2">
                               <p className="capitalize text-red-600 font-medium">
@@ -233,7 +223,16 @@ export default function ManagePapersPage() {
                             </button>
                           }
                           handleSubmit={() => deletePaper(row._id)}
-                        />
+                        >
+                          <p className="">
+                            Are you sure you want to delete
+                            <span className="font-medium space-x-1">
+                              {" "}
+                              {row.name}
+                            </span>{" "}
+                            from the system?
+                          </p>
+                        </Modal>
                       </div>
                     </div>
                   </div>

@@ -115,7 +115,7 @@ export default function PaperTemplate({
 
     getQPaperInfo();
     getQuestionBlocks();
-  }, [params]);
+  }, [params, router]);
 
   const renderer = ({
     hours,
@@ -158,17 +158,6 @@ export default function PaperTemplate({
                     </button>
                   }
                   modalTitle={"Quit Paper"}
-                  children={
-                    <>
-                      <p className="">
-                        Are you sure you want to Quit the Paper?
-                      </p>
-                      {/* <p className="text-sm italic">
-                        Your progress will be saved and you can resume the quiz
-                        later
-                      </p> */}
-                    </>
-                  }
                   submitBtn={
                     <button className="bg-red-400 px-4 py-2 rounded-md">
                       <p className="text-white text-sm font-medium">
@@ -179,7 +168,15 @@ export default function PaperTemplate({
                   handleSubmit={() =>
                     router.push(`${UrlSlugType.PAPERS}/${params.PaperID}`)
                   }
-                />
+                >
+                  <>
+                    <p className="">Are you sure you want to Quit the Paper?</p>
+                    {/* <p className="text-sm italic">
+                  Your progress will be saved and you can resume the quiz
+                  later
+                </p> */}
+                  </>
+                </Modal>
               </div>
               <p className="font-bold text-lg uppercase text-blue-600">
                 {!loadingQPaper ? QPaperName : "Loading..."} - {QPaperId}
@@ -202,26 +199,6 @@ export default function PaperTemplate({
                 </button>
               }
               modalTitle={"Submit Paper"}
-              children={
-                <>
-                  <p className="">Are you sure you want to submit the Paper?</p>
-                  {answeredArray.length >= totalQuestions ? (
-                    <div className="mt-2 flex gap-2">
-                      <FilledCheckIcon classes={"w-5 h-5 text-green-600"} />
-                      <p className="text-sm text-green-600">
-                        All questions has been answered
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="mt-2 flex gap-2">
-                      <ExclamationMarkIcon classes={"w-5 h-5 text-red-600"} />
-                      <p className="text-sm text-red-600">
-                        {`Only ${answeredArray.length} out of ${totalQuestions} questions have been answered`}
-                      </p>
-                    </div>
-                  )}
-                </>
-              }
               submitBtn={
                 <button className="bg-blue-400 px-4 py-2 rounded-md">
                   <p className="text-white text-sm font-medium">
@@ -230,7 +207,26 @@ export default function PaperTemplate({
                 </button>
               }
               handleSubmit={() => handleCompleteQuiz()}
-            />
+            >
+              <>
+                <p className="">Are you sure you want to submit the Paper?</p>
+                {answeredArray.length >= totalQuestions ? (
+                  <div className="mt-2 flex gap-2">
+                    <FilledCheckIcon classes={"w-5 h-5 text-green-600"} />
+                    <p className="text-sm text-green-600">
+                      All questions has been answered
+                    </p>
+                  </div>
+                ) : (
+                  <div className="mt-2 flex gap-2">
+                    <ExclamationMarkIcon classes={"w-5 h-5 text-red-600"} />
+                    <p className="text-sm text-red-600">
+                      {`Only ${answeredArray.length} out of ${totalQuestions} questions have been answered`}
+                    </p>
+                  </div>
+                )}
+              </>
+            </Modal>
           </div>
           <div className="flex">
             <div className="p-2 h-max w-[228px]">

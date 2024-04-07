@@ -29,12 +29,7 @@ import { PaperType } from "@/utils/enums";
 
 import { LMSStdDetails } from "@/types";
 
-const headers = [
-  "Student Name",
-  "Email",
-  "Passowrd",
-  "actions",
-];
+const headers = ["Student Name", "Email", "Passowrd", "actions"];
 
 export default function ManageUsersPage() {
   const [loading, setLoading] = useState<boolean>(false);
@@ -46,7 +41,6 @@ export default function ManageUsersPage() {
   const [pageSize, setPageSize] = useState<number>(entriesArray[1]);
 
   const router = useRouter();
-
 
   //get studnets
   useEffect(() => {
@@ -83,7 +77,6 @@ export default function ManageUsersPage() {
 
     getPapers();
   }, [pageNumber, pageSize]);
-
 
   //delete student
   const deleteStudent = (email: string) => {
@@ -180,7 +173,7 @@ export default function ManageUsersPage() {
                     >
                       {row.password}
                     </div>
-                    
+
                     <div className={table().rowItem({ className: "gap-3" })}>
                       {/* <div
                         className="p-1 cursor-pointer"
@@ -192,23 +185,13 @@ export default function ManageUsersPage() {
                       >
                         <EyeOpenIcon classes={"w-4 h-5 text-blue-600"} />
                       </div> */}
-                      
+
                       <div className="cursor-pointer">
                         <Modal
                           viewButton={
                             <DeleteIcon classes="h-4 w-4 text-red-600" />
                           }
                           modalTitle={"Alert!"}
-                          children={
-                            <p className="">
-                              Are you sure you want to delete
-                              <span className="font-medium space-x-1">
-                                {" "}
-                                {row.name}
-                              </span>{" "}
-                              from the system?
-                            </p>
-                          }
                           submitBtn={
                             <button className="bg-red-100 hover:bg-red-200 rounded-md px-4 py-2">
                               <p className="capitalize text-red-600 font-medium">
@@ -217,7 +200,16 @@ export default function ManageUsersPage() {
                             </button>
                           }
                           handleSubmit={() => deleteStudent(row.email)}
-                        />
+                        >
+                          <p className="">
+                            Are you sure you want to delete
+                            <span className="font-medium space-x-1">
+                              {" "}
+                              {row.name}
+                            </span>{" "}
+                            from the system?
+                          </p>
+                        </Modal>
                       </div>
                     </div>
                   </div>
