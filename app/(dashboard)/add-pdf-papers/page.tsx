@@ -17,7 +17,7 @@ import EntriesPerPage from "@/components/pagination/EntriesPerPage";
 import { entriesArray } from "@/components/pagination/entriesArray";
 import SectionTitle from "@/components/sectionTitle";
 import Modal from "@/components/modal";
-import AddPaperModal from "./modals/AddStudentModal";
+import AddPDFPaperModal from "./modals/AddPDFPaperModal";
 import EditPaperModal from "./modals/EditPaperModal";
 
 import { table } from "@/variants/table";
@@ -33,7 +33,7 @@ const headers = [
   "Student Name",
   "Email",
   "Passowrd",
-  "Actions",
+  "actions",
 ];
 
 export default function ManageUsersPage() {
@@ -44,7 +44,6 @@ export default function ManageUsersPage() {
   const [tableSearch, setTableSearch] = useState<string>("");
   const [modalShowPaper, setModalShowPaper] = useState<LMSStdDetails>();
   const [pageSize, setPageSize] = useState<number>(entriesArray[1]);
-  const [deleteUser, setDeleteUser] = useState<boolean>(false);
 
   const router = useRouter();
 
@@ -55,7 +54,7 @@ export default function ManageUsersPage() {
       setLoading(true);
       const axiosConfig = {
         method: "GET",
-        url: `${BASE_URL}lms/auth/users/all`,
+        url: `${BASE_URL}lms/studnets`,
         params: {
           page: pageNumber,
           limit: pageSize,
@@ -66,7 +65,7 @@ export default function ManageUsersPage() {
       };
       axios(axiosConfig)
         .then((response) => {
-          setStudentList(response.data);
+          setStudentList(response.data.result);
           setNumberOfPages(
             Math.ceil(
               response?.data?.pagination?.totalPapers /
@@ -79,20 +78,19 @@ export default function ManageUsersPage() {
         })
         .finally(() => {
           setLoading(false);
-          setDeleteUser(false);
         });
     };
 
     getPapers();
-  }, [deleteUser , setLoading]);
+  }, [pageNumber, pageSize]);
 
 
   //delete student
-  const deleteStudent = (_id: string) => {
+  const deleteStudent = (email: string) => {
     setLoading(true);
     const axiosConfig = {
       method: "DELETE",
-      url: `${BASE_URL}lms/auth/${_id}`,
+      url: `${BASE_URL}lms/students/${email}`,
       headers: {
         Authorization: `Bearer ${getAccess()}`,
       },
@@ -106,7 +104,6 @@ export default function ManageUsersPage() {
       })
       .finally(() => {
         setLoading(false);
-        setDeleteUser(true);
       });
   };
 
@@ -119,7 +116,7 @@ export default function ManageUsersPage() {
   return (
     <div>
       <div className="flex justify-between">
-        <SectionTitle title="Manage Students in LMS" />
+        <SectionTitle title="Add Weekly Papers" />
       </div>
       <div className={table().base()}>
         <div className={table().featuresRow({ className: "grid grid-cols-4" })}>
@@ -131,7 +128,7 @@ export default function ManageUsersPage() {
               onChange={(e) => setTableSearch(e.target.value)}
               value={tableSearch}
               className={table().featuresSearchInput()}
-              placeholder="Search Students"
+              placeholder="Search Papers"
             />
             <div className={table().featuresSearchButton()}>
               <SearchIcon classes={"h-4 w-4 text-white"} />
@@ -142,11 +139,11 @@ export default function ManageUsersPage() {
             setValue={setPageSize}
             array={entriesArray}
           />
-          <AddPaperModal />
+          <AddPDFPaperModal />
         </div>
         <div
           className={table().headerRow({
-            className: "grid grid-cols-4",
+            className: "grid grid-cols-6",
           })}
         >
           {headers.map((header) => (
@@ -162,9 +159,9 @@ export default function ManageUsersPage() {
                 return (
                   <div
                     className={table().tableRow({
-                      className: "grid grid-cols-4",
+                      className: "grid grid-cols-6",
                     })}
-                    key={row.key}
+                    key={row.email}
                   >
                     <div
                       className={table().rowItem({
@@ -174,14 +171,14 @@ export default function ManageUsersPage() {
                       {row.name}
                     </div>
                     <div
-                      className={table().rowItem({ className: "lowercase" })}
+                      className={table().rowItem({ className: "uppercase" })}
                     >
                       {row.email}
                     </div>
                     <div
                       className={table().rowItem({ className: "uppercase" })}
                     >
-                      {row.key}
+                      {row.password}
                     </div>
                     
                     <div className={table().rowItem({ className: "gap-3" })}>
@@ -219,7 +216,7 @@ export default function ManageUsersPage() {
                               </p>
                             </button>
                           }
-                          handleSubmit={() => deleteStudent(row._id)}
+                          handleSubmit={() => deleteStudent(row.email)}
                         />
                       </div>
                     </div>
