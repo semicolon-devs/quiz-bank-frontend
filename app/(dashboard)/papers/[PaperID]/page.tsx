@@ -44,7 +44,7 @@ export default function PaperDetailsPage({
     };
 
     getQPapers();
-  }, []);
+  }, [params.PaperID]);
 
   return (
     <div className="w-full">

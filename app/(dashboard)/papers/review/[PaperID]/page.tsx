@@ -90,7 +90,7 @@ export default function PaperDetailsPage({
       };
       axios(axiosConfig)
         .then((response) => {
-          console.log(response)
+          console.log(response);
           setTotalQuestions(response.data.totalQuestions);
         })
         .catch((err) => {
@@ -132,7 +132,7 @@ export default function PaperDetailsPage({
         ) : (
           <div className="p-5">
             <p className="uppercase font-bold text-lg">
-              You haven't taken this quiz
+              You haven&apos;t taken this quiz
             </p>
           </div>
         )}

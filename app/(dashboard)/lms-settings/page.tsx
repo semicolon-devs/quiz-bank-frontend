@@ -48,21 +48,16 @@ const validationSchema = Yup.object({
 });
 
 export default function AddPDFPapers() {
-
-  
   const [loading, setLoading] = useState<boolean>(false);
   const [driveLink, setdriveLink] = useState<string>("");
   const [batch, setBatch] = useState<string>("");
 
-  
   const [initialValues, setInitialValues] = useState<FormValues>({
     driveLink: "Loading",
     batch: "Loading",
     deleteText: "",
     newBatch: "",
   });
-
-  
 
   useEffect(() => {
     const getSettings = async () => {
@@ -78,10 +73,8 @@ export default function AddPDFPapers() {
         .then((response) => {
           setdriveLink(response.data.driveLink);
           setBatch(response.data.batch);
-          
         })
         .catch((err) => {
-          
           console.log(err);
         })
         .finally(() => {
@@ -90,21 +83,16 @@ export default function AddPDFPapers() {
     };
 
     getSettings();
-    
   }, []);
-
 
   useEffect(() => {
     // Update initial values once data is fetched
-    setInitialValues(prevValues => ({
+    setInitialValues((prevValues) => ({
       ...prevValues,
       driveLink: driveLink,
       batch: batch,
-      
     }));
-    console.log(initialValues.driveLink)
-  }, [driveLink, batch, ]);
-
+  }, [driveLink, batch]);
 
   const changeLMSSettings = (values: FormValues) => {
     const axiosConfig = {
@@ -171,42 +159,37 @@ export default function AddPDFPapers() {
 
       <div className="mt-5 flex gap-3">
         <div className="w-1/2 bg-white p-10 rounded-md">
-        
-  <Formik initialValues={initialValues} enableReinitialize onSubmit={changeLMSSettings}>
-    {({ isSubmitting, errors, handleSubmit, touched, values }) => (
-      <form onSubmit={handleSubmit} className={form().innerForm()}>
-        <div className={form().formDiv()}>
-          <label htmlFor="driveLink" className={form().label()}>
-            Drive Link
-          </label>
-          <Field
-            name="driveLink"
-            type="text"
-            className={form().input()}
-          />
-        </div>
+          <Formik
+            initialValues={initialValues}
+            enableReinitialize
+            onSubmit={changeLMSSettings}
+          >
+            {({ isSubmitting, errors, handleSubmit, touched, values }) => (
+              <form onSubmit={handleSubmit} className={form().innerForm()}>
+                <div className={form().formDiv()}>
+                  <label htmlFor="driveLink" className={form().label()}>
+                    Drive Link
+                  </label>
+                  <Field
+                    name="driveLink"
+                    type="text"
+                    className={form().input()}
+                  />
+                </div>
 
-        <div className={form().formDiv()}>
-          <label htmlFor="batch" className={form().label()}>
-            SMIT Batch
-          </label>
-          <Field 
-            name="batch" 
-            type="text" 
-            className={form().input()} 
-          />
-        </div>
+                <div className={form().formDiv()}>
+                  <label htmlFor="batch" className={form().label()}>
+                    SMIT Batch
+                  </label>
+                  <Field name="batch" type="text" className={form().input()} />
+                </div>
 
-        <button
-          type="submit"
-          className={form().button()}
-        >
-          <p className="">Update Settings</p>
-        </button>
-      </form>
-    )}
-  </Formik>
-
+                <button type="submit" className={form().button()}>
+                  <p className="">Update Settings</p>
+                </button>
+              </form>
+            )}
+          </Formik>
         </div>
 
         <div className="w-1/2 bg-white p-10 rounded-md">
@@ -258,7 +241,7 @@ export default function AddPDFPapers() {
                     Delete ALL data of current batch such as papers, notes,
                     users and their marks*
                     <p className="p-3 font-medium pl-0 pt-0">
-                      Type 'DELETE ALL DaTa'{" "}
+                      Type &apos;DELETE ALL DaTa&apos;{" "}
                     </p>
                   </label>
                   <Field

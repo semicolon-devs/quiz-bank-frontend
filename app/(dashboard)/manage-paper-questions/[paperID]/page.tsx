@@ -291,16 +291,6 @@ const ManagePaperQuestionsPage = ({
                       </div>
                     }
                     modalTitle={"Alert !"}
-                    children={
-                      <p className="">
-                        Are you sure want to remove{" "}
-                        <span className="font-medium">
-                          {questionToView.slice(0, 40)}
-                          {questionToView.length >= 40 && "..."}
-                        </span>{" "}
-                        from the paper?
-                      </p>
-                    }
                     handleSubmit={() => removeQuestion(row._id)}
                     submitBtn={
                       <div className="flex outline-none justify-center rounded-md bg-red-100 px-4 py-2 hover:bg-red-200">
@@ -309,7 +299,16 @@ const ManagePaperQuestionsPage = ({
                         </p>
                       </div>
                     }
-                  />
+                  >
+                    <p className="">
+                      Are you sure want to remove{" "}
+                      <span className="font-medium">
+                        {questionToView.slice(0, 40)}
+                        {questionToView.length >= 40 && "..."}
+                      </span>{" "}
+                      from the paper?
+                    </p>
+                  </Modal>
                 </div>
               </Reorder.Item>
             );
@@ -397,16 +396,6 @@ const ManagePaperQuestionsPage = ({
                           </div>
                         }
                         modalTitle={"Add question"}
-                        children={
-                          <p className="">
-                            Are you sure want to add{" "}
-                            <span className="font-medium">
-                              {questionToView.slice(0, 40)}{" "}
-                              {questionToView.length >= 40 && "... "}
-                            </span>
-                            to the paper?
-                          </p>
-                        }
                         handleSubmit={() => addQuestion(row._id)}
                         submitBtn={
                           <div className="flex outline-none justify-center rounded-md bg-green-100 px-4 py-2 hover:bg-green-200">
@@ -415,7 +404,16 @@ const ManagePaperQuestionsPage = ({
                             </p>
                           </div>
                         }
-                      />
+                      >
+                        <p className="">
+                          Are you sure want to add{" "}
+                          <span className="font-medium">
+                            {questionToView.slice(0, 40)}{" "}
+                            {questionToView.length >= 40 && "... "}
+                          </span>
+                          to the paper?
+                        </p>
+                      </Modal>
                     ) : (
                       // <div
                       //   className="bg-blue-600 py-1 px-4 rounded-full flex items-center justify-center gap-2 cursor-pointer"

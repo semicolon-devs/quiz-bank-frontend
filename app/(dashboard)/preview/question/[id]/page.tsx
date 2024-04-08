@@ -29,7 +29,7 @@ interface Question {
   difficulty: string;
 }
 
-export default async function Page({ params }: { params: { id: string } }) {
+export default function Page({ params }: { params: { id: string } }) {
   const [loading, setLoading] = useState<boolean>(false);
   const [question, setQuestion] = useState<Question>();
   const [answersSelected, setAnswersSelected] = useState<boolean[]>([
@@ -138,12 +138,11 @@ export default async function Page({ params }: { params: { id: string } }) {
             </button>
           }
           modalTitle={"Explanation"}
-          children={
-            <div dangerouslySetInnerHTML={{ __html: question.explaination }} />
-          }
           closeBtn
           modalMaxWidth="max-w-3xl"
-        />
+        >
+          <div dangerouslySetInnerHTML={{ __html: question.explaination }} />
+        </Modal>
       )}
     </div>
   );
