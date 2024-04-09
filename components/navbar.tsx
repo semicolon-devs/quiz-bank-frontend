@@ -43,7 +43,7 @@ export const Navbar = () => {
       </div>
 
       <div className="flex">
-        <div className="flex mr-3 justify-center ">
+        <div className="flex mr-3 justify-center my-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
