@@ -4,6 +4,8 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
+import { RootState, useAppSelector } from "@/store";
+
 import Modal from "@/components/modal";
 import QuestionBlock from "@/components/questionBlock";
 
@@ -15,7 +17,6 @@ import {
 
 import { BASE_URL } from "@/config/apiConfig";
 import { getAccess } from "@/helpers/token";
-import { getUserDetails, getUserID } from "@/helpers/userDetails";
 import { UrlSlugType } from "@/utils/enums/UrlSlug";
 import SectionTitle from "@/components/sectionTitle";
 
@@ -38,11 +39,13 @@ export default function PaperTemplate({
 
   const router = useRouter();
 
+  const { userDetails } = useAppSelector((state: RootState) => state.auth);
+
   useEffect(() => {
     const hasFinishedQuiz = () => {
       const axiosConfig = {
         method: "GET",
-        url: `${BASE_URL}answers/has-finished/${getUserID()}/${params.PaperID}`,
+        url: `${BASE_URL}answers/has-finished/${userDetails?._id}/${params.PaperID}`,
         headers: {
           Authorization: `Bearer ${getAccess()}`,
         },
@@ -58,7 +61,7 @@ export default function PaperTemplate({
 
     const getQuestionBlockSubmitted = () => {
       setLoadingQBlocks(true);
-      const userID = getUserDetails()?._id;
+      const userID = userDetails?._id;
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}answers/answers-status/${userID}/${params.PaperID}`,

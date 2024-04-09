@@ -4,9 +4,10 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
+import { RootState, useAppSelector } from "@/store";
+
 import { BASE_URL } from "@/config/apiConfig";
 import { getAccess } from "@/helpers/token";
-import { getUserID } from "@/helpers/userDetails";
 
 import { FilledCheckIcon } from "@/components/icons";
 import { UrlSlugType } from "@/utils/enums/UrlSlug";
@@ -26,11 +27,13 @@ export default function PaperDetailsPage({
 
   const router = useRouter();
 
+  const { userDetails } = useAppSelector((state: RootState) => state.auth);
+
   useEffect(() => {
     const hasFinishedQuiz = () => {
       const axiosConfig = {
         method: "GET",
-        url: `${BASE_URL}answers/has-finished/${getUserID()}/${params.PaperID}`,
+        url: `${BASE_URL}answers/has-finished/${userDetails?._id}/${params.PaperID}`,
         headers: {
           Authorization: `Bearer ${getAccess()}`,
         },
@@ -48,7 +51,7 @@ export default function PaperDetailsPage({
     const getMarks = () => {
       const axiosConfig = {
         method: "GET",
-        url: `${BASE_URL}answers/marks/${getUserID()}/${params.PaperID}`,
+        url: `${BASE_URL}answers/marks/${userDetails?._id}/${params.PaperID}`,
         headers: {
           Authorization: `Bearer ${getAccess()}`,
         },
@@ -83,7 +86,7 @@ export default function PaperDetailsPage({
     const getQuizTotalQuestions = () => {
       const axiosConfig = {
         method: "GET",
-        url: `${BASE_URL}answers/status/${getUserID()}/${params.PaperID}`,
+        url: `${BASE_URL}answers/status/${userDetails?._id}/${params.PaperID}`,
         headers: {
           Authorization: `Bearer ${getAccess()}`,
         },

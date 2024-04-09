@@ -11,15 +11,12 @@ import { LogoutIcon, MenuIcon } from "./icons";
 
 import { menuItems } from "@/config/menuItems";
 
-import {
-  getUserDetails,
-  getUser,
-  clearUserDetails,
-} from "@/helpers/userDetails";
 import { clearAuthToken } from "@/helpers/token";
 import { MenuItems, UserDetails } from "@/types";
 import { UserRole } from "@/utils/enums";
 import { UrlSlugType } from "@/utils/enums/UrlSlug";
+import { RootState, useAppDispatch, useAppSelector } from "@/store";
+import { clearUserDetails } from "@/store/authSlice";
 
 type Props = {};
 
@@ -27,15 +24,10 @@ export const Sidebar = (props: Props) => {
   const pathname = usePathname();
   const router = useRouter();
 
-  const [userDetails, setUserDetails] = useState<UserDetails | null>();
   const [role, setRole] = useState<UserRole>();
   const [isSidebarExpanded, setIsSidebarExpanded] = useState<boolean>(false);
 
-  useEffect(() => {
-    getUser();
-
-    setUserDetails(getUserDetails());
-  }, []);
+  const { userDetails } = useAppSelector((state: RootState) => state.auth);
 
   useEffect(() => {
     const getHighestRole = (): UserRole => {

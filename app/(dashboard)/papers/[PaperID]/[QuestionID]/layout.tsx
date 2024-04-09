@@ -16,9 +16,9 @@ import {
 
 import { BASE_URL } from "@/config/apiConfig";
 import { getAccess } from "@/helpers/token";
-import { getUserDetails, getUserID } from "@/helpers/userDetails";
 import { UrlSlugType } from "@/utils/enums/UrlSlug";
 import toast from "react-hot-toast";
+import { RootState, useAppSelector } from "@/store";
 
 export default function PaperTemplate({
   children,
@@ -38,6 +38,8 @@ export default function PaperTemplate({
 
   const router = useRouter();
 
+  const { userDetails } = useAppSelector((state: RootState) => state.auth);
+
   const handleCompleteQuiz = () => {
     const axiosConfig = {
       method: "POST",
@@ -46,7 +48,7 @@ export default function PaperTemplate({
         Authorization: `Bearer ${getAccess()}`,
       },
       data: {
-        userId: getUserID(),
+        userId: userDetails?._id,
         paperId: params.PaperID,
         submitAt: new Date(),
       },
@@ -64,7 +66,7 @@ export default function PaperTemplate({
   useEffect(() => {
     const getQuestionBlocks = () => {
       setLoadingQBlocks(true);
-      const userID = getUserDetails()?._id;
+      const userID = userDetails?._id;
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}answers/status/${userID}/${params.PaperID}`,
