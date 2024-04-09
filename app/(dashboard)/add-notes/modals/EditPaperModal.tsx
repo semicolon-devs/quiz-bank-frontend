@@ -1,7 +1,7 @@
 "use client";
 
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, ReactNode, useState } from "react";
+import { Fragment, ReactNode, useState, useEffect } from "react";
 import {
   Formik,
   Field,
@@ -11,7 +11,7 @@ import {
 } from "formik";
 import axios from "axios";
 
-import { CloseIcon, PlusIcon } from "../../../../components/icons";
+import { CloseIcon, EditIcon } from "../../../../components/icons";
 
 import { table } from "@/variants/table";
 import { form } from "@/variants/form";
@@ -21,75 +21,72 @@ import { getAccess } from "@/helpers/token";
 import { UrlSlugType } from "@/utils/enums/UrlSlug";
 import { PaperType } from "@/utils/enums";
 
-import { lmsAddStudentValidation } from "@/schema/lmsAddStudentValidation";
+import { paperValidationSchema } from "@/schema/paperValidation";
+
+import { PaperDetails } from "@/types";
 
 interface FormValues {
   name: string;
-  email: string;
-  password: string;
-  
+  code: string;
+  paperType: PaperType;
+  time: Number;
+  isTimed: boolean;
 }
 
 const initialValues: FormValues = {
   name: "",
-  email:"",
-  password:""
+  code: "",
+  paperType: PaperType.ONE_ATTEMPT,
+  time: 0,
+  isTimed: false,
 };
 
-const AddStudentModal = (props) => {
-  const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
+type EditPaperModalProps = {
+  paper: PaperDetails;
+};
 
-  const addStudent = (values: FormValues) => {
-    console.log("clicked")
+const EditPaperModal = ({ paper }: EditPaperModalProps) => {
+  const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    initialValues.name = paper && paper.name;
+    initialValues.code = paper && paper.paperId;
+    initialValues.paperType =
+      paper && paper.paperType === PaperType.MULTIPLE_ATTEMPT
+        ? PaperType.MULTIPLE_ATTEMPT
+        : PaperType.ONE_ATTEMPT;
+    initialValues.isTimed = paper && paper.isTimed;
+    initialValues.time = paper && paper.timeInMinutes;
+  }, [paper]);
+
+  const editPaper = (values: FormValues) => {
     const axiosConfig = {
-      method: "POST",
-      url: `${BASE_URL}lms/auth/register`,
+      method: "PATCH",
+      url: `${BASE_URL}papers/${paper._id}`,
       headers: {
         Authorization: `Bearer ${getAccess()}`,
       },
       data: {
-        password: values.password,
+        paperId: values.code,
         name: values.name,
-        email: values.email,
+        timeInMinutes: values.time,
+        isTimed: values.isTimed,
+        paperType: values.paperType,
       },
     };
     axios(axiosConfig)
       .then((response) => {
         console.log(response);
-        if (response.status === 201) {
-          props.added();
-          closeModal();
-        } else {
-          alert("Unexpected status code: " + response.status);
-        }
+        closeModal();
       })
-      .catch((error) => {
-        if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-          console.log(error.response.data);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-          if (error.response.status === 500) {
-            alert("Duplicate Student emails found!!");
-          } else {
-            alert("Error: " + error.response.status);
-          }
-        } else if (error.request) {
-          // The request was made but no response was received
-          console.log(error.request);
-          alert("No response received from the server");
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          console.log('Error', error.message);
-          alert("An error occurred: " + error.message);
-        }
+      .catch((err) => {
+        console.log(err);
       })
       .finally(() => {
         // setLoading(false);
       });
-};
-
+  };
 
   const openModal = () => {
     setIsOpenModal(true);
@@ -101,11 +98,8 @@ const AddStudentModal = (props) => {
 
   return (
     <>
-      <div className="" onClick={openModal}>
-        <button className={table().featuresButton()}>
-          <PlusIcon classes={"w-4 h-4 text-white"} />
-          <p className="">add student</p>
-        </button>
+      <div className="cursor-pointer" onClick={openModal}>
+        <EditIcon classes="h-4 w-4 text-blue-600" />
       </div>
 
       <Transition appear show={isOpenModal} as={Fragment}>
@@ -140,7 +134,7 @@ const AddStudentModal = (props) => {
                     as="h3"
                     className="text-xl font-semibold leading-6"
                   >
-                    Add New Student to LMS
+                    Edit Paper
                   </Dialog.Title>
 
                   <div
@@ -153,8 +147,8 @@ const AddStudentModal = (props) => {
                   <div className="mt-4">
                     <Formik
                       initialValues={initialValues}
-                      validationSchema={lmsAddStudentValidation}
-                      onSubmit={addStudent}
+                      validationSchema={paperValidationSchema}
+                      onSubmit={editPaper}
                     >
                       {({
                         isSubmitting,
@@ -169,7 +163,7 @@ const AddStudentModal = (props) => {
                         >
                           <div className={form().formDiv()}>
                             <label htmlFor="name" className={form().label()}>
-                              Studnet Name
+                              Paper name
                             </label>
                             <Field
                               name="name"
@@ -188,51 +182,103 @@ const AddStudentModal = (props) => {
                           </div>
 
                           <div className={form().formDiv()}>
-                            <label htmlFor="email" className={form().label()}>
-                              Student Email
+                            <label htmlFor="code" className={form().label()}>
+                              Paper Code
                             </label>
                             <Field
-                              name="email"
-                              type="email"
+                              name="code"
+                              type="text"
                               className={`${form().input()} ${
-                                errors.email && touched.email
+                                errors.code && touched.code
                                   ? form().labelError()
                                   : ""
                               }`}
                             />
                             <ErrorMessage
                               className={form().errorMessage()}
-                              name="email"
+                              name="code"
                               component="div"
                             />
                           </div>
 
                           <div className={form().formDiv()}>
-                            <label htmlFor="passowrd" className={form().label()}>
-                              Assign a Password
+                            <label
+                              htmlFor="paperType"
+                              className={form().label()}
+                            >
+                              Paper Type
                             </label>
                             <Field
-                              name="password"
-                              type="text"
+                              name="paperType"
+                              as="select"
                               className={`${form().input()} ${
-                                errors.password && touched.password
+                                errors.name && touched.name
                                   ? form().labelError()
                                   : ""
                               }`}
-                            />
+                            >
+                              <option value={PaperType.ONE_ATTEMPT}>
+                                One attempt
+                              </option>
+                              <option value={PaperType.MULTIPLE_ATTEMPT}>
+                                Multiple attempt
+                              </option>
+                            </Field>
                             <ErrorMessage
                               className={form().errorMessage()}
-                              name="password"
+                              name="PaperType"
                               component="div"
                             />
                           </div>
 
+                          <div className={form().checkBoxDiv()}>
+                            <Field
+                              name="isTimed"
+                              type="checkbox"
+                              className={`${form().checkBox()} ${
+                                errors.isTimed && touched.isTimed
+                                  ? form().labelError()
+                                  : ""
+                              }`}
+                            />
+                            <label htmlFor="isTimed" className={form().label()}>
+                              Is the paper timed?
+                            </label>
+                            <ErrorMessage
+                              className={form().errorMessage()}
+                              name="isTimed"
+                              component="div"
+                            />
+                          </div>
+
+                          {values.isTimed && (
+                            <div className={form().formDiv()}>
+                              <label htmlFor="time" className={form().label()}>
+                                Paper Duration (minutes)
+                              </label>
+                              <Field
+                                name="time"
+                                type="number"
+                                className={`${form().input()} ${
+                                  errors.time && touched.time
+                                    ? form().labelError()
+                                    : ""
+                                }`}
+                              />
+                              <ErrorMessage
+                                className={form().errorMessage()}
+                                name="time"
+                                component="div"
+                              />
+                            </div>
+                          )}
+
                           <button
                             type="submit"
-                            
+                            disabled={isSubmitting}
                             className={form().button()}
                           >
-                            <p className="">Add Student</p>
+                            <p className="">save changes</p>
                           </button>
                         </form>
                       )}
@@ -248,4 +294,4 @@ const AddStudentModal = (props) => {
   );
 };
 
-export default AddStudentModal;
+export default EditPaperModal;

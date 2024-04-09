@@ -40,8 +40,14 @@ export default function ManageUsersPage() {
   const [modalShowPaper, setModalShowPaper] = useState<LMSStdDetails>();
   const [pageSize, setPageSize] = useState<number>(entriesArray[1]);
   const [deleteUser, setDeleteUser] = useState<boolean>(false);
+  const [userAdded, setUserAdded] = useState<boolean>(false);
 
   const router = useRouter();
+
+  const userAddedFunc = () => {
+    setUserAdded(true);
+    console.log("user added called")
+  };
 
   //get studnets
   useEffect(() => {
@@ -74,11 +80,12 @@ export default function ManageUsersPage() {
         .finally(() => {
           setLoading(false);
           setDeleteUser(false);
+          setUserAdded(false);
         });
     };
 
     getPapers();
-  }, [pageNumber, pageSize]);
+  }, [pageNumber, pageSize, userAdded ,deleteUser]);
 
   //delete student
   const deleteStudent = (_id: string) => {
@@ -109,6 +116,8 @@ export default function ManageUsersPage() {
       return paper.name.includes(tableSearch);
     });
 
+ 
+
   return (
     <div>
       <div className="flex justify-between">
@@ -135,7 +144,7 @@ export default function ManageUsersPage() {
             setValue={setPageSize}
             array={entriesArray}
           />
-          <AddPaperModal />
+          <AddPaperModal added={userAddedFunc} />
         </div>
         <div
           className={table().headerRow({
@@ -157,7 +166,7 @@ export default function ManageUsersPage() {
                     className={table().tableRow({
                       className: "grid grid-cols-4",
                     })}
-                    key={row.key}
+                    key={row.email}
                   >
                     <div
                       className={table().rowItem({
@@ -172,7 +181,7 @@ export default function ManageUsersPage() {
                       {row.email}
                     </div>
                     <div
-                      className={table().rowItem({ className: "uppercase" })}
+                      className={table().rowItem({ className: "" })}
                     >
                       {row.key}
                     </div>
