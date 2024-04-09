@@ -36,7 +36,7 @@ const initialValues: FormValues = {
   password:""
 };
 
-const AddStudentModal = () => {
+const AddStudentModal = (props) => {
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
 
   const addStudent = (values: FormValues) => {
@@ -57,6 +57,7 @@ const AddStudentModal = () => {
       .then((response) => {
         console.log(response);
         if (response.status === 201) {
+          props.added();
           closeModal();
         } else {
           alert("Unexpected status code: " + response.status);

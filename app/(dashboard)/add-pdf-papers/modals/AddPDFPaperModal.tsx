@@ -24,16 +24,16 @@ import { PaperType } from "@/utils/enums";
 import { lmsAddPDFPaperValidation } from "@/schema/lmsAddPDFPaperValidation";
 
 interface FormValues {
-  name: string;
-  driveLink: string;
+  title: string;
+  fileId: string;
 }
 
 const initialValues: FormValues = {
-  name: "",
-  driveLink: "",
+  title: "",
+  fileId: "",
 };
 
-const AddPDFPaperModal = () => {
+const AddPDFPaperModal = (props :any) => {
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
 
   const getFileIdFromGoogleDriveUrl = (url: string) => {
@@ -53,22 +53,23 @@ const AddPDFPaperModal = () => {
   };
 
   const AddPDFPaper = (values: FormValues) => {
-    console.log(getFileIdFromGoogleDriveUrl(values.driveLink));
+    
     const axiosConfig = {
       method: "POST",
-      url: `${BASE_URL}lms/auth/register`,
+      url: `${BASE_URL}lms/papers`,
       headers: {
         Authorization: `Bearer ${getAccess()}`,
       },
       data: {
-        name: values.name,
-        driveLink: getFileIdFromGoogleDriveUrl(values.driveLink),
+        title: values.title,
+        fileId: getFileIdFromGoogleDriveUrl(values.fileId),
       },
     };
     axios(axiosConfig)
       .then((response) => {
         console.log(response);
         if (response.status === 201) {
+          props.added();
           closeModal();
         } else {
           alert("Unexpected status code: " + response.status);
@@ -82,8 +83,12 @@ const AddPDFPaperModal = () => {
           console.log(error.response.status);
           console.log(error.response.headers);
           if (error.response.status === 500) {
-            alert("Duplicate Student emails found!!");
-          } else {
+            alert("Duplicate Papers found!!");
+          } else if(error.response.status === 401){
+            alert("Enter Valid Google Drive Link");
+          } 
+          
+          else {
             alert("Error: " + error.response.status);
           }
         } else if (error.request) {
@@ -182,17 +187,17 @@ const AddPDFPaperModal = () => {
                               Paper Name
                             </label>
                             <Field
-                              name="name"
+                              name="title"
                               type="text"
                               className={`${form().input()} ${
-                                errors.name && touched.name
+                                errors.title && touched.title
                                   ? form().labelError()
                                   : ""
                               }`}
                             />
                             <ErrorMessage
                               className={form().errorMessage()}
-                              name="name"
+                              name="title"
                               component="div"
                             />
                           </div>
@@ -202,17 +207,17 @@ const AddPDFPaperModal = () => {
                               Drive Link
                             </label>
                             <Field
-                              name="driveLink"
+                              name="fileId"
                               type="text"
                               className={`${form().input()} ${
-                                errors.driveLink && touched.driveLink
+                                errors.fileId && touched.fileId
                                   ? form().labelError()
                                   : ""
                               }`}
                             />
                             <ErrorMessage
                               className={form().errorMessage()}
-                              name="driveLink"
+                              name="fileId"
                               component="div"
                             />
                           </div>

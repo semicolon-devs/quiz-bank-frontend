@@ -84,3 +84,10 @@ export type Question = {
   __v: number;
   _id: string;
 };
+
+
+export type PDFPaperDetails = {
+  _id: string;
+  title: string;
+  fileId: string;
+};

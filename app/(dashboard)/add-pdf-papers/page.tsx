@@ -27,28 +27,35 @@ import { getAccess } from "@/helpers/token";
 import { UrlSlugType } from "@/utils/enums/UrlSlug";
 import { PaperType } from "@/utils/enums";
 
-import { LMSStdDetails } from "@/types";
+import { PDFPaperDetails } from "@/types";
 
-const headers = ["Student Name", "Email", "Passowrd", "actions"];
+const headers = ["Paper Name", "Link", "actions"];
 
 export default function ManageUsersPage() {
   const [loading, setLoading] = useState<boolean>(false);
-  const [studentList, setStudentList] = useState<LMSStdDetails[]>([]);
+  const [papersList, setpapersList] = useState<PDFPaperDetails[]>([]);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [numberOfPages, setNumberOfPages] = useState<number>(1);
   const [tableSearch, setTableSearch] = useState<string>("");
-  const [modalShowPaper, setModalShowPaper] = useState<LMSStdDetails>();
+  const [modalShowPaper, setModalShowPaper] = useState<PDFPaperDetails>();
   const [pageSize, setPageSize] = useState<number>(entriesArray[1]);
+  const [paperAdded, setPaperAdded] = useState<boolean>(false);
+  const [deletePaperV, setDeletePaper] = useState<boolean>(false);
 
   const router = useRouter();
 
-  //get studnets
+  const paperAddedFunc = () => {
+    setPaperAdded(true);
+    console.log("user added called");
+  };
+
+  //get papers
   useEffect(() => {
     const getPapers = async () => {
       setLoading(true);
       const axiosConfig = {
         method: "GET",
-        url: `${BASE_URL}lms/studnets`,
+        url: `${BASE_URL}lms/papers`,
         params: {
           page: pageNumber,
           limit: pageSize,
@@ -59,7 +66,8 @@ export default function ManageUsersPage() {
       };
       axios(axiosConfig)
         .then((response) => {
-          setStudentList(response.data.result);
+          console.log(response.data);
+          setpapersList(response.data);
           setNumberOfPages(
             Math.ceil(
               response?.data?.pagination?.totalPapers /
@@ -72,24 +80,27 @@ export default function ManageUsersPage() {
         })
         .finally(() => {
           setLoading(false);
+          setPaperAdded(false);
+          setDeletePaper(false)
         });
     };
 
     getPapers();
-  }, [pageNumber, pageSize]);
+  }, [pageNumber, pageSize, paperAdded, deletePaperV]);
 
   //delete student
-  const deleteStudent = (email: string) => {
+  const deletePaper = (_id: string) => {
     setLoading(true);
     const axiosConfig = {
       method: "DELETE",
-      url: `${BASE_URL}lms/students/${email}`,
+      url: `${BASE_URL}lms/papers/${_id}`,
       headers: {
         Authorization: `Bearer ${getAccess()}`,
       },
     };
     axios(axiosConfig)
       .then((response) => {
+        setDeletePaper(true);
         // console.log(response);
       })
       .catch((err) => {
@@ -97,15 +108,38 @@ export default function ManageUsersPage() {
       })
       .finally(() => {
         setLoading(false);
+        setDeletePaper(true);
       });
   };
 
-  const filteredPapers: LMSStdDetails[] =
-    studentList &&
-    studentList.filter((paper) => {
-      return paper.name.includes(tableSearch);
+  const filteredPapers: PDFPaperDetails[] =
+    papersList &&
+    papersList.filter((paper) => {
+      return paper.title.includes(tableSearch);
     });
 
+  const generateDirectLink = (fileId : string) => {
+    // Assuming there's a function or API call to generate direct link using fileId
+    // Replace this with your actual implementation
+    return `https://drive.google.com/uc?id=${fileId}`;
+  };
+
+
+  const getFileIdFromGoogleDriveUrl = (url: string) => {
+    const regex: RegExp =
+      /(?:https?:\/\/)?(?:drive\.google\.com\/(?:file\/d\/|open\?id=)|docs\.google\.com\/(?:.*\/)?d\/)([\w-]{25,})/;
+
+    // Attempt to match the URL with the regular expression
+    const match: RegExpMatchArray | null = url.match(regex);
+
+    if (match) {
+      // Return the file ID captured in the first capture group
+      return match[1];
+    } else {
+      // Handle invalid or unrecognized URLs
+      return null;
+    }
+  };
   return (
     <div>
       <div className="flex justify-between">
@@ -132,11 +166,11 @@ export default function ManageUsersPage() {
             setValue={setPageSize}
             array={entriesArray}
           />
-          <AddPDFPaperModal />
+          <AddPDFPaperModal added={paperAddedFunc} />
         </div>
         <div
           className={table().headerRow({
-            className: "grid grid-cols-6",
+            className: "grid grid-cols-3",
           })}
         >
           {headers.map((header) => (
@@ -147,31 +181,31 @@ export default function ManageUsersPage() {
         </div>
         <div className={table().tableContent()}>
           {
-            studentList &&
-              filteredPapers.map((row: LMSStdDetails) => {
+            papersList &&
+              filteredPapers.map((row: PDFPaperDetails) => {
                 return (
                   <div
                     className={table().tableRow({
-                      className: "grid grid-cols-6",
+                      className: "grid grid-cols-3",
                     })}
-                    key={row.email}
+                    key={row._id}
                   >
                     <div
                       className={table().rowItem({
                         className: "font-medium",
                       })}
                     >
-                      {row.name}
+                      {row.title}
                     </div>
-                    <div
-                      className={table().rowItem({ className: "uppercase" })}
-                    >
-                      {row.email}
-                    </div>
-                    <div
-                      className={table().rowItem({ className: "uppercase" })}
-                    >
-                      {row.password}
+                    <div className={table().rowItem({ className: "p-2" })}>
+                      
+                      <button className="bg-green-100 hover:bg-green-200 rounded-md px-4 py-1" 
+                      ><a href={generateDirectLink(row.fileId)} target="_blank" rel="noopener noreferrer">
+                       File Download Link
+                      
+                    </a>
+                             
+                            </button>
                     </div>
 
                     <div className={table().rowItem({ className: "gap-3" })}>
@@ -199,13 +233,13 @@ export default function ManageUsersPage() {
                               </p>
                             </button>
                           }
-                          handleSubmit={() => deleteStudent(row.email)}
+                          handleSubmit={() => deletePaper(row._id)}
                         >
                           <p className="">
                             Are you sure you want to delete
                             <span className="font-medium space-x-1">
                               {" "}
-                              {row.name}
+                              {row.title}
                             </span>{" "}
                             from the system?
                           </p>
