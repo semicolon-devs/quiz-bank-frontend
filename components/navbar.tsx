@@ -1,25 +1,27 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-
-import { getUser, getUserDetails } from "@/helpers/userDetails";
-
 import NextLink from "next/link";
 import clsx from "clsx";
 
 import { SearchIcon } from "@/components/icons";
 import { UserRole } from "@/utils/enums";
 import { UserDetails } from "@/types";
+import { RootState, useAppDispatch, useAppSelector } from "@/store";
+import { fetchUserDetails } from "@/store/authSlice";
 import Logo from "@/public/smit_logo.webp";
 import Image from "next/image";
 
 export const Navbar = () => {
-  const [userDetails, setUserDetails] = useState<UserDetails | null>();
+  const dispatch = useAppDispatch();
+
   const [role, setRole] = useState<UserRole>();
 
+  const { userDetails } = useAppSelector((state: RootState) => state.auth);
+
   useEffect(() => {
-    setUserDetails(getUserDetails());
-  }, []);
+    dispatch(fetchUserDetails());
+  }, [dispatch]);
 
   useEffect(() => {
     const getHighestRole = (): UserRole => {

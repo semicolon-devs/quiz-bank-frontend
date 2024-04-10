@@ -5,11 +5,12 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 
+import { RootState, useAppSelector } from "@/store";
+
 import Spinner from "@/components/spinner";
 
 import { BASE_URL } from "@/config/apiConfig";
 import { getAccess } from "@/helpers/token";
-import { getUserID } from "@/helpers/userDetails";
 import { UrlSlugType } from "@/utils/enums/UrlSlug";
 
 interface Question {
@@ -35,6 +36,8 @@ export default function PaperQuestionPage({
   ]);
 
   const router = useRouter();
+
+  const { userDetails } = useAppSelector((state: RootState) => state.auth);
 
   useEffect(() => {
     const getQuestion = () => {
@@ -97,7 +100,7 @@ export default function PaperQuestionPage({
         Authorization: `Bearer ${getAccess()}`,
       },
       data: {
-        userId: getUserID(),
+        userId: userDetails?._id,
         paperId: params.PaperID,
         questionIndex: params.QuestionID,
         answer: getTrueIndexes(),
