@@ -17,7 +17,7 @@ import EntriesPerPage from "@/components/pagination/EntriesPerPage";
 import { entriesArray } from "@/components/pagination/entriesArray";
 import SectionTitle from "@/components/sectionTitle";
 import Modal from "@/components/modal";
-import AddPaperModal from "./modals/AddPaperModal";
+import AddNoteModal from "./modals/AddNoteModal";
 import EditPaperModal from "./modals/EditPaperModal";
 
 import { table } from "@/variants/table";
@@ -27,39 +27,61 @@ import { getAccess } from "@/helpers/token";
 import { UrlSlugType } from "@/utils/enums/UrlSlug";
 import { PaperType } from "@/utils/enums";
 
-import { PaperDetails } from "@/types";
+import { NoteDetails } from "@/types";
 
-const headers = [
-  "paper name",
-  "paper id",
-  "paper type",
-  "timing",
-  "questions",
-  "actions",
-];
+const headers = ["Note Name", "Subject", "Link", "actions"];
 
-export default function ManagePapersPage() {
+export default function ManageUsersPage() {
   const [loading, setLoading] = useState<boolean>(false);
-  const [paperList, setPaperList] = useState<PaperDetails[]>([]);
+  const [papersList, setpapersList] = useState<NoteDetails[]>([]);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [numberOfPages, setNumberOfPages] = useState<number>(1);
   const [tableSearch, setTableSearch] = useState<string>("");
-  const [modalShowPaper, setModalShowPaper] = useState<PaperDetails>();
+  const [modalShowPaper, setModalShowPaper] = useState<NoteDetails>();
   const [pageSize, setPageSize] = useState<number>(entriesArray[1]);
+  const [paperAdded, setPaperAdded] = useState<boolean>(false);
+  const [deleteNoteV, setdeleteNote] = useState<boolean>(false);
 
   const router = useRouter();
 
+  const formatSubjectLabel = (subject: string) => {
+    switch (subject) {
+      case "not_specified":
+        return "Not Specified"
+      case "reading_skills":
+        return "Reading Skills and General Knowledge";
+      case "logical_reasoning":
+        return "Logical Reasoning";
+      case "problem_solving":
+        return "Problem Solving";
+      case "biology":
+        return "Biology";
+      case "chemistry":
+        return "Chemistry";
+      case "physics":
+        return "Physics";
+      case "maths":
+        return "Maths";
+      default:
+        return "Not Specified";
+    }
+  }
+
+  const paperAddedFunc = () => {
+    setPaperAdded(true);
+    console.log("user added called");
+  };
+
+  //get papers
   useEffect(() => {
     const getPapers = async () => {
       setLoading(true);
       const axiosConfig = {
         method: "GET",
-        url: `${BASE_URL}papers/admin`,
+        url: `${BASE_URL}lms/notes`,
         params: {
           page: pageNumber,
           limit: pageSize,
-          // subject: "Biology",
-          // module: "Mendelian Genetics",
         },
         headers: {
           Authorization: `Bearer ${getAccess()}`,
@@ -67,7 +89,8 @@ export default function ManagePapersPage() {
       };
       axios(axiosConfig)
         .then((response) => {
-          setPaperList(response.data.result);
+          console.log(response.data);
+          setpapersList(response.data);
           setNumberOfPages(
             Math.ceil(
               response?.data?.pagination?.totalPapers /
@@ -80,23 +103,27 @@ export default function ManagePapersPage() {
         })
         .finally(() => {
           setLoading(false);
+          setPaperAdded(false);
+          setdeleteNote(false);
         });
     };
 
     getPapers();
-  }, [pageNumber, pageSize]);
+  }, [pageNumber, pageSize, paperAdded, deleteNoteV]);
 
-  const deletePaper = (id: string) => {
+  //delete student
+  const deleteNote = (_id: string) => {
     setLoading(true);
     const axiosConfig = {
       method: "DELETE",
-      url: `${BASE_URL}papers/${id}`,
+      url: `${BASE_URL}lms/notes/${_id}`,
       headers: {
         Authorization: `Bearer ${getAccess()}`,
       },
     };
     axios(axiosConfig)
       .then((response) => {
+        setdeleteNote(true);
         // console.log(response);
       })
       .catch((err) => {
@@ -104,19 +131,39 @@ export default function ManagePapersPage() {
       })
       .finally(() => {
         setLoading(false);
+        setdeleteNote(true);
       });
   };
 
-  const filteredPapers: PaperDetails[] =
-    paperList &&
-    paperList.filter((paper) => {
-      return paper.name.includes(tableSearch);
+  const filteredPapers: NoteDetails[] =
+    papersList &&
+    papersList.filter((paper) => {
+      return paper.title.includes(tableSearch);
     });
 
+  const generateDirectLink = (fileId: string) => {
+    return `https://drive.google.com/uc?id=${fileId}`;
+  };
+
+  const getFileIdFromGoogleDriveUrl = (url: string) => {
+    const regex: RegExp =
+      /(?:https?:\/\/)?(?:drive\.google\.com\/(?:file\/d\/|open\?id=)|docs\.google\.com\/(?:.*\/)?d\/)([\w-]{25,})/;
+
+    // Attempt to match the URL with the regular expression
+    const match: RegExpMatchArray | null = url.match(regex);
+
+    if (match) {
+      // Return the file ID captured in the first capture group
+      return match[1];
+    } else {
+      // Handle invalid or unrecognized URLs
+      return null;
+    }
+  };
   return (
     <div>
       <div className="flex justify-between">
-        <SectionTitle title="Manage Papers" />
+        <SectionTitle title="Add Notes" />
       </div>
       <div className={table().base()}>
         <div className={table().featuresRow({ className: "grid grid-cols-4" })}>
@@ -128,7 +175,7 @@ export default function ManagePapersPage() {
               onChange={(e) => setTableSearch(e.target.value)}
               value={tableSearch}
               className={table().featuresSearchInput()}
-              placeholder="Search questions"
+              placeholder="Search Notes"
             />
             <div className={table().featuresSearchButton()}>
               <SearchIcon classes={"h-4 w-4 text-white"} />
@@ -139,11 +186,11 @@ export default function ManagePapersPage() {
             setValue={setPageSize}
             array={entriesArray}
           />
-          <AddPaperModal />
+          <AddNoteModal added={paperAddedFunc} />
         </div>
         <div
           className={table().headerRow({
-            className: "grid grid-cols-6",
+            className: "grid grid-cols-4",
           })}
         >
           {headers.map((header) => (
@@ -154,12 +201,12 @@ export default function ManagePapersPage() {
         </div>
         <div className={table().tableContent()}>
           {
-            paperList &&
-              filteredPapers.map((row: PaperDetails) => {
+            papersList &&
+              filteredPapers.map((row: NoteDetails) => {
                 return (
                   <div
                     className={table().tableRow({
-                      className: "grid grid-cols-6",
+                      className: "grid grid-cols-4",
                     })}
                     key={row._id}
                   >
@@ -168,31 +215,29 @@ export default function ManagePapersPage() {
                         className: "font-medium",
                       })}
                     >
-                      {row.name}
+                      {row.title}
                     </div>
+
                     <div
-                      className={table().rowItem({ className: "uppercase" })}
+                      className={table().rowItem({
+                        className: "font-medium",
+                      })}
                     >
-                      {row.paperId}
+                      {formatSubjectLabel(row.subject)}
                     </div>
-                    <div className={table().rowItem()}>{row.paperType}</div>
-                    <div className={table().rowItem()}>
-                      {row.isTimed ? `${row.timeInMinutes} mins` : "Not timed"}
+
+                    <div className={table().rowItem({ className: "p-2" })}>
+                      <button className="bg-green-100 hover:bg-green-200 rounded-md px-4 py-1">
+                        <a
+                          href={generateDirectLink(row.fileId)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          File Download Link
+                        </a>
+                      </button>
                     </div>
-                    <div className={table().rowItem()}>
-                      <div
-                        className="bg-blue-400 px-3 py-1 rounded-full flex items-center justify-center cursor-pointer"
-                        onClick={() =>
-                          router.push(
-                            `${UrlSlugType.MANAGE_PAPER_QUESTIONS}/${row._id}`
-                          )
-                        }
-                      >
-                        <p className="text-white text-xs font-medium">
-                          Manage questions
-                        </p>
-                      </div>
-                    </div>
+
                     <div className={table().rowItem({ className: "gap-3" })}>
                       {/* <div
                         className="p-1 cursor-pointer"
@@ -204,11 +249,7 @@ export default function ManagePapersPage() {
                       >
                         <EyeOpenIcon classes={"w-4 h-5 text-blue-600"} />
                       </div> */}
-                      <div className="" onClick={() => setModalShowPaper(row)}>
-                        {modalShowPaper && (
-                          <EditPaperModal paper={modalShowPaper} />
-                        )}
-                      </div>
+
                       <div className="cursor-pointer">
                         <Modal
                           viewButton={
@@ -222,13 +263,13 @@ export default function ManagePapersPage() {
                               </p>
                             </button>
                           }
-                          handleSubmit={() => deletePaper(row._id)}
+                          handleSubmit={() => deleteNote(row._id)}
                         >
                           <p className="">
                             Are you sure you want to delete
                             <span className="font-medium space-x-1">
                               {" "}
-                              {row.name}
+                              {row.title}
                             </span>{" "}
                             from the system?
                           </p>

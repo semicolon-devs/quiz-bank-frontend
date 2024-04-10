@@ -21,6 +21,14 @@ export type UserDetails = {
   _id: string;
 };
 
+export type LMSStdDetails = {
+  _id: string;
+  name: string;
+  password: string;
+  email: string;
+  key:string;
+};
+
 export type PaperDetails = {
   isTimed: boolean;
   name: string;
@@ -75,4 +83,18 @@ export type Question = {
   type: string;
   __v: number;
   _id: string;
+};
+
+
+export type PDFPaperDetails = {
+  _id: string;
+  title: string;
+  fileId: string;
+};
+
+export type NoteDetails = {
+  _id: string;
+  title: string;
+  fileId: string;
+  subject: string;
 };

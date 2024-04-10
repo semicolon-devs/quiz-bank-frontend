@@ -193,15 +193,6 @@ export default function ManageCoursesPage() {
                               </div>
                             }
                             modalTitle={"Alert !"}
-                            children={
-                              <p className="">
-                                Are you sure you want to remove subject{" "}
-                                <span className="font-medium">
-                                  {subject.name}{" "}
-                                </span>
-                                from the system?
-                              </p>
-                            }
                             handleSubmit={() => deleteSubject(subject._id)}
                             submitBtn={
                               <div className="flex  capitalize outline-none justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 hover:bg-red-200">
@@ -210,7 +201,15 @@ export default function ManageCoursesPage() {
                                 </p>
                               </div>
                             }
-                          />
+                          >
+                            <p className="">
+                              Are you sure you want to remove subject{" "}
+                              <span className="font-medium">
+                                {subject.name}{" "}
+                              </span>
+                              from the system?
+                            </p>
+                          </Modal>
                         </div>
                       )}
                     </>
@@ -255,17 +254,6 @@ export default function ManageCoursesPage() {
                                         </div>
                                       }
                                       modalTitle={"Alert !"}
-                                      children={
-                                        <p className="">
-                                          Are you sure you want to remove
-                                          subject category{" "}
-                                          <span className="font-medium">
-                                            {subCategory.name}{" "}
-                                          </span>{" "}
-                                          of subject {subject.name} from the
-                                          system?
-                                        </p>
-                                      }
                                       handleSubmit={() =>
                                         deleteSubjectCategory({
                                           subjectId: subject._id,
@@ -279,7 +267,17 @@ export default function ManageCoursesPage() {
                                           </p>
                                         </div>
                                       }
-                                    />
+                                    >
+                                      <p className="">
+                                        Are you sure you want to remove subject
+                                        category{" "}
+                                        <span className="font-medium">
+                                          {subCategory.name}{" "}
+                                        </span>{" "}
+                                        of subject {subject.name} from the
+                                        system?
+                                      </p>
+                                    </Modal>
                                   </div>
                                 )}
                               </>
@@ -313,16 +311,6 @@ export default function ManageCoursesPage() {
                                       </div>
                                     }
                                     modalTitle={"Alert !"}
-                                    children={
-                                      <p className="">
-                                        Are you sure you want to remove module{" "}
-                                        <span className="font-medium">
-                                          {module.name}{" "}
-                                        </span>{" "}
-                                        of subject category {subCategory.name}{" "}
-                                        from the system?
-                                      </p>
-                                    }
                                     handleSubmit={() =>
                                       deleteModule({
                                         subCategoryId: subCategory._id,
@@ -336,7 +324,16 @@ export default function ManageCoursesPage() {
                                         </p>
                                       </div>
                                     }
-                                  />
+                                  >
+                                    <p className="">
+                                      Are you sure you want to remove module{" "}
+                                      <span className="font-medium">
+                                        {module.name}{" "}
+                                      </span>{" "}
+                                      of subject category {subCategory.name}{" "}
+                                      from the system?
+                                    </p>
+                                  </Modal>
                                 </div>
                               </div>
                             ))}

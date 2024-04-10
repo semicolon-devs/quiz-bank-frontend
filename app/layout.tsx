@@ -2,7 +2,6 @@ import "@/styles/globals.css";
 import { Metadata } from "next";
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
-import { Providers } from "./providers";
 import clsx from "clsx";
 
 export const metadata: Metadata = {
@@ -36,7 +35,7 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
-        <Providers>{children}</Providers>
+        {children}
       </body>
     </html>
   );

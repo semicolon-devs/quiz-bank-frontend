@@ -49,8 +49,9 @@ export default function PaperQuestionPage({
       axios(axiosConfig)
         .then((response) => {
           setQuestion(response.data.question);
-          response.data.answer?.answer &&
+          if (response.data.answer?.answer) {
             setSubmittedAnswers(response.data.answer.answer);
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -61,7 +62,9 @@ export default function PaperQuestionPage({
     };
 
     getQuestion();
-  }, []);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params]);
 
   function setSubmittedAnswers(submittedAnswers: number[]) {
     for (let i = 0; i < answersSelected.length; i++) {

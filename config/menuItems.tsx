@@ -11,6 +11,7 @@ import {
   ManageUsersIcon,
   SubscriptionIcon,
   ProfileIcon,
+  EditIcon
 } from "@/components/icons";
 
 export const menuItems = (): MenuItems[] => {
@@ -28,8 +29,20 @@ export const menuItems = (): MenuItems[] => {
       users: [UserRole.ADMIN, UserRole.MODERATOR],
     },
     {
-      name: "papers",
+      name: "quiz",
       path: UrlSlugType.PAPERS,
+      icon: <ManagePapersIcon />,
+      users: [UserRole.USER],
+    },
+    {
+      name: "pdf-papers",
+      path: UrlSlugType.PDF_PAPERS,
+      icon: <ManagePapersIcon />,
+      users: [UserRole.USER],
+    },
+    {
+      name: "notes",
+      path: UrlSlugType.NOTES,
       icon: <ManagePapersIcon />,
       users: [UserRole.USER],
     },
@@ -52,28 +65,46 @@ export const menuItems = (): MenuItems[] => {
       users: [UserRole.ADMIN, UserRole.MODERATOR],
     },
     {
-      name: "manage users",
+      name: "add pdf papers",
+      path: UrlSlugType.ADD_PDF_PAPERS,
+      icon: <AddQuestionIcon />,
+      users: [UserRole.ADMIN, UserRole.MODERATOR],
+    },
+    {
+      name: "add notes",
+      path: UrlSlugType.ADD_NOTES,
+      icon: <AddQuestionIcon />,
+      users: [UserRole.ADMIN, UserRole.MODERATOR],
+    },
+    {
+      name: "manage lms users",
       path: UrlSlugType.MANAGE_USERS,
       icon: <ManageUsersIcon />,
       users: [UserRole.ADMIN],
     },
     {
-      name: "subscriptions",
-      path: UrlSlugType.SUBSCRIPTIONS,
+      name: "lms settings",
+      path: UrlSlugType.LMS_SETTINGS,
       icon: <SubscriptionIcon />,
       users: [UserRole.ADMIN],
     },
-    {
-      name: "profile",
-      path: UrlSlugType.PROFILE,
-      icon: <ProfileIcon />,
-      users: [UserRole.ADMIN, UserRole.MODERATOR, UserRole.USER],
-    },
-    {
-      name: "payment details",
-      path: UrlSlugType.PAYMENT_DETAILS,
-      icon: <ProfileIcon />,
-      users: [UserRole.USER],
-    },
+    // {
+    //   name: "subscriptions",
+    //   path: UrlSlugType.SUBSCRIPTIONS,
+    //   icon: <SubscriptionIcon />,
+    //   users: [UserRole.ADMIN],
+    // },
+    // {
+    //   name: "profile",
+    //   path: UrlSlugType.PROFILE,
+    //   icon: <ProfileIcon />,
+    //   users: [UserRole.ADMIN, UserRole.MODERATOR, UserRole.USER],
+    // },
+    // {
+    //   name: "payment details",
+    //   path: UrlSlugType.PAYMENT_DETAILS,
+    //   icon: <ProfileIcon />,
+    //   users: [UserRole.USER],
+    // },
   ];
 };
