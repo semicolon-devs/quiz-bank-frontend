@@ -1,8 +1,11 @@
+"use client";
+
 import "@/styles/globals.css";
 import { Metadata } from "next";
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
 import clsx from "clsx";
+import ReduxProvider from "@/store/redux-provider";
 
 export const metadata: Metadata = {
   title: {
@@ -35,7 +38,7 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
-        {children}
+        <ReduxProvider>{children}</ReduxProvider>
       </body>
     </html>
   );

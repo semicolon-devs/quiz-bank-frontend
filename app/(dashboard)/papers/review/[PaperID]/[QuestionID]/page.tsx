@@ -12,8 +12,8 @@ import { CheckIcon, CloseIcon } from "@/components/icons";
 
 import { BASE_URL } from "@/config/apiConfig";
 import { getAccess } from "@/helpers/token";
-import { getUserDetails, getUserID } from "@/helpers/userDetails";
 import { UrlSlugType } from "@/utils/enums/UrlSlug";
+import { RootState, useAppSelector } from "@/store";
 
 interface Question {
   answers: { number: number; answer: string; _id: string }[];
@@ -43,6 +43,8 @@ export default function PaperQuestionPage({
   >([]);
 
   const router = useRouter();
+
+  const { userDetails } = useAppSelector((state: RootState) => state.auth);
 
   useEffect(() => {
     const getQuestion = () => {
@@ -91,7 +93,7 @@ export default function PaperQuestionPage({
     };
 
     const getQuestionBlockSubmitted = () => {
-      const userID = getUserDetails()?._id;
+      const userID = userDetails?._id;
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}answers/answers-status/${userID}/${params.PaperID}`,

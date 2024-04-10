@@ -1,7 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { getUserDetails } from "@/helpers/userDetails";
+
+import { RootState, useAppSelector } from "@/store";
+
 import { UserRole } from "@/utils/enums";
 
 export default function DashboardHomeLayout({
@@ -13,10 +15,10 @@ export default function DashboardHomeLayout({
 }) {
   const [role, setRole] = useState<UserRole | undefined>(undefined);
 
+  const { userDetails } = useAppSelector((state: RootState) => state.auth);
+
   useEffect(() => {
     const getHighestRole = (): UserRole => {
-      const userDetails = getUserDetails();
-
       if (userDetails?.roles.includes(UserRole.ADMIN)) {
         return UserRole.ADMIN;
       } else if (userDetails?.roles.includes(UserRole.MODERATOR)) {
@@ -27,7 +29,7 @@ export default function DashboardHomeLayout({
     };
 
     setRole(getHighestRole());
-  }, []);
+  }, [userDetails]);
 
   return student;
   // return role === UserRole.ADMIN ? admin : student;
