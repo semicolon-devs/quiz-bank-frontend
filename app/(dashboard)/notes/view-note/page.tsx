@@ -2,7 +2,6 @@
 
 import SectionTitle from "@/components/sectionTitle";
 import { useSearchParams } from "next/navigation";
-import styles from "./styles.module.css";
 
 export default function NotesPage() {
   const params = useSearchParams();
