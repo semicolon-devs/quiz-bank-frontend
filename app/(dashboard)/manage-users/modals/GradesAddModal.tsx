@@ -222,7 +222,7 @@ const GradesModal = (props: any) => {
       <div className="" onClick={openModal}>
         <button className={table().featuresButton()}>
           <GradesIcon classes={"w-4 h-4 text-white"} />
-          <p className="">Manage Grades</p>
+          <p className="">Add Grades</p>
         </button>
       </div>
 
