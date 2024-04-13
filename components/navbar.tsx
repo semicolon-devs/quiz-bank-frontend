@@ -18,6 +18,7 @@ import { RootState, useAppDispatch, useAppSelector } from "@/store";
 import { fetchUserDetails } from "@/store/authSlice";
 import Logo from "@/public/smit_logo.webp";
 import Image from "next/image";
+import Avatar from "@mui/material/Avatar";
 
 const drawerWidth = 240;
 
@@ -74,23 +75,36 @@ export const Navbar = ({ open, handleDrawerOpen }: NavbarProps) => {
   }, [userDetails]);
 
   return (
-    <AppBar position="fixed" open={open}>
-      <Toolbar>
-        <IconButton
-          color="inherit"
-          aria-label="open drawer"
-          onClick={handleDrawerOpen}
-          edge="start"
-          sx={{
-            marginRight: 5,
-            ...(open && { display: "none" }),
-          }}
-        >
-          <MenuIcon />
+    <AppBar
+      position="fixed"
+      open={open}
+      color="inherit"
+      sx={{
+        bgcolor: "theme.palette.background.default",
+        boxShadow: "none",
+      }}
+    >
+      <Toolbar sx={{ justifyContent: "space-between" }}>
+        <Box sx={{ flexGrow: 0 }} display={"flex"} alignItems={"center"}>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            edge="start"
+            sx={{
+              marginRight: 5,
+              ...(open && { display: "none" }),
+            }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" noWrap component="div">
+            Mini variant drawer
+          </Typography>
+        </Box>
+        <IconButton sx={{ p: 0 }}>
+          <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
         </IconButton>
-        <Typography variant="h6" noWrap component="div">
-          Mini variant drawer
-        </Typography>
       </Toolbar>
     </AppBar>
     // <nav className="max-h-20 h-20 flex w-full bg-white justify-between items-center px-5 py-1">
