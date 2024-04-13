@@ -6,20 +6,18 @@ import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { Transition } from "@headlessui/react";
 import clsx from "clsx";
-
+import SemicolonDevs from "@/public/devs.png";
 import { LogoutIcon, MenuIcon } from "./icons";
+import Image from "next/image";
 
 import { menuItems } from "@/config/menuItems";
 
-import {
-  getUserDetails,
-  getUser,
-  clearUserDetails,
-} from "@/helpers/userDetails";
 import { clearAuthToken } from "@/helpers/token";
 import { MenuItems, UserDetails } from "@/types";
 import { UserRole } from "@/utils/enums";
 import { UrlSlugType } from "@/utils/enums/UrlSlug";
+import { RootState, useAppDispatch, useAppSelector } from "@/store";
+import { clearUserDetails } from "@/store/authSlice";
 
 type Props = {};
 
@@ -27,15 +25,10 @@ export const Sidebar = (props: Props) => {
   const pathname = usePathname();
   const router = useRouter();
 
-  const [userDetails, setUserDetails] = useState<UserDetails | null>();
   const [role, setRole] = useState<UserRole>();
   const [isSidebarExpanded, setIsSidebarExpanded] = useState<boolean>(false);
 
-  useEffect(() => {
-    getUser();
-
-    setUserDetails(getUserDetails());
-  }, []);
+  const { userDetails } = useAppSelector((state: RootState) => state.auth);
 
   useEffect(() => {
     const getHighestRole = (): UserRole => {
@@ -101,6 +94,7 @@ export const Sidebar = (props: Props) => {
             .map((item) => renderLink(item))}
         </div>
       </div>
+
       <div
         className={`cursor-pointer px-5 flex gap-5 items-center py-2 mb-1 ${
           isSidebarExpanded ? "w-64" : "w-[65px]"
@@ -113,14 +107,41 @@ export const Sidebar = (props: Props) => {
       >
         <LogoutIcon />
         {isSidebarExpanded && (
-          <p
-            className={`text-white font-semibold uppercase transition-all duration-700 ease-in-out ${
-              isSidebarExpanded ? "opacity-100" : "opacity-0"
-            }`}
-          >
-            log out
-          </p>
+          <div>
+            <p
+              className={`text-white font-semibold uppercase transition-all duration-700 ease-in-out ${
+                isSidebarExpanded ? "opacity-100" : "opacity-0"
+              }`}
+            >
+              log out
+            </p>
+          </div>
         )}
+      </div>
+      <div
+        style={{ padding: 20 + "px" }}
+        className={`${!isSidebarExpanded ? "hidden" : "block"}`}
+      >
+        <p style={{ fontSize: 12 + "px" }} className="text-white	">
+          Developed By
+          <Image
+            style={{
+              display: "inline-block",
+              width: 20 + "px",
+              marginLeft: 10 + "px",
+            }}
+            alt="SemicolonDevs"
+            src={SemicolonDevs}
+          />
+        </p>
+        <a
+          className="text-white"
+          style={{ fontSize: "15px" }}
+          href="https://semicolondevs.com/"
+          target="_blank"
+        >
+          SemicolonDevs
+        </a>
       </div>
     </div>
   );

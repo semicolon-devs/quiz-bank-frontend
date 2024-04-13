@@ -1,25 +1,27 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-
-import { getUser, getUserDetails } from "@/helpers/userDetails";
-
 import NextLink from "next/link";
 import clsx from "clsx";
 
 import { SearchIcon } from "@/components/icons";
 import { UserRole } from "@/utils/enums";
 import { UserDetails } from "@/types";
+import { RootState, useAppDispatch, useAppSelector } from "@/store";
+import { fetchUserDetails } from "@/store/authSlice";
 import Logo from "@/public/smit_logo.webp";
 import Image from "next/image";
 
 export const Navbar = () => {
-  const [userDetails, setUserDetails] = useState<UserDetails | null>();
+  const dispatch = useAppDispatch();
+
   const [role, setRole] = useState<UserRole>();
 
+  const { userDetails } = useAppSelector((state: RootState) => state.auth);
+
   useEffect(() => {
-    setUserDetails(getUserDetails());
-  }, []);
+    dispatch(fetchUserDetails());
+  }, [dispatch]);
 
   useEffect(() => {
     const getHighestRole = (): UserRole => {
@@ -36,10 +38,10 @@ export const Navbar = () => {
   }, [userDetails]);
 
   return (
-    <nav className="max-h-14 h-14 flex w-full bg-white justify-between items-center px-5 py-1">
+    <nav className="max-h-20 h-20 flex w-full bg-white justify-between items-center px-5 py-1">
       <div className="flex">
-        <Image src={Logo} alt="Logo" height={50} className="p-2" />{" "}
-        {/* Use the Logo component */}
+        <Image src={Logo} alt="Logo" height={60} className="p-5" />{" "}
+        
       </div>
 
       <div className="flex">
