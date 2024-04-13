@@ -94,7 +94,7 @@ export const Sidebar = (props: Props) => {
             .map((item) => renderLink(item))}
         </div>
       </div>
-      
+
       <div
         className={`cursor-pointer px-5 flex gap-5 items-center py-2 mb-1 ${
           isSidebarExpanded ? "w-64" : "w-[65px]"
@@ -108,7 +108,6 @@ export const Sidebar = (props: Props) => {
         <LogoutIcon />
         {isSidebarExpanded && (
           <div>
-
             <p
               className={`text-white font-semibold uppercase transition-all duration-700 ease-in-out ${
                 isSidebarExpanded ? "opacity-100" : "opacity-0"
@@ -118,34 +117,32 @@ export const Sidebar = (props: Props) => {
             </p>
           </div>
         )}
-
-
-
       </div>
-      <div className="bg-white"
-              style={{ padding: 20 + "px" }}
-              className={`${!isSidebarExpanded ? "hidden" : "block"}`}
-            >
-              <p style={{ fontSize: 12 + "px" }} className="text-white	">
-                Developed By
-                <Image
-                  style={{
-                    display: "inline-block",
-                    width: 20 + "px",
-                    marginLeft: 10 + "px",
-                  }}
-                  alt="SemicolonDevs"
-                  src={SemicolonDevs}
-                />
-              </p>
-              <a
-              className="text-white	"
-                style={{ fontSize: 15 + "px" }}
-                href="https://semicolondevs.com/"
-              >
-                SemicolonDevs
-              </a>
-            </div>
+      <div
+        style={{ padding: 20 + "px" }}
+        className={`${!isSidebarExpanded ? "hidden" : "block"}`}
+      >
+        <p style={{ fontSize: 12 + "px" }} className="text-white	">
+          Developed By
+          <Image
+            style={{
+              display: "inline-block",
+              width: 20 + "px",
+              marginLeft: 10 + "px",
+            }}
+            alt="SemicolonDevs"
+            src={SemicolonDevs}
+          />
+        </p>
+        <a
+          className="text-white"
+          style={{ fontSize: "15px" }}
+          href="https://semicolondevs.com/"
+          target="_blank"
+        >
+          SemicolonDevs
+        </a>
+      </div>
     </div>
   );
 };

@@ -38,10 +38,10 @@ export const Navbar = () => {
   }, [userDetails]);
 
   return (
-    <nav className="max-h-14 h-14 flex w-full bg-white justify-between items-center px-5 py-1">
+    <nav className="max-h-20 h-20 flex w-full bg-white justify-between items-center px-5 py-1">
       <div className="flex">
-        <Image src={Logo} alt="Logo" height={50} className="p-2" />{" "}
-        {/* Use the Logo component */}
+        <Image src={Logo} alt="Logo" height={60} className="p-5" />{" "}
+        
       </div>
 
       <div className="flex">
