@@ -189,7 +189,7 @@ export default function ManageUsersPage() {
                     </div>
 
                     <div className={table().rowItem({ className: "" })}>
-                      <GradesAddModel name={row.name} id={row._id}   />
+                      <GradesAddModel name={row.name} id={row._id} added={userAddedFunc}  />
                       
                     </div>
 
