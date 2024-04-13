@@ -2,17 +2,26 @@ import { UrlSlugType } from "@/utils/enums/UrlSlug";
 import { UserRole } from "@/utils/enums";
 import { MenuItems } from "@/types";
 
-import {
-  HomeIcon,
-  ManagePapersIcon,
-  ManageQuestionsIcon,
-  AddQuestionIcon,
-  ManageCoursesIcon,
-  ManageUsersIcon,
-  SubscriptionIcon,
-  ProfileIcon,
-  EditIcon
-} from "@/components/icons";
+// import {
+//   HomeIcon,
+//   ManagePapersIcon,
+//   ManageQuestionsIcon,
+//   AddQuestionIcon,
+//   ManageCoursesIcon,
+//   ManageUsersIcon,
+//   SubscriptionIcon,
+//   ProfileIcon,
+//   EditIcon
+// } from "@/components/icons";
+import HomeIcon from '@mui/icons-material/Home';
+import FilePresentIcon from '@mui/icons-material/FilePresent';
+import GroupIcon from '@mui/icons-material/Group';
+import PostAddIcon from '@mui/icons-material/PostAdd';
+import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import SettingsIcon from '@mui/icons-material/Settings';
+import NoteAddIcon from '@mui/icons-material/NoteAdd';
+import FolderIcon from '@mui/icons-material/Folder';
 
 export const menuItems = (): MenuItems[] => {
   return [
@@ -25,67 +34,67 @@ export const menuItems = (): MenuItems[] => {
     {
       name: "manage papers",
       path: UrlSlugType.MANAGE_PAPERS,
-      icon: <ManagePapersIcon />,
+      icon: <FolderIcon />,
       users: [UserRole.ADMIN, UserRole.MODERATOR],
     },
     {
       name: "quiz",
       path: UrlSlugType.PAPERS,
-      icon: <ManagePapersIcon />,
+      icon: <FilePresentIcon />,
       users: [UserRole.USER],
     },
     {
       name: "pdf-papers",
       path: UrlSlugType.PDF_PAPERS,
-      icon: <ManagePapersIcon />,
+      icon: <FilePresentIcon />,
       users: [UserRole.USER],
     },
     {
       name: "notes",
       path: UrlSlugType.NOTES,
-      icon: <ManagePapersIcon />,
+      icon: <FilePresentIcon />,
       users: [UserRole.USER],
     },
     {
       name: "manage questions",
       path: UrlSlugType.MANAGE_QUESTIONS,
-      icon: <ManageQuestionsIcon />,
+      icon: <FilePresentIcon />,
       users: [UserRole.ADMIN, UserRole.MODERATOR],
     },
     {
       name: "add question",
       path: UrlSlugType.ADD_QUESTION,
-      icon: <AddQuestionIcon />,
+      icon: <LibraryAddIcon />,
       users: [UserRole.ADMIN, UserRole.MODERATOR],
     },
     {
       name: "manage courses",
       path: UrlSlugType.MANAGE_COURSES,
-      icon: <ManageCoursesIcon />,
+      icon: <DashboardIcon />,
       users: [UserRole.ADMIN, UserRole.MODERATOR],
     },
     {
       name: "add pdf papers",
       path: UrlSlugType.ADD_PDF_PAPERS,
-      icon: <AddQuestionIcon />,
+      icon: <NoteAddIcon />,
       users: [UserRole.ADMIN, UserRole.MODERATOR],
     },
     {
       name: "add notes",
       path: UrlSlugType.ADD_NOTES,
-      icon: <AddQuestionIcon />,
+      icon: <PostAddIcon />,
       users: [UserRole.ADMIN, UserRole.MODERATOR],
     },
     {
       name: "manage lms users",
       path: UrlSlugType.MANAGE_USERS,
-      icon: <ManageUsersIcon />,
+      icon: <GroupIcon />,
       users: [UserRole.ADMIN],
     },
     {
       name: "lms settings",
       path: UrlSlugType.LMS_SETTINGS,
-      icon: <SubscriptionIcon />,
+      icon: <SettingsIcon />,
       users: [UserRole.ADMIN],
     },
     // {
