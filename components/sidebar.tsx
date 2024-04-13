@@ -4,24 +4,25 @@ import React, { useState, useEffect, Fragment } from "react";
 import NextLink from "next/link";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { Transition } from "@headlessui/react";
 import clsx from "clsx";
 import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
 import CssBaseline from "@mui/material/CssBaseline";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
 import Image from "next/image";
 
 import SemicolonDevs from "@/public/devs.png";
 
-import { menuItems } from "@/config/menuItems";
+import {
+  generalMenuItems,
+  lmsMenuItems,
+  qBankMenuItems,
+} from "@/config/menuItems";
 
 import { clearAuthToken } from "@/helpers/token";
 import { MenuItems } from "@/types";
@@ -127,7 +128,7 @@ export const Sidebar = ({ open, handleDrawerClose }: Props) => {
       </DrawerHeader>
       <Divider />
       <List>
-        {menuItems()
+        {generalMenuItems()
           .filter((route: any) => route.users.some((u: string) => u === role))
           .map((item, index) => (
             <ListItem
@@ -150,12 +151,81 @@ export const Sidebar = ({ open, handleDrawerClose }: Props) => {
                     justifyContent: "center",
                   }}
                 >
-                  {/* {index % 2 === 0 ? <InboxIcon /> : <MailIcon />} */}
                   {item.icon}
                 </ListItemIcon>
                 <ListItemText
                   primary={item.name}
-                  sx={{ opacity: open ? 1 : 0 }}
+                  sx={{ opacity: open ? 1 : 0, textTransform: "capitalize" }}
+                />
+              </ListItemButton>
+            </ListItem>
+          ))}
+      </List>
+      <Divider />
+      <List>
+        {qBankMenuItems()
+          .filter((route: any) => route.users.some((u: string) => u === role))
+          .map((item, index) => (
+            <ListItem
+              key={item.path}
+              disablePadding
+              sx={{ display: "block" }}
+              onClick={() => router.push(item.path)}
+            >
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                  }}
+                >
+                  {item.icon}
+                </ListItemIcon>
+                <ListItemText
+                  primary={item.name}
+                  sx={{ opacity: open ? 1 : 0, textTransform: "capitalize" }}
+                />
+              </ListItemButton>
+            </ListItem>
+          ))}
+      </List>
+      <Divider />
+      <List>
+        {lmsMenuItems()
+          .filter((route: any) => route.users.some((u: string) => u === role))
+          .map((item, index) => (
+            <ListItem
+              key={item.path}
+              disablePadding
+              sx={{ display: "block" }}
+              onClick={() => router.push(item.path)}
+            >
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                  }}
+                >
+                  {item.icon}
+                </ListItemIcon>
+                <ListItemText
+                  primary={item.name}
+                  sx={{ opacity: open ? 1 : 0, textTransform: "capitalize" }}
                 />
               </ListItemButton>
             </ListItem>

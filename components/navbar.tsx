@@ -10,6 +10,8 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
+import Avatar from "@mui/material/Avatar";
+import Stack from "@mui/material/Stack";
 
 import { SearchIcon } from "@/components/icons";
 import { UserRole } from "@/utils/enums";
@@ -18,7 +20,7 @@ import { RootState, useAppDispatch, useAppSelector } from "@/store";
 import { fetchUserDetails } from "@/store/authSlice";
 import Logo from "@/public/smit_logo.webp";
 import Image from "next/image";
-import Avatar from "@mui/material/Avatar";
+import Chip from "@mui/material/Chip";
 
 const drawerWidth = 240;
 
@@ -98,13 +100,19 @@ export const Navbar = ({ open, handleDrawerOpen }: NavbarProps) => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Mini variant drawer
-          </Typography>
+          <Typography variant="h6" noWrap component="div"></Typography>
         </Box>
-        <IconButton sx={{ p: 0 }}>
-          <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-        </IconButton>
+        <Box sx={{}} display={"flex"} alignItems={"center"} gap={2}>
+          <Stack spacing={0} >
+            <Typography variant="button" display="block">
+              {userDetails?.firstname} {userDetails?.lastname}
+            </Typography>
+            <Chip label={role} size="small" variant="outlined"/>
+          </Stack>
+          <IconButton sx={{ p: 0 }}>
+            <Avatar alt="Remy Sharp" src="/displayPhoto.jpg" />
+          </IconButton>
+        </Box>
       </Toolbar>
     </AppBar>
     // <nav className="max-h-20 h-20 flex w-full bg-white justify-between items-center px-5 py-1">
