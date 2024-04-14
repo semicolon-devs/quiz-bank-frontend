@@ -27,8 +27,7 @@ const SectionTitle = ({
           <ChevronLeftIcon classes={"h-9 w-9 text-blue-700"} />
         </div>
       )}
-      <h3 className={`text-3xl text-blue-700 font-semibold capitalize`}></h3>
-      <Typography variant="h4" textTransform={'capitalize'} gutterBottom>
+      <Typography variant="h4" textTransform={"capitalize"} gutterBottom>
         {title}
       </Typography>
     </div>
