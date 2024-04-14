@@ -91,3 +91,10 @@ export type PDFPaperDetails = {
   title: string;
   fileId: string;
 };
+
+export type NoteDetails = {
+  _id: string;
+  title: string;
+  fileId: string;
+  subject: string;
+};

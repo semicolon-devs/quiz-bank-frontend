@@ -24,13 +24,13 @@ import { PaperType } from "@/utils/enums";
 import { lmsAddPDFPaperValidation } from "@/schema/lmsAddPDFPaperValidation";
 
 interface FormValues {
-  name: string;
-  driveLink: string;
+  title: string;
+  fileId: string;
 }
 
 const initialValues: FormValues = {
-  name: "",
-  driveLink: "",
+  title: "",
+  fileId: "",
 };
 
 const AddPDFPaperModal = (props :any) => {
@@ -61,8 +61,8 @@ const AddPDFPaperModal = (props :any) => {
         Authorization: `Bearer ${getAccess()}`,
       },
       data: {
-        title: values.name,
-        fileId: getFileIdFromGoogleDriveUrl(values.driveLink),
+        title: values.title,
+        fileId: getFileIdFromGoogleDriveUrl(values.fileId),
       },
     };
     axios(axiosConfig)
@@ -187,17 +187,17 @@ const AddPDFPaperModal = (props :any) => {
                               Paper Name
                             </label>
                             <Field
-                              name="name"
+                              name="title"
                               type="text"
                               className={`${form().input()} ${
-                                errors.name && touched.name
+                                errors.title && touched.title
                                   ? form().labelError()
                                   : ""
                               }`}
                             />
                             <ErrorMessage
                               className={form().errorMessage()}
-                              name="name"
+                              name="title"
                               component="div"
                             />
                           </div>
@@ -207,17 +207,17 @@ const AddPDFPaperModal = (props :any) => {
                               Drive Link
                             </label>
                             <Field
-                              name="driveLink"
+                              name="fileId"
                               type="text"
                               className={`${form().input()} ${
-                                errors.driveLink && touched.driveLink
+                                errors.fileId && touched.fileId
                                   ? form().labelError()
                                   : ""
                               }`}
                             />
                             <ErrorMessage
                               className={form().errorMessage()}
-                              name="driveLink"
+                              name="fileId"
                               component="div"
                             />
                           </div>

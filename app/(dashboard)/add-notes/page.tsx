@@ -17,7 +17,7 @@ import EntriesPerPage from "@/components/pagination/EntriesPerPage";
 import { entriesArray } from "@/components/pagination/entriesArray";
 import SectionTitle from "@/components/sectionTitle";
 import Modal from "@/components/modal";
-import AddPDFPaperModal from "./modals/AddPDFPaperModal";
+import AddNoteModal from "./modals/AddNoteModal";
 import EditPaperModal from "./modals/EditPaperModal";
 
 import { table } from "@/variants/table";
@@ -27,22 +27,45 @@ import { getAccess } from "@/helpers/token";
 import { UrlSlugType } from "@/utils/enums/UrlSlug";
 import { PaperType } from "@/utils/enums";
 
-import { PDFPaperDetails } from "@/types";
+import { NoteDetails } from "@/types";
 
-const headers = ["Paper Name", "Link", "actions"];
+const headers = ["Note Name", "Subject", "Link", "actions"];
 
 export default function ManageUsersPage() {
   const [loading, setLoading] = useState<boolean>(false);
-  const [papersList, setpapersList] = useState<PDFPaperDetails[]>([]);
+  const [papersList, setpapersList] = useState<NoteDetails[]>([]);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [numberOfPages, setNumberOfPages] = useState<number>(1);
   const [tableSearch, setTableSearch] = useState<string>("");
-  const [modalShowPaper, setModalShowPaper] = useState<PDFPaperDetails>();
+  const [modalShowPaper, setModalShowPaper] = useState<NoteDetails>();
   const [pageSize, setPageSize] = useState<number>(entriesArray[1]);
   const [paperAdded, setPaperAdded] = useState<boolean>(false);
-  const [deletePaperV, setDeletePaper] = useState<boolean>(false);
+  const [deleteNoteV, setdeleteNote] = useState<boolean>(false);
 
   const router = useRouter();
+
+  const formatSubjectLabel = (subject: string) => {
+    switch (subject) {
+      case "not_specified":
+        return "Not Specified"
+      case "reading_skills":
+        return "Reading Skills and General Knowledge";
+      case "logical_reasoning":
+        return "Logical Reasoning";
+      case "problem_solving":
+        return "Problem Solving";
+      case "biology":
+        return "Biology";
+      case "chemistry":
+        return "Chemistry";
+      case "physics":
+        return "Physics";
+      case "maths":
+        return "Maths";
+      default:
+        return "Not Specified";
+    }
+  }
 
   const paperAddedFunc = () => {
     setPaperAdded(true);
@@ -55,7 +78,7 @@ export default function ManageUsersPage() {
       setLoading(true);
       const axiosConfig = {
         method: "GET",
-        url: `${BASE_URL}lms/papers`,
+        url: `${BASE_URL}lms/notes`,
         params: {
           page: pageNumber,
           limit: pageSize,
@@ -81,25 +104,26 @@ export default function ManageUsersPage() {
         .finally(() => {
           setLoading(false);
           setPaperAdded(false);
+          setdeleteNote(false);
         });
     };
 
     getPapers();
-  }, [pageNumber, pageSize, paperAdded, deletePaperV]);
+  }, [pageNumber, pageSize, paperAdded, deleteNoteV]);
 
   //delete student
-  const deletePaper = (_id: string) => {
+  const deleteNote = (_id: string) => {
     setLoading(true);
     const axiosConfig = {
       method: "DELETE",
-      url: `${BASE_URL}lms/papers/${_id}`,
+      url: `${BASE_URL}lms/notes/${_id}`,
       headers: {
         Authorization: `Bearer ${getAccess()}`,
       },
     };
     axios(axiosConfig)
       .then((response) => {
-        setDeletePaper(true);
+        setdeleteNote(true);
         // console.log(response);
       })
       .catch((err) => {
@@ -107,28 +131,39 @@ export default function ManageUsersPage() {
       })
       .finally(() => {
         setLoading(false);
-        setDeletePaper(false);
+        setdeleteNote(true);
       });
   };
 
-  const filteredPapers: PDFPaperDetails[] =
+  const filteredPapers: NoteDetails[] =
     papersList &&
     papersList.filter((paper) => {
       return paper.title.includes(tableSearch);
     });
 
-  const generateDirectLink = (fileId : string) => {
-    // Assuming there's a function or API call to generate direct link using fileId
-    // Replace this with your actual implementation
+  const generateDirectLink = (fileId: string) => {
     return `https://drive.google.com/uc?id=${fileId}`;
   };
 
+  const getFileIdFromGoogleDriveUrl = (url: string) => {
+    const regex: RegExp =
+      /(?:https?:\/\/)?(?:drive\.google\.com\/(?:file\/d\/|open\?id=)|docs\.google\.com\/(?:.*\/)?d\/)([\w-]{25,})/;
 
+    // Attempt to match the URL with the regular expression
+    const match: RegExpMatchArray | null = url.match(regex);
 
+    if (match) {
+      // Return the file ID captured in the first capture group
+      return match[1];
+    } else {
+      // Handle invalid or unrecognized URLs
+      return null;
+    }
+  };
   return (
     <div>
       <div className="flex justify-between">
-        <SectionTitle title="Add Weekly Papers" />
+        <SectionTitle title="Add Notes" />
       </div>
       <div className={table().base()}>
         <div className={table().featuresRow({ className: "grid grid-cols-4" })}>
@@ -140,7 +175,7 @@ export default function ManageUsersPage() {
               onChange={(e) => setTableSearch(e.target.value)}
               value={tableSearch}
               className={table().featuresSearchInput()}
-              placeholder="Search Papers"
+              placeholder="Search Notes"
             />
             <div className={table().featuresSearchButton()}>
               <SearchIcon classes={"h-4 w-4 text-white"} />
@@ -151,11 +186,11 @@ export default function ManageUsersPage() {
             setValue={setPageSize}
             array={entriesArray}
           />
-          <AddPDFPaperModal added={paperAddedFunc} />
+          <AddNoteModal added={paperAddedFunc} />
         </div>
         <div
           className={table().headerRow({
-            className: "grid grid-cols-3",
+            className: "grid grid-cols-4",
           })}
         >
           {headers.map((header) => (
@@ -167,11 +202,11 @@ export default function ManageUsersPage() {
         <div className={table().tableContent()}>
           {
             papersList &&
-              filteredPapers.map((row: PDFPaperDetails) => {
+              filteredPapers.map((row: NoteDetails) => {
                 return (
                   <div
                     className={table().tableRow({
-                      className: "grid grid-cols-3",
+                      className: "grid grid-cols-4",
                     })}
                     key={row._id}
                   >
@@ -182,14 +217,25 @@ export default function ManageUsersPage() {
                     >
                       {row.title}
                     </div>
+
+                    <div
+                      className={table().rowItem({
+                        className: "font-medium",
+                      })}
+                    >
+                      {formatSubjectLabel(row.subject)}
+                    </div>
+
                     <div className={table().rowItem({ className: "p-2" })}>
-                      
-                      <button className="bg-green-100 hover:bg-green-200 rounded-md px-4 py-1" 
-                      ><a href={generateDirectLink(generateDirectLink(row.fileId))} target="_blank" rel="noopener noreferrer">
-                       File Download Link
-                    </a>
-                             
-                            </button>
+                      <button className="bg-green-100 hover:bg-green-200 rounded-md px-4 py-1">
+                        <a
+                          href={generateDirectLink(row.fileId)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          File Download Link
+                        </a>
+                      </button>
                     </div>
 
                     <div className={table().rowItem({ className: "gap-3" })}>
@@ -217,7 +263,7 @@ export default function ManageUsersPage() {
                               </p>
                             </button>
                           }
-                          handleSubmit={() => deletePaper(row._id)}
+                          handleSubmit={() => deleteNote(row._id)}
                         >
                           <p className="">
                             Are you sure you want to delete

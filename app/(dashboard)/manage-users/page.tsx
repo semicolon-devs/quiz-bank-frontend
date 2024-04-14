@@ -19,6 +19,8 @@ import SectionTitle from "@/components/sectionTitle";
 import Modal from "@/components/modal";
 import AddPaperModal from "./modals/AddStudentModal";
 import EditPaperModal from "./modals/EditPaperModal";
+import GradesAddModel from "./modals/GradesAddModal";
+import GradesChangeModel from "./modals/GradesChangeModal";
 
 import { table } from "@/variants/table";
 
@@ -29,7 +31,7 @@ import { PaperType } from "@/utils/enums";
 
 import { LMSStdDetails } from "@/types";
 
-const headers = ["Student Name", "Email", "Passowrd", "Actions"];
+const headers = ["Student Name", "Email", "Passowrd", "Add Grades","Change Grades", "Actions"];
 
 export default function ManageUsersPage() {
   const [loading, setLoading] = useState<boolean>(false);
@@ -148,7 +150,7 @@ export default function ManageUsersPage() {
         </div>
         <div
           className={table().headerRow({
-            className: "grid grid-cols-4",
+            className: "grid grid-cols-6",
           })}
         >
           {headers.map((header) => (
@@ -164,7 +166,7 @@ export default function ManageUsersPage() {
                 return (
                   <div
                     className={table().tableRow({
-                      className: "grid grid-cols-4",
+                      className: "grid grid-cols-6",
                     })}
                     key={row.email}
                   >
@@ -186,7 +188,17 @@ export default function ManageUsersPage() {
                       {row.key}
                     </div>
 
-                    <div className={table().rowItem({ className: "gap-3" })}>
+                    <div className={table().rowItem({ className: "" })}>
+                      <GradesAddModel name={row.name} id={row._id} added={userAddedFunc}  />
+                      
+                    </div>
+
+                    <div className={table().rowItem({ className: "" })}>
+                      <GradesChangeModel name={row.name} id={row._id}   />
+                      
+                    </div>
+
+                    <div className={table().rowItem({ className: "" })}>
                       {/* <div
                         className="p-1 cursor-pointer"
                         onClick={() =>
@@ -222,6 +234,8 @@ export default function ManageUsersPage() {
                             from the system?
                           </p>
                         </Modal>
+                        
+
                       </div>
                     </div>
                   </div>

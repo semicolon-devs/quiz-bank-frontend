@@ -105,7 +105,7 @@ export default function PaperDetailsPage({
     getMarks();
     getQuizInfo();
     getQuizTotalQuestions();
-  }, [params]);
+  }, [params, userDetails]);
 
   return (
     <div className="flex flex-col h-full w-full">

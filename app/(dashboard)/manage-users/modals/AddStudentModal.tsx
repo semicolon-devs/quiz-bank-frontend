@@ -27,20 +27,19 @@ interface FormValues {
   name: string;
   email: string;
   password: string;
-  
 }
 
 const initialValues: FormValues = {
   name: "",
-  email:"",
-  password:""
+  email: "",
+  password: "",
 };
 
-const AddStudentModal = (props) => {
+const AddStudentModal = (props: { added: () => void }) => {
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
 
   const addStudent = (values: FormValues) => {
-    console.log("clicked")
+    console.log("clicked");
     const axiosConfig = {
       method: "POST",
       url: `${BASE_URL}lms/auth/register`,
@@ -81,15 +80,14 @@ const AddStudentModal = (props) => {
           alert("No response received from the server");
         } else {
           // Something happened in setting up the request that triggered an Error
-          console.log('Error', error.message);
+          console.log("Error", error.message);
           alert("An error occurred: " + error.message);
         }
       })
       .finally(() => {
         // setLoading(false);
       });
-};
-
+  };
 
   const openModal = () => {
     setIsOpenModal(true);
@@ -208,7 +206,10 @@ const AddStudentModal = (props) => {
                           </div>
 
                           <div className={form().formDiv()}>
-                            <label htmlFor="passowrd" className={form().label()}>
+                            <label
+                              htmlFor="passowrd"
+                              className={form().label()}
+                            >
                               Assign a Password
                             </label>
                             <Field
@@ -227,11 +228,7 @@ const AddStudentModal = (props) => {
                             />
                           </div>
 
-                          <button
-                            type="submit"
-                            
-                            className={form().button()}
-                          >
+                          <button type="submit" className={form().button()}>
                             <p className="">Add Student</p>
                           </button>
                         </form>

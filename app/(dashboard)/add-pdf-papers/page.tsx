@@ -81,6 +81,7 @@ export default function ManageUsersPage() {
         .finally(() => {
           setLoading(false);
           setPaperAdded(false);
+          setDeletePaper(false)
         });
     };
 
@@ -107,7 +108,7 @@ export default function ManageUsersPage() {
       })
       .finally(() => {
         setLoading(false);
-        setDeletePaper(false);
+        setDeletePaper(true);
       });
   };
 
@@ -124,7 +125,21 @@ export default function ManageUsersPage() {
   };
 
 
+  const getFileIdFromGoogleDriveUrl = (url: string) => {
+    const regex: RegExp =
+      /(?:https?:\/\/)?(?:drive\.google\.com\/(?:file\/d\/|open\?id=)|docs\.google\.com\/(?:.*\/)?d\/)([\w-]{25,})/;
 
+    // Attempt to match the URL with the regular expression
+    const match: RegExpMatchArray | null = url.match(regex);
+
+    if (match) {
+      // Return the file ID captured in the first capture group
+      return match[1];
+    } else {
+      // Handle invalid or unrecognized URLs
+      return null;
+    }
+  };
   return (
     <div>
       <div className="flex justify-between">
@@ -185,8 +200,9 @@ export default function ManageUsersPage() {
                     <div className={table().rowItem({ className: "p-2" })}>
                       
                       <button className="bg-green-100 hover:bg-green-200 rounded-md px-4 py-1" 
-                      ><a href={generateDirectLink(generateDirectLink(row.fileId))} target="_blank" rel="noopener noreferrer">
+                      ><a href={generateDirectLink(row.fileId)} target="_blank" rel="noopener noreferrer">
                        File Download Link
+                      
                     </a>
                              
                             </button>

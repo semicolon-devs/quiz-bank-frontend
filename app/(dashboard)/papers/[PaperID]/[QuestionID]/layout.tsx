@@ -117,7 +117,7 @@ export default function PaperTemplate({
 
     getQPaperInfo();
     getQuestionBlocks();
-  }, [params, router]);
+  }, [params, router, userDetails]);
 
   const renderer = ({
     hours,

@@ -1,6 +1,10 @@
 "use client";
 
 import "@/styles/globals.css";
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
+import { ThemeProvider } from "@mui/material/styles";
+import theme from "./theme";
+
 import { Metadata } from "next";
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
@@ -38,7 +42,11 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
-        <ReduxProvider>{children}</ReduxProvider>
+        <ReduxProvider>
+          <AppRouterCacheProvider>
+            <ThemeProvider theme={theme}>{children}</ThemeProvider>
+          </AppRouterCacheProvider>
+        </ReduxProvider>
       </body>
     </html>
   );

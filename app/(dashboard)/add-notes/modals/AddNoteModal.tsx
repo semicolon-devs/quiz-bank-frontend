@@ -24,16 +24,31 @@ import { PaperType } from "@/utils/enums";
 import { lmsAddPDFPaperValidation } from "@/schema/lmsAddPDFPaperValidation";
 
 interface FormValues {
-  name: string;
-  driveLink: string;
+  title: string;
+  subject: string;
+  fileId: string;
 }
 
+
+const subjectOptions = [
+  { value: "not_specified", label: "Not Specified" },
+  { value: "reading_skills", label: "Reading Skills and General Knowledge" },
+  { value: "logical_reasoning", label: "Logical Reasoning" },
+  { value: "problem_solving", label: "Problem Solving" },
+  { value: "biology", label: "Biology" },
+  { value: "chemistry", label: "Chemistry" },
+  { value: "physics", label: "Physics" },
+  { value: "maths", label: "Maths" },
+];
+
 const initialValues: FormValues = {
-  name: "",
-  driveLink: "",
+  title: "",
+  subject: subjectOptions[0].label,
+  fileId: "",
 };
 
-const AddPDFPaperModal = (props :any) => {
+
+const AddNoteModal = (props: any) => {
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
 
   const getFileIdFromGoogleDriveUrl = (url: string) => {
@@ -52,22 +67,24 @@ const AddPDFPaperModal = (props :any) => {
     }
   };
 
+  
+
   const AddPDFPaper = (values: FormValues) => {
-    
     const axiosConfig = {
       method: "POST",
-      url: `${BASE_URL}lms/papers`,
+      url: `${BASE_URL}lms/notes`,
       headers: {
         Authorization: `Bearer ${getAccess()}`,
       },
       data: {
-        title: values.name,
-        fileId: getFileIdFromGoogleDriveUrl(values.driveLink),
+        title: values.title,
+        subject: values.subject,
+        fileId: getFileIdFromGoogleDriveUrl(values.fileId),
       },
     };
     axios(axiosConfig)
       .then((response) => {
-        console.log(response);
+        console.log(axiosConfig.data);
         if (response.status === 201) {
           props.added();
           closeModal();
@@ -83,12 +100,10 @@ const AddPDFPaperModal = (props :any) => {
           console.log(error.response.status);
           console.log(error.response.headers);
           if (error.response.status === 500) {
-            alert("Duplicate Papers found!!");
-          } else if(error.response.status === 401){
-            alert("Enter Valid Google Drive Link");
-          } 
-          
-          else {
+            alert("Duplicates found!!");
+          } else if (error.response.status === 401) {
+            alert("Duplicates found!!");
+          } else {
             alert("Error: " + error.response.status);
           }
         } else if (error.request) {
@@ -119,7 +134,7 @@ const AddPDFPaperModal = (props :any) => {
       <div className="" onClick={openModal}>
         <button className={table().featuresButton()}>
           <PlusIcon classes={"w-4 h-4 text-white"} />
-          <p className="">add PDF paper</p>
+          <p className="">add Notes</p>
         </button>
       </div>
 
@@ -155,7 +170,7 @@ const AddPDFPaperModal = (props :any) => {
                     as="h3"
                     className="text-xl font-semibold leading-6"
                   >
-                    Add New Weekly Papers to LMS
+                    Add New Notes to LMS
                   </Dialog.Title>
 
                   <div
@@ -184,20 +199,20 @@ const AddPDFPaperModal = (props :any) => {
                         >
                           <div className={form().formDiv()}>
                             <label htmlFor="name" className={form().label()}>
-                              Paper Name
+                              Note Name
                             </label>
                             <Field
-                              name="name"
+                              name="title"
                               type="text"
                               className={`${form().input()} ${
-                                errors.name && touched.name
+                                errors.title && touched.title
                                   ? form().labelError()
                                   : ""
                               }`}
                             />
                             <ErrorMessage
                               className={form().errorMessage()}
-                              name="name"
+                              name="title"
                               component="div"
                             />
                           </div>
@@ -207,17 +222,43 @@ const AddPDFPaperModal = (props :any) => {
                               Drive Link
                             </label>
                             <Field
-                              name="driveLink"
+                              name="fileId"
                               type="text"
                               className={`${form().input()} ${
-                                errors.driveLink && touched.driveLink
+                                errors.fileId && touched.fileId
                                   ? form().labelError()
                                   : ""
                               }`}
                             />
                             <ErrorMessage
                               className={form().errorMessage()}
-                              name="driveLink"
+                              name="fileId"
+                              component="div"
+                            />
+                          </div>
+                          <div className={form().formDiv()}>
+                            <label htmlFor="subject" className={form().label()}>
+                              Subject
+                            </label>
+                            <Field
+                              name="subject"
+                              as="select"
+                              className={`${form().input()} ${
+                                errors.subject && touched.subject
+                                  ? form().labelError()
+                                  : ""
+                              }`}
+                            >
+                              {/* Map through subject options to create dropdown */}
+                              {subjectOptions.map((option) => (
+                                <option key={option.value} value={option.value}>
+                                  {option.label}
+                                </option>
+                              ))}
+                            </Field>
+                            <ErrorMessage
+                              className={form().errorMessage()}
+                              name="subject"
                               component="div"
                             />
                           </div>
@@ -239,4 +280,4 @@ const AddPDFPaperModal = (props :any) => {
   );
 };
 
-export default AddPDFPaperModal;
+export default AddNoteModal;
