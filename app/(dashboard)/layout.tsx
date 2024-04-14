@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useState } from "react";
 
@@ -9,7 +9,7 @@ import { Sidebar } from "@/components/sidebar";
 
 const drawerWidth = 240;
 
-export default function SigninLayout({
+export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -26,13 +26,11 @@ export default function SigninLayout({
 
   return (
     <div className="flex h-screen w-screen">
+      <Toaster position="top-center" />
       <Sidebar open={open} handleDrawerClose={handleDrawerClose} />
       <div className="relative flex flex-col w-full">
         <Navbar open={open} handleDrawerOpen={handleDrawerOpen} />
-        <main className="p-5 overflow-y-auto h-full mt-16">
-          <Toaster position="top-center" />
-          {children}
-        </main>
+        <div className="p-5 overflow-y-auto h-full mt-16">{children}</div>
       </div>
     </div>
   );

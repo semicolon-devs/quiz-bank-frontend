@@ -84,7 +84,7 @@ export default function Page({ params }: { params: { id: string } }) {
         >
           <ChevronLeftIcon classes={"h-8 w-8 text-blue-600"} />
         </div>
-        <SectionTitle title={"Question Preview"} noMarginBottom />
+        <SectionTitle title={"Question Preview"} />
       </div>
       {question && (
         <div dangerouslySetInnerHTML={{ __html: question.question }} />

@@ -217,7 +217,7 @@ const ManagePaperQuestionsPage = ({
             ? `${paper?.name} : ${paper?.paperId}`
             : "Loading..."
         }
-        backBtn
+        
       />
       <SectionSubTitle
         title={`Added questions : count ${paper?.questions.length}`}
