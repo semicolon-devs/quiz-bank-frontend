@@ -53,7 +53,7 @@ export default function ManageUsersPage() {
 
   //get studnets
   useEffect(() => {
-    const getPapers = async () => {
+    const getLMSUsers = async () => {
       setLoading(true);
       const axiosConfig = {
         method: "GET",
@@ -86,7 +86,7 @@ export default function ManageUsersPage() {
         });
     };
 
-    getPapers();
+    getLMSUsers();
   // }, [pageNumber, pageSize, userAdded ,deleteUser]);
   }, [ userAdded ,deleteUser]);
 
@@ -95,7 +95,7 @@ export default function ManageUsersPage() {
     setLoading(true);
     const axiosConfig = {
       method: "DELETE",
-      url: `${BASE_URL}/auth/${_id}`,
+      url: `${BASE_URL}auth/${_id}`,
       headers: {
         Authorization: `Bearer ${getAccess()}`,
       },
