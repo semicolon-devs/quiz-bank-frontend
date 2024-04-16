@@ -65,7 +65,7 @@ export default function LoginPage() {
     setLoading(true);
     const axiosConfig = {
       method: "POST",
-      url: `${BASE_URL}lms/auth/login`,
+      url: `${BASE_URL}/auth/login`,
       data: {
         email: values.email,
         password: values.password,

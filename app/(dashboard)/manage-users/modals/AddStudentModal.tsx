@@ -42,7 +42,7 @@ const AddStudentModal = (props: { added: () => void }) => {
     console.log("clicked");
     const axiosConfig = {
       method: "POST",
-      url: `${BASE_URL}lms/auth/register`,
+      url: `${BASE_URL}/auth/register-lms-user`,
       headers: {
         Authorization: `Bearer ${getAccess()}`,
       },
