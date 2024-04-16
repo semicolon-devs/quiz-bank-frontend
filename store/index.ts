@@ -3,22 +3,17 @@ import { useDispatch, TypedUseSelectorHook, useSelector } from "react-redux";
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
-import { authReducer } from "./authSlice";
+import rootReducer from "./reducer";
 
-const authPersistConfig = {
-  key: "auth",
+const persistConfig = {
+  key: "root",
   storage: storage,
-  whitelist: ["authState"],
 };
 
-const rootReducer = combineReducers({
-  auth: persistReducer(authPersistConfig, authReducer),
-});
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
-  reducer: rootReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({ serializableCheck: false }),
+  reducer: persistedReducer,
 });
 
 export type RootState = ReturnType<typeof store.getState>;
