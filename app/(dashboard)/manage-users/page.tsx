@@ -36,11 +36,11 @@ const headers = ["Student Name", "Email", "Passowrd", "Add Grades","Change Grade
 export default function ManageUsersPage() {
   const [loading, setLoading] = useState<boolean>(false);
   const [studentList, setStudentList] = useState<UserDetails[]>([]);
-  // const [pageNumber, setPageNumber] = useState<number>(1);
-  // const [numberOfPages, setNumberOfPages] = useState<number>(1);
+   const [pageNumber, setPageNumber] = useState<number>(1);
+  const [numberOfPages, setNumberOfPages] = useState<number>(1);
   const [tableSearch, setTableSearch] = useState<string>("");
   const [modalShowPaper, setModalShowPaper] = useState<UserDetails>();
-  // const [pageSize, setPageSize] = useState<number>(entriesArray[1]);
+   const [pageSize, setPageSize] = useState<number>(entriesArray[1]);
   const [deleteUser, setDeleteUser] = useState<boolean>(false);
   const [userAdded, setUserAdded] = useState<boolean>(false);
 
@@ -53,7 +53,7 @@ export default function ManageUsersPage() {
 
   //get studnets
   useEffect(() => {
-    const getPapers = async () => {
+    const getLMSUsers = async () => {
       setLoading(true);
       const axiosConfig = {
         method: "GET",
@@ -86,16 +86,16 @@ export default function ManageUsersPage() {
         });
     };
 
-    getPapers();
+    getLMSUsers();
   // }, [pageNumber, pageSize, userAdded ,deleteUser]);
-  }, []);
+  }, [ userAdded ,deleteUser]);
 
   //delete student
   const deleteStudent = (_id: string) => {
     setLoading(true);
     const axiosConfig = {
       method: "DELETE",
-      url: `${BASE_URL}/auth/${_id}`,
+      url: `${BASE_URL}auth/${_id}`,
       headers: {
         Authorization: `Bearer ${getAccess()}`,
       },

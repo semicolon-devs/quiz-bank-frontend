@@ -97,13 +97,13 @@ const GradesModal = (props: any) => {
     getPapers();
   }, [activePaper, pageNumber]);
 
-
+//meka hdenna ona
   //get grades by user and paper
   useEffect(() => {
-    const getSettings = async () => {
+    const getMarksByPaper = async () => {
       const axiosConfig = {
         method: "GET",
-        url: `${BASE_URL}lms/grades/`,
+        url: `${BASE_URL}lms/marks/`,
         params: {
             studentId: props.id,
             paperId: activePaper,
@@ -123,7 +123,7 @@ const GradesModal = (props: any) => {
         .finally(() => {});
     };
 
-    getSettings();
+    getMarksByPaper();
   }, [activePaper, props.id]);
 
   useEffect(() => {
