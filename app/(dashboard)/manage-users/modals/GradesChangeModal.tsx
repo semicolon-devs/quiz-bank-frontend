@@ -24,15 +24,15 @@ import { PaperType } from "@/utils/enums";
 
 interface FormValues {
   paperTitle: string;
-  readingSkills: number;
-  logicAndProbSol: number;
+  reading: number;
+  logicalAndProblemSolving: number;
   biology: number;
   chemistry: number;
   physicsAndMaths: number;
-  didntAns: number;
-  wrongAns: number;
-  correctAns: number;
-  lostMarks: number;
+  didNotAnswer: number;
+  wrongAnswer: number;
+  corrcetAnswer: number;
+  lostmarks: number;
   total: number;
 }
 
@@ -42,6 +42,23 @@ interface papers {
   fileId: string;
 }
 
+interface UserMark {
+  _id: string;
+  paperId: string;
+  userId: string;
+  reading: number;
+  logicalAndProblemSolving: number;
+  biology: number;
+  chemistry: number;
+  physicsAndMaths: number;
+  didNotAnswer: number;
+  wrongAnswer: number;
+  corrcetAnswer: number;
+  lostmarks: number;
+  total: number;
+  __v: number;
+}
+
 const GradesModal = (props: any) => {
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
   const [grades, setGrades] = useState<FormValues>();
@@ -49,19 +66,59 @@ const GradesModal = (props: any) => {
   const [activePaper, setActivePaper] = useState<string>("");
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [numberOfPages, setNumberOfPages] = useState<number>(1);
+  const [userMarks, setUserMarks] = useState<UserMark[]>();
   const [initialValues, setInitialValues] = useState<FormValues>({
-    paperTitle: "",
-    readingSkills: 0,
-    logicAndProbSol: 0,
+    paperTitle: activePaper,
+    reading: 0,
+    logicalAndProblemSolving: 0,
     biology: 0,
     chemistry: 0,
     physicsAndMaths: 0,
-    didntAns: 0,
-    wrongAns: 0,
-    correctAns: 0,
-    lostMarks: 0,
+    didNotAnswer: 0,
+    wrongAnswer: 0,
+    corrcetAnswer: 0,
+    lostmarks: 0,
     total: 0,
   });
+
+  const filterPapersByUserMarks = () => {
+    if (!papers || !userMarks) return [];
+    // Extract paper IDs from user marks
+    const markedPaperIds = userMarks.map(mark => mark.paperId);
+    // Filter papers based on whether their ID is in markedPaperIds
+    return papers.filter(paper => markedPaperIds.includes(paper._id));
+  };
+  
+
+  //get user's All marks
+  useEffect(() => {
+    const getUserMarks = async () => {
+      const axiosConfig = {
+        method: "GET",
+        url: `${BASE_URL}lms/marks/${props.id}`,
+        headers: {
+          Authorization: `Bearer ${getAccess()}`,
+        },
+      };
+      axios(axiosConfig)
+        .then((response) => {
+          console.log(response.data);
+          setUserMarks(response.data);
+          setNumberOfPages(
+            Math.ceil(
+              response?.data?.pagination?.totalPapers /
+                response?.data?.pagination?.limit
+            )
+          );
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {});
+    };
+
+    getUserMarks();
+  }, [isOpenModal, props.id]);
 
   //get papers
   useEffect(() => {
@@ -79,8 +136,10 @@ const GradesModal = (props: any) => {
       };
       axios(axiosConfig)
         .then((response) => {
-          console.log(response.data);
+          
+          console.log("Papers" + response.data);
           setPapers(response.data);
+          setActivePaper(response.data[0]._id)
           setNumberOfPages(
             Math.ceil(
               response?.data?.pagination?.totalPapers /
@@ -95,26 +154,25 @@ const GradesModal = (props: any) => {
     };
 
     getPapers();
-  }, [activePaper, pageNumber]);
+  }, []);
 
-//meka hdenna ona
   //get grades by user and paper
   useEffect(() => {
-    const getMarksByPaper = async () => {
+    const getSettings = async () => {
       const axiosConfig = {
         method: "GET",
-        url: `${BASE_URL}lms/marks/`,
-        params: {
-            studentId: props.id,
-            paperId: activePaper,
-          },
+        url: `${BASE_URL}lms/marks/${props.id}/${activePaper}`,
+        
         headers: {
           Authorization: `Bearer ${getAccess()}`,
         },
       };
       axios(axiosConfig)
         .then((response) => {
+          console.log("Marks");
+          console.log(response.data)
           setGrades(response.data);
+          console.log(grades)
         })
         .catch((err) => {
           console.log("Called");
@@ -123,59 +181,59 @@ const GradesModal = (props: any) => {
         .finally(() => {});
     };
 
-    getMarksByPaper();
+    getSettings();
   }, [activePaper, props.id]);
 
   useEffect(() => {
-    // Check if grades is defined before updating initial values
-    if (grades) {
-      setInitialValues((prevValues) => ({
-        ...prevValues,
-        readingSkills: grades?.readingSkills || prevValues.readingSkills,
-        logicAndProbSol: grades?.logicAndProbSol || prevValues.logicAndProbSol,
-        biology: grades?.biology || prevValues.biology,
-        chemistry: grades?.chemistry || prevValues.chemistry,
-        physicsAndMaths: grades?.physicsAndMaths || prevValues.physicsAndMaths,
-        didntAns: grades?.didntAns || prevValues.didntAns,
-        wrongAns: grades?.wrongAns || prevValues.wrongAns,
-        correctAns: grades?.correctAns || prevValues.correctAns,
-        lostMarks: grades?.lostMarks || prevValues.lostMarks,
-        total: grades?.total || prevValues.total,
-      }));
+    if (grades && grades.length > 0) {
+      const grade = grades[0]; // Assuming you only need the first element
+      setInitialValues({
+        paperTitle: activePaper,
+        reading: grade.reading || 0,
+        logicalAndProblemSolving: grade.logicalAndProblemSolving || 0,
+        biology: grade.biology || 0,
+        chemistry: grade.chemistry || 0,
+        physicsAndMaths: grade.physicsAndMaths || 0,
+        didNotAnswer: grade.didNotAnswer || 0,
+        wrongAnswer: grade.wrongAnswer || 0,
+        corrcetAnswer: grade.corrcetAnswer || 0,
+        lostmarks: grade.lostmarks || 0,
+        total: grade.total || 0,
+      });
     }
   }, [grades]);
 
-  //change grades
-  const changeGrades = (values: FormValues) => {
-    
+  //change Marks
+  const changeMarks = (values: FormValues) => {
+    console.log(values);
     const axiosConfig = {
-      method: "POST",
-      url: `${BASE_URL}lms/grades/`,
-      params: {
-        studentId: props.id,
-        paperId: activePaper,
-      },
+      method: "PATCH",
+      url: `${BASE_URL}lms/marks/${props.id}/${activePaper}`,
+      // params: {
+      //   studentId: props.id,
+      //   paperId: activePaper,
+      // },
       headers: {
         Authorization: `Bearer ${getAccess()}`,
       },
       data: {
-        paperTitle: values.paperTitle,
-        readingSkills: values.readingSkills,
-        logicAndProbSol: values.logicAndProbSol,
+        
+        reading: values.reading,
+        logicalAndProblemSolving: values.logicalAndProblemSolving,
         biology: values.biology,
         chemistry: values.chemistry,
         physicsAndMaths: values.physicsAndMaths,
-        didntAns: values.didntAns,
-        wrongAns: values.wrongAns,
-        correctAns: values.correctAns,
-        lostMarks: values.lostMarks,
+        didNotAnswer: values.didNotAnswer,
+        wrongAnswer: values.wrongAnswer,
+        corrcetAnswer: values.corrcetAnswer,
+        lostmarks: values.lostmarks,
         total: values.total,
       },
     };
     axios(axiosConfig)
       .then((response) => {
         console.log(response);
-        if (response.status === 201) {
+        if (response.status === 200) {
           props.added();
           closeModal();
         } else {
@@ -222,7 +280,7 @@ const GradesModal = (props: any) => {
       <div className="" onClick={openModal}>
         <button className={table().featuresButton()}>
           <GradesIcon classes={"w-4 h-4 text-white"} />
-          <p className="">Change Grades</p>
+          <p className="">Manage Grades</p>
         </button>
       </div>
 
@@ -272,7 +330,7 @@ const GradesModal = (props: any) => {
                     <Formik
                       initialValues={initialValues}
                       enableReinitialize
-                      onSubmit={changeGrades}
+                      onSubmit={changeMarks}
                     >
                       {({
                         isSubmitting,
@@ -286,86 +344,86 @@ const GradesModal = (props: any) => {
                           className={form().innerForm()}
                         >
                           <div className="bg-red-200 rounded p-2">
-                          <div className={form().formDiv()}>
-                            <label
-                              htmlFor="paperTitle"
-                              className={form().label()}
-                            >
-                              Select Paper
-                            </label>
-                            <Field
-                              name="paperTitle"
-                              as="select"
-                              value={activePaper}
-                              onChange={(e: any) => {
-                                console.log("Selected value:", e.target.value);
-                                setActivePaper(e.target.value);
-                              }}
-                              className={`${form().input()} ${
-                                errors.paperTitle && touched.paperTitle
-                                  ? form().labelError()
-                                  : ""
-                              }`}
-                            >
-                              {/* Map through subject options to create dropdown */}
-                              {papers &&
-                                papers.map((option) => (
+                            <div className={form().formDiv()}>
+                              <label
+                                htmlFor="paperTitle"
+                                className={form().label()}
+                              >
+                                Select Paper
+                              </label>
+                              <Field
+                                name="paperTitle"
+                                as="select"
+                                value={activePaper}
+                                onChange={(e: any) => {
+                                  console.log(
+                                    "Selected value:",
+                                    e.target.value
+                                  );
+                                  setActivePaper(e.target.value);
+                                }}
+                                className={`${form().input()} ${
+                                  errors.paperTitle && touched.paperTitle
+                                    ? form().labelError()
+                                    : ""
+                                }`}
+                              >
+                                
+                                {/* Render options based on filtered papers */}
+                                {filterPapersByUserMarks().map((option) => (
                                   <option key={option._id} value={option._id}>
                                     {option.title}
                                   </option>
                                 ))}
-                            </Field>
-                            <ErrorMessage
-                              className={form().errorMessage()}
-                              name="subject"
-                              component="div"
-                            />
-                          </div>
+                              </Field>
+                              <ErrorMessage
+                                className={form().errorMessage()}
+                                name="subject"
+                                component="div"
+                              />
+                            </div>
                           </div>
 
                           <div className={form().formDiv()}>
-                            <label
-                              htmlFor="readingSkills"
-                              className={form().label()}
-                            >
+                            <label htmlFor="reading" className={form().label()}>
                               Reading Skills
                             </label>
                             <Field
-                              name="readingSkills"
+                              name="reading"
                               type="number"
                               className={`${form().input()} ${
-                                errors.readingSkills && touched.readingSkills
+                                errors.reading && touched.reading
                                   ? form().labelError()
                                   : ""
                               }`}
                             />
                             <ErrorMessage
                               className={form().errorMessage()}
-                              name="readingSkills"
+                              name="reading"
                               component="div"
                             />
                           </div>
 
                           <div className={form().formDiv()}>
                             <label
-                              htmlFor="logicAndProbSol"
+                              htmlFor="logicalAndProblemSolving"
                               className={form().label()}
                             >
                               Logic and Problem Solving
                             </label>
                             <Field
-                              name="logicAndProbSol"
+                              name="logicalAndProblemSolving"
                               type="number"
                               className={`${form().input()} ${
-                                errors.logicAndProbSol &&
-                                touched.logicAndProbSol
+                                errors.logicalAndProblemSolving &&
+                                touched.logicalAndProblemSolving
                                   ? form().labelError()
                                   : ""
                               }`}
                             />
                             <ErrorMessage
                               className={form().errorMessage()}
-                              name="logicAndProbSol"
+                              name="logicalAndProblemSolving"
                               component="div"
                             />
                           </div>
@@ -439,92 +497,92 @@ const GradesModal = (props: any) => {
 
                           <div className={form().formDiv()}>
                             <label
-                              htmlFor="didntAns"
+                              htmlFor="didNotAnswer"
                               className={form().label()}
                             >
                               Did not Answer
                             </label>
                             <Field
-                              name="didntAns"
+                              name="didNotAnswer"
                               type="number"
                               className={`${form().input()} ${
-                                errors.didntAns && touched.didntAns
+                                errors.didNotAnswer && touched.didNotAnswer
                                   ? form().labelError()
                                   : ""
                               }`}
                             />
                             <ErrorMessage
                               className={form().errorMessage()}
-                              name="didntAns"
+                              name="didNotAnswer"
                               component="div"
                             />
                           </div>
 
                           <div className={form().formDiv()}>
                             <label
-                              htmlFor="wrongAns"
+                              htmlFor="wrongAnswer"
                               className={form().label()}
                             >
                               Wrong Answer
                             </label>
                             <Field
-                              name="wrongAns"
+                              name="wrongAnswer"
                               type="number"
                               className={`${form().input()} ${
-                                errors.wrongAns && touched.wrongAns
+                                errors.wrongAnswer && touched.wrongAnswer
                                   ? form().labelError()
                                   : ""
                               }`}
                             />
                             <ErrorMessage
                               className={form().errorMessage()}
-                              name="wrongAns"
+                              name="wrongAnswer"
                               component="div"
                             />
                           </div>
 
                           <div className={form().formDiv()}>
                             <label
-                              htmlFor="correctAns"
+                              htmlFor="corrcetAnswer"
                               className={form().label()}
                             >
                               Correct Answer
                             </label>
                             <Field
-                              name="correctAns"
+                              name="corrcetAnswer"
                               type="number"
                               className={`${form().input()} ${
-                                errors.correctAns && touched.correctAns
+                                errors.corrcetAnswer && touched.corrcetAnswer
                                   ? form().labelError()
                                   : ""
                               }`}
                             />
                             <ErrorMessage
                               className={form().errorMessage()}
-                              name="correctAns"
+                              name="corrcetAnswer"
                               component="div"
                             />
                           </div>
 
                           <div className={form().formDiv()}>
                             <label
-                              htmlFor="lostMarks"
+                              htmlFor="lostmarks"
                               className={form().label()}
                             >
                               Lost Marks
                             </label>
                             <Field
-                              name="lostMarks"
+                              name="lostmarks"
                               type="number"
                               className={`${form().input()} ${
-                                errors.lostMarks && touched.lostMarks
+                                errors.lostmarks && touched.lostmarks
                                   ? form().labelError()
                                   : ""
                               }`}
                             />
                             <ErrorMessage
                               className={form().errorMessage()}
-                              name="lostMarks"
+                              name="lostmarks"
                               component="div"
                             />
                           </div>
