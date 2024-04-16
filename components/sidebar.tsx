@@ -43,6 +43,33 @@ import MailIcon from "@mui/icons-material/Mail";
 
 const drawerWidth = 240;
 
+export const customStyles = {
+  drawer: {
+    backgroundColor: "#141E25",
+    border: "red",
+  },
+  list: {
+    backgroundColor: "#141E25",
+  },
+  icon: {
+    color: "#FFFFFF",
+  },
+  listItemIcon: {
+    minWidth: 0,
+    justifyContent: "center",
+  },
+  listItemButton: {
+    minHeight: 48,
+    px: 2.5,
+  },
+  divider: {
+    borderColor: "#FFF",
+  },
+  text: {
+    color: "#FFF",
+  },
+};
+
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
   transition: theme.transitions.create("width", {
@@ -116,9 +143,13 @@ export const Sidebar = ({ open, handleDrawerClose }: Props) => {
   }, [userDetails]);
 
   return (
-    <Drawer variant="permanent" open={open}>
-      <DrawerHeader>
-        <IconButton onClick={handleDrawerClose}>
+    <Drawer
+      variant="permanent"
+      open={open}
+      PaperProps={{ sx: customStyles.drawer }}
+    >
+      <DrawerHeader sx={customStyles.list}>
+        <IconButton onClick={handleDrawerClose} sx={customStyles.icon}>
           {theme.direction === "rtl" ? (
             <ChevronRightIcon />
           ) : (
@@ -126,8 +157,8 @@ export const Sidebar = ({ open, handleDrawerClose }: Props) => {
           )}
         </IconButton>
       </DrawerHeader>
-      <Divider />
-      <List>
+      <Divider sx={customStyles.divider} />
+      <List sx={customStyles.list}>
         {generalMenuItems()
           .filter((route: any) => route.users.some((u: string) => u === role))
           .map((item, index) => (
@@ -139,30 +170,33 @@ export const Sidebar = ({ open, handleDrawerClose }: Props) => {
             >
               <ListItemButton
                 sx={{
-                  minHeight: 48,
+                  ...customStyles.listItemButton,
                   justifyContent: open ? "initial" : "center",
-                  px: 2.5,
                 }}
               >
                 <ListItemIcon
                   sx={{
-                    minWidth: 0,
+                    ...customStyles.icon,
+                    ...customStyles.listItemIcon,
                     mr: open ? 3 : "auto",
-                    justifyContent: "center",
                   }}
                 >
                   {item.icon}
                 </ListItemIcon>
                 <ListItemText
                   primary={item.name}
-                  sx={{ opacity: open ? 1 : 0, textTransform: "capitalize" }}
+                  sx={{
+                    ...customStyles.text,
+                    opacity: open ? 1 : 0,
+                    textTransform: "capitalize",
+                  }}
                 />
               </ListItemButton>
             </ListItem>
           ))}
       </List>
-      <Divider />
-      <List>
+      <Divider sx={customStyles.divider} />
+      <List sx={customStyles.list}>
         {qBankMenuItems()
           .filter((route: any) => route.users.some((u: string) => u === role))
           .map((item, index) => (
@@ -174,30 +208,33 @@ export const Sidebar = ({ open, handleDrawerClose }: Props) => {
             >
               <ListItemButton
                 sx={{
-                  minHeight: 48,
+                  ...customStyles.listItemButton,
                   justifyContent: open ? "initial" : "center",
-                  px: 2.5,
                 }}
               >
                 <ListItemIcon
                   sx={{
-                    minWidth: 0,
+                    ...customStyles.icon,
+                    ...customStyles.listItemIcon,
                     mr: open ? 3 : "auto",
-                    justifyContent: "center",
                   }}
                 >
                   {item.icon}
                 </ListItemIcon>
                 <ListItemText
                   primary={item.name}
-                  sx={{ opacity: open ? 1 : 0, textTransform: "capitalize" }}
+                  sx={{
+                    ...customStyles.text,
+                    opacity: open ? 1 : 0,
+                    textTransform: "capitalize",
+                  }}
                 />
               </ListItemButton>
             </ListItem>
           ))}
       </List>
-      <Divider />
-      <List>
+      <Divider sx={customStyles.divider} />
+      <List sx={customStyles.list}>
         {lmsMenuItems()
           .filter((route: any) => route.users.some((u: string) => u === role))
           .map((item, index) => (
@@ -209,30 +246,33 @@ export const Sidebar = ({ open, handleDrawerClose }: Props) => {
             >
               <ListItemButton
                 sx={{
-                  minHeight: 48,
+                  ...customStyles.listItemButton,
                   justifyContent: open ? "initial" : "center",
-                  px: 2.5,
                 }}
               >
                 <ListItemIcon
                   sx={{
-                    minWidth: 0,
+                    ...customStyles.icon,
+                    ...customStyles.listItemIcon,
                     mr: open ? 3 : "auto",
-                    justifyContent: "center",
                   }}
                 >
                   {item.icon}
                 </ListItemIcon>
                 <ListItemText
                   primary={item.name}
-                  sx={{ opacity: open ? 1 : 0, textTransform: "capitalize" }}
+                  sx={{
+                    ...customStyles.text,
+                    opacity: open ? 1 : 0,
+                    textTransform: "capitalize",
+                  }}
                 />
               </ListItemButton>
             </ListItem>
           ))}
       </List>
-      <Divider />
-      <List>
+      <Divider sx={customStyles.divider} />
+      <List sx={customStyles.list}>
         {["Log out"].map((text, index) => (
           <ListItem
             key={text}
@@ -246,21 +286,23 @@ export const Sidebar = ({ open, handleDrawerClose }: Props) => {
           >
             <ListItemButton
               sx={{
-                minHeight: 48,
+                ...customStyles.listItemButton,
                 justifyContent: open ? "initial" : "center",
-                px: 2.5,
               }}
             >
               <ListItemIcon
                 sx={{
-                  minWidth: 0,
+                  ...customStyles.icon,
+                  ...customStyles.listItemIcon,
                   mr: open ? 3 : "auto",
-                  justifyContent: "center",
                 }}
               >
                 <LogoutIcon />
               </ListItemIcon>
-              <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+              <ListItemText
+                primary={text}
+                sx={{ ...customStyles.text, opacity: open ? 1 : 0 }}
+              />
             </ListItemButton>
           </ListItem>
         ))}
