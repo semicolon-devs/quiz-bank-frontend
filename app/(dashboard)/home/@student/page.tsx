@@ -85,7 +85,7 @@ interface QPaper {
   _id: string;
 }
 
-export default function DashboardHomePage() {
+export default function StudentDashboardPage() {
   const [loading, setLoading] = useState<boolean>(false);
   const [paperList, setPaperList] = useState<QPaper[]>();
 

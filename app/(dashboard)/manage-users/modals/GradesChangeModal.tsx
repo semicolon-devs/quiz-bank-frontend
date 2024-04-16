@@ -95,7 +95,7 @@ const GradesModal = (props: any) => {
     };
 
     getPapers();
-  }, [activePaper]);
+  }, [activePaper, pageNumber]);
 
 
   //get grades by user and paper

@@ -118,7 +118,7 @@ const GradesModal = (props: any) => {
     };
 
     getUserMarks();
-  }, [isOpenModal]);
+  }, [isOpenModal, props.id]);
 
   //get papers
   useEffect(() => {
@@ -152,7 +152,7 @@ const GradesModal = (props: any) => {
     };
 
     getPapers();
-  }, [activePaper]);
+  }, [activePaper, pageNumber]);
 
   //get grades by user and paper
   useEffect(() => {

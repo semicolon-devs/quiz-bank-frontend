@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
 import SectionTitle from "@/components/sectionTitle";
 
-export default function DashboardHomePage() {
+export default function AdminDashboardPage() {
   return (
-    <div>
+    <>
       <SectionTitle title="Admin Dashboard" />
-    </div>
+    </>
   );
 }

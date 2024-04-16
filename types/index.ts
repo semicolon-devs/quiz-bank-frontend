@@ -18,6 +18,7 @@ export type UserDetails = {
   lastname: string;
   email: string;
   roles: UserRole[];
+  key?: string;
   _id: string;
 };
 
