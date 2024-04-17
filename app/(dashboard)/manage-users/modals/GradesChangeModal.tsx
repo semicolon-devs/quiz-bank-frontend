@@ -368,7 +368,9 @@ const GradesModal = (props: any) => {
                                     : ""
                                 }`}
                               >
-                                
+                                 <option key="1" value="">
+                                    Select Paper
+                                  </option>
                                 {/* Render options based on filtered papers */}
                                 {filterPapersByUserMarks().map((option) => (
                                   <option key={option._id} value={option._id}>

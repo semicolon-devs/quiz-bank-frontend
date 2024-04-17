@@ -103,14 +103,16 @@ export const Navbar = ({ open, handleDrawerOpen }: NavbarProps) => {
           <Typography variant="h6" noWrap component="div"></Typography>
         </Box>
         <Box sx={{}} display={"flex"} alignItems={"center"} gap={2}>
+        
           <Stack spacing={0} >
             <Typography variant="button" display="block">
               {userDetails?.firstname} {userDetails?.lastname}
+              
             </Typography>
             <Chip label={role} size="small" variant="outlined"/>
           </Stack>
           <IconButton sx={{ p: 0 }}>
-            <Avatar alt="Remy Sharp" src="/displayPhoto.jpg" variant="square"/>
+          <Image src={Logo} alt="Logo" height={40} className="p-1" />{" "}
           </IconButton>
         </Box>
       </Toolbar>
