@@ -3,9 +3,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-
+import MarksCardLMS from "@/components/MarksCardLMS/MarksCardLMS"
 import SectionTitle from "@/components/sectionTitle";
 import SectionSubTitle from "@/components/sectionSubTitle";
+import { RootState, useAppDispatch, useAppSelector } from "@/store";
 
 import { table } from "@/variants/table";
 
@@ -74,6 +75,23 @@ const headers = [
   "STATUS",
 ];
 
+interface UserMark {
+  _id: string;
+  paperId: string;
+  userId: string;
+  reading: number;
+  logicalAndProblemSolving: number;
+  biology: number;
+  chemistry: number;
+  physicsAndMaths: number;
+  didNotAnswer: number;
+  wrongAnswer: number;
+  corrcetAnswer: number;
+  lostmarks: number;
+  total: number;
+  __v: number;
+}
+
 interface QPaper {
   isTimed: boolean;
   name: string;
@@ -88,8 +106,35 @@ interface QPaper {
 export default function StudentDashboardPage() {
   const [loading, setLoading] = useState<boolean>(false);
   const [paperList, setPaperList] = useState<QPaper[]>();
-
+  const [marks, setMarks] = useState<UserMark[]>();
   const router = useRouter();
+  const { userDetails } = useAppSelector((state: RootState) => state.auth);
+
+//get marks by user
+useEffect(() => {
+  const getMarks = async () => {
+    const axiosConfig = {
+      method: "GET",
+      url: `${BASE_URL}lms/marks/${userDetails?._id}`,
+      headers: {
+        Authorization: `Bearer ${getAccess()}`,
+      },
+    };
+    axios(axiosConfig)
+      .then((response) => {
+        setMarks(response.data);
+        // console.log(response);
+        // console.log(userDetails?._id)
+      })
+      .catch((err) => {
+        console.log("Error in get marks by user");
+        console.log(err);
+      })
+      .finally(() => {});
+  };
+
+  getMarks();
+}, [userDetails?._id]);
 
   useEffect(() => {
     const getQPapers = async () => {
@@ -117,11 +162,11 @@ export default function StudentDashboardPage() {
   }, []);
 
   return (
-    <>
+    <div className="p-5">
       <SectionTitle title={"Student Dashboard"} />
-      <div className="mb-4 max-w-full">
+      <div className="mb-4 max-w-full p-5">
         <div className="flex justify-between items-center">
-          <SectionSubTitle title={"Papers"} />
+          <SectionSubTitle title={"Quizes"} />
           <div
             className="flex gap-2 transition duration-700 items-center cursor-pointer"
             onClick={() => router.push(UrlSlugType.PAPERS)}
@@ -156,7 +201,7 @@ export default function StudentDashboardPage() {
             ))}
         </div>
       </div>
-      <SectionSubTitle title="Stats" />
+      {/* <SectionSubTitle title="Stats" />
       <div className="grid grid-cols-3 gap-3">
         <div className="flex flex-col gap-3">
           <div className=" bg-white rounded-xl p-3 shadow flex justify-between">
@@ -210,7 +255,14 @@ export default function StudentDashboardPage() {
             </div>
           </div>
         </div>
+      </div> */}
+
+      <div className="">
+        <SectionSubTitle title={"Marks"} />
+        <div >
+          <MarksCardLMS marks = {marks}/>
+        </div>
       </div>
-    </>
+    </div>
   );
 }

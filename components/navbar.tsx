@@ -110,7 +110,7 @@ export const Navbar = ({ open, handleDrawerOpen }: NavbarProps) => {
             <Chip label={role} size="small" variant="outlined" />
           </Stack>
           <IconButton sx={{ p: 0 }}>
-            <Avatar alt="Remy Sharp" src="/displayPhoto.jpg" variant="square" />
+          <Image src={Logo} alt="Logo" height={40} className="p-1" />{" "}
           </IconButton>
         </Box>
       </Toolbar>

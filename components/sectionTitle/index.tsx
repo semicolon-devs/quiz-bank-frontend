@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 
 import Typography from "@mui/material/Typography";
@@ -14,7 +12,7 @@ const SectionTitle = ({ title }: Props) => {
       variant="h4"
       textTransform={"capitalize"}
       gutterBottom
-      suppressHydrationWarning
+      // suppressHydrationWarning
     >
       {title}
     </Typography>

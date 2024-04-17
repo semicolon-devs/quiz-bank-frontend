@@ -145,7 +145,7 @@ export const qBankMenuItems = (): MenuItems[] => {
 export const lmsMenuItems = (): MenuItems[] => {
   return [
     {
-      name: "pdf-papers",
+      name: "PDF-papers",
       path: UrlSlugType.PDF_PAPERS,
       icon: <FilePresentIcon />,
       users: [UserRole.USER],
@@ -169,13 +169,13 @@ export const lmsMenuItems = (): MenuItems[] => {
       users: [UserRole.ADMIN, UserRole.MODERATOR],
     },
     {
-      name: "manage lms users",
+      name: "manage LMS users",
       path: UrlSlugType.MANAGE_USERS,
       icon: <GroupIcon />,
       users: [UserRole.ADMIN],
     },
     {
-      name: "lms settings",
+      name: "LMS settings",
       path: UrlSlugType.LMS_SETTINGS,
       icon: <SettingsIcon />,
       users: [UserRole.ADMIN],

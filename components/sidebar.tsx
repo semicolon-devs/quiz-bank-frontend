@@ -307,6 +307,7 @@ export const Sidebar = ({ open, handleDrawerClose }: Props) => {
           </ListItem>
         ))}
       </List>
+      
     </Drawer>
   );
 };
