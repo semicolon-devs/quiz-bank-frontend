@@ -98,20 +98,19 @@ export const Navbar = ({ open, handleDrawerOpen }: NavbarProps) => {
             sx={{
               marginRight: 5,
               ...(open && { display: "none" }),
+              color: "primary.main",
             }}
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div"></Typography>
+          {/* <Typography variant="h6" noWrap component="div"></Typography> */}
         </Box>
         <Box sx={{}} display={"flex"} alignItems={"center"} gap={2}>
           <Stack spacing={0}>
             <Typography display="block">{fullName}</Typography>
             <Chip label={role} size="small" variant="outlined" />
           </Stack>
-          <IconButton sx={{ p: 0 }}>
-          <Image src={Logo} alt="Logo" height={40} className="p-1" />{" "}
-          </IconButton>
+          <Image src={Logo} alt="Logo" height={40} className="p-1" />
         </Box>
       </Toolbar>
     </AppBar>
