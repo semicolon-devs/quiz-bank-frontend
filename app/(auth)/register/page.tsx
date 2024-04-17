@@ -39,9 +39,9 @@ const initialValues: FormValues = {
   confirmPassword: "",
 };
 
-export const metadata: Metadata = {
-  title: "Register",
-};
+// export const metadata: Metadata = {
+//   title: "Register",
+// };
 
 export default function RegisterPage() {
   const router = useRouter();
