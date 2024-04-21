@@ -24,38 +24,42 @@ import { PaperType } from "@/utils/enums";
 import { lmsAddStudentValidation } from "@/schema/lmsAddStudentValidation";
 
 interface FormValues {
-  name: string;
+  firstname: string;
+  lastname: string;
   email: string;
   password: string;
-  
 }
 
 const initialValues: FormValues = {
-  name: "",
-  email:"",
-  password:""
+
+  firstname: "",
+  lastname:"",
+  email: "",
+  password: "",
 };
 
-const AddStudentModal = (props) => {
+const AddStudentModal = (props: { added: () => void }) => {
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
 
   const addStudent = (values: FormValues) => {
-    console.log("clicked")
+    console.log("clicked user add button");
     const axiosConfig = {
       method: "POST",
-      url: `${BASE_URL}lms/auth/register`,
+      url: `${BASE_URL}auth/register-lms-user`,
       headers: {
         Authorization: `Bearer ${getAccess()}`,
       },
       data: {
-        password: values.password,
-        name: values.name,
+        firstname: values.firstname,
+        lastname:values.lastname,
         email: values.email,
+        password: values.password,
       },
     };
     axios(axiosConfig)
       .then((response) => {
         console.log(response);
+        console.log("LMS USER ADDED")
         if (response.status === 201) {
           props.added();
           closeModal();
@@ -81,15 +85,14 @@ const AddStudentModal = (props) => {
           alert("No response received from the server");
         } else {
           // Something happened in setting up the request that triggered an Error
-          console.log('Error', error.message);
+          console.log("Error", error.message);
           alert("An error occurred: " + error.message);
         }
       })
       .finally(() => {
         // setLoading(false);
       });
-};
-
+  };
 
   const openModal = () => {
     setIsOpenModal(true);
@@ -168,21 +171,41 @@ const AddStudentModal = (props) => {
                           className={form().innerForm()}
                         >
                           <div className={form().formDiv()}>
-                            <label htmlFor="name" className={form().label()}>
-                              Studnet Name
+                            <label htmlFor="firstname" className={form().label()}>
+                              Studnet First Name
                             </label>
                             <Field
-                              name="name"
+                              name="firstname"
                               type="text"
                               className={`${form().input()} ${
-                                errors.name && touched.name
+                                errors.firstname && touched.firstname
                                   ? form().labelError()
                                   : ""
                               }`}
                             />
                             <ErrorMessage
                               className={form().errorMessage()}
-                              name="name"
+                              name="firstname"
+                              component="div"
+                            />
+                          </div>
+
+                          <div className={form().formDiv()}>
+                            <label htmlFor="lastname" className={form().label()}>
+                              Studnet Last Name
+                            </label>
+                            <Field
+                              name="lastname"
+                              type="text"
+                              className={`${form().input()} ${
+                                errors.lastname && touched.lastname
+                                  ? form().labelError()
+                                  : ""
+                              }`}
+                            />
+                            <ErrorMessage
+                              className={form().errorMessage()}
+                              name="lastname"
                               component="div"
                             />
                           </div>
@@ -208,7 +231,10 @@ const AddStudentModal = (props) => {
                           </div>
 
                           <div className={form().formDiv()}>
-                            <label htmlFor="passowrd" className={form().label()}>
+                            <label
+                              htmlFor="passowrd"
+                              className={form().label()}
+                            >
                               Assign a Password
                             </label>
                             <Field
@@ -227,11 +253,7 @@ const AddStudentModal = (props) => {
                             />
                           </div>
 
-                          <button
-                            type="submit"
-                            
-                            className={form().button()}
-                          >
+                          <button type="submit" className={form().button()}>
                             <p className="">Add Student</p>
                           </button>
                         </form>

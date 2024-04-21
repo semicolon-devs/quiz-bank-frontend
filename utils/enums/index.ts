@@ -2,6 +2,7 @@ export enum UserRole {
   ADMIN = "ADMIN",
   MODERATOR = "MODERATOR",
   USER = "USER",
+  LMS_USER = "LMS_USER",
 }
 
 export enum PaperType {

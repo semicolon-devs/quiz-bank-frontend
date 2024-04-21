@@ -19,7 +19,9 @@ import SectionTitle from "@/components/sectionTitle";
 import Modal from "@/components/modal";
 import AddPaperModal from "./modals/AddStudentModal";
 import EditPaperModal from "./modals/EditPaperModal";
-import GradesModel from "./modals/GradesModal";
+import GradesAddModel from "./modals/GradesAddModal";
+import GradesChangeModel from "./modals/GradesChangeModal";
+
 import { table } from "@/variants/table";
 
 import { BASE_URL } from "@/config/apiConfig";
@@ -27,18 +29,18 @@ import { getAccess } from "@/helpers/token";
 import { UrlSlugType } from "@/utils/enums/UrlSlug";
 import { PaperType } from "@/utils/enums";
 
-import { LMSStdDetails } from "@/types";
+import { UserDetails } from "@/types";
 
-const headers = ["Student Name", "Email", "Passowrd", "Grades", "Actions"];
+const headers = ["Student Name", "Email", "Passowrd", "Add Grades","Change Grades", "Actions"];
 
 export default function ManageUsersPage() {
   const [loading, setLoading] = useState<boolean>(false);
-  const [studentList, setStudentList] = useState<LMSStdDetails[]>([]);
-  const [pageNumber, setPageNumber] = useState<number>(1);
+  const [studentList, setStudentList] = useState<UserDetails[]>([]);
+   const [pageNumber, setPageNumber] = useState<number>(1);
   const [numberOfPages, setNumberOfPages] = useState<number>(1);
   const [tableSearch, setTableSearch] = useState<string>("");
-  const [modalShowPaper, setModalShowPaper] = useState<LMSStdDetails>();
-  const [pageSize, setPageSize] = useState<number>(entriesArray[1]);
+  const [modalShowPaper, setModalShowPaper] = useState<UserDetails>();
+   const [pageSize, setPageSize] = useState<number>(entriesArray[1]);
   const [deleteUser, setDeleteUser] = useState<boolean>(false);
   const [userAdded, setUserAdded] = useState<boolean>(false);
 
@@ -51,15 +53,15 @@ export default function ManageUsersPage() {
 
   //get studnets
   useEffect(() => {
-    const getPapers = async () => {
+    const getLMSUsers = async () => {
       setLoading(true);
       const axiosConfig = {
         method: "GET",
-        url: `${BASE_URL}lms/auth/users/all`,
-        params: {
-          page: pageNumber,
-          limit: pageSize,
-        },
+        url: `${BASE_URL}auth/all-lms-users`,
+        // params: {
+        //   page: pageNumber,
+        //   limit: pageSize,
+        // },
         headers: {
           Authorization: `Bearer ${getAccess()}`,
         },
@@ -67,12 +69,12 @@ export default function ManageUsersPage() {
       axios(axiosConfig)
         .then((response) => {
           setStudentList(response.data);
-          setNumberOfPages(
-            Math.ceil(
-              response?.data?.pagination?.totalPapers /
-                response?.data?.pagination?.limit
-            )
-          );
+          // setNumberOfPages(
+          //   Math.ceil(
+          //     response?.data?.pagination?.totalPapers /
+          //       response?.data?.pagination?.limit
+          //   )
+          // );
         })
         .catch((err) => {
           console.log(err);
@@ -84,15 +86,16 @@ export default function ManageUsersPage() {
         });
     };
 
-    getPapers();
-  }, [pageNumber, pageSize, userAdded ,deleteUser]);
+    getLMSUsers();
+  // }, [pageNumber, pageSize, userAdded ,deleteUser]);
+  }, [ userAdded ,deleteUser]);
 
   //delete student
   const deleteStudent = (_id: string) => {
     setLoading(true);
     const axiosConfig = {
       method: "DELETE",
-      url: `${BASE_URL}lms/auth/${_id}`,
+      url: `${BASE_URL}auth/${_id}`,
       headers: {
         Authorization: `Bearer ${getAccess()}`,
       },
@@ -110,10 +113,10 @@ export default function ManageUsersPage() {
       });
   };
 
-  const filteredPapers: LMSStdDetails[] =
+  const filteredPapers: UserDetails[] =
     studentList &&
     studentList.filter((paper) => {
-      return paper.name.includes(tableSearch);
+      return paper.firstname.includes(tableSearch);
     });
 
  
@@ -139,16 +142,16 @@ export default function ManageUsersPage() {
               <SearchIcon classes={"h-4 w-4 text-white"} />
             </div>
           </div>
-          <EntriesPerPage
+          {/* <EntriesPerPage
             value={pageSize}
             setValue={setPageSize}
             array={entriesArray}
-          />
+          /> */}
           <AddPaperModal added={userAddedFunc} />
         </div>
         <div
           className={table().headerRow({
-            className: "grid grid-cols-5",
+            className: "grid grid-cols-6",
           })}
         >
           {headers.map((header) => (
@@ -160,11 +163,11 @@ export default function ManageUsersPage() {
         <div className={table().tableContent()}>
           {
             studentList &&
-              filteredPapers.map((row: LMSStdDetails) => {
+              filteredPapers.map((row: UserDetails) => {
                 return (
                   <div
                     className={table().tableRow({
-                      className: "grid grid-cols-5",
+                      className: "grid grid-cols-6",
                     })}
                     key={row.email}
                   >
@@ -173,7 +176,7 @@ export default function ManageUsersPage() {
                         className: "font-medium",
                       })}
                     >
-                      {row.name}
+                      {row.firstname} {row.lastname}
                     </div>
                     <div
                       className={table().rowItem({ className: "lowercase" })}
@@ -186,10 +189,17 @@ export default function ManageUsersPage() {
                       {row.key}
                     </div>
 
-                    <div className={table().rowItem({ className: "py-2" })}>
-                      <GradesModel name={row.name} id={row._id}   />
+                    <div className={table().rowItem({ className: "" })}>
+                      <GradesAddModel name={row.firstname} id={row._id} added={userAddedFunc}  />
+                      
                     </div>
-                    <div className={table().rowItem({ className: "gap-3" })}>
+
+                    <div className={table().rowItem({ className: "" })}>
+                      <GradesChangeModel name={row.firstname} id={row._id} added={userAddedFunc}  />
+                      
+                    </div>
+
+                    <div className={table().rowItem({ className: "" })}>
                       {/* <div
                         className="p-1 cursor-pointer"
                         onClick={() =>
@@ -220,7 +230,7 @@ export default function ManageUsersPage() {
                             Are you sure you want to delete
                             <span className="font-medium space-x-1">
                               {" "}
-                              {row.name}
+                              {row.firstname}
                             </span>{" "}
                             from the system?
                           </p>
@@ -258,13 +268,13 @@ export default function ManageUsersPage() {
             // )}
           }
         </div>
-        <div className={table().paginationDiv()}>
+        {/* <div className={table().paginationDiv()}>
           <PaginationComponent
             numberOfPages={numberOfPages}
             pageNumber={pageNumber}
             setPageNumber={setPageNumber}
           />
-        </div>
+        </div> */}
       </div>
     </div>
   );

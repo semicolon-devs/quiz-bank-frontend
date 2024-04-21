@@ -56,7 +56,7 @@ export default function PapersPage() {
 
   return (
     <div>
-      <SectionTitle title="papers" backBtn />
+      <SectionTitle title="Quizes" />
       <div className="w-full flex flex-col gap-3">
         {paperList &&
           paperList.map((paper) => (
