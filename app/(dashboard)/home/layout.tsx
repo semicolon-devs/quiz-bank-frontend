@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import { RootState, useAppSelector } from "@/store";
 
@@ -13,15 +13,20 @@ export default function DashboardHomeLayout({
   admin: React.ReactNode;
   student: React.ReactNode;
 }) {
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+
   const { userDetails } = useAppSelector((state: RootState) => state.auth);
 
-  if (userDetails?.roles.includes(UserRole.ADMIN)) {
-    return admin;
-  } else if (userDetails?.roles.includes(UserRole.MODERATOR)) {
-    return admin;
-  } else if (userDetails?.roles.includes(UserRole.LMS_USER)) {
-    return student;
-  } else {
-    return student;
-  }
+  useEffect(() => {
+    if (userDetails?.roles.includes(UserRole.ADMIN)) {
+      setIsAdmin(true);
+    } else {
+      setIsAdmin(false);
+    }
+  }, [userDetails]);
+
+  // Default content if userDetails is initially missing
+  // const defaultContent = <p>Loading user details...</p>;
+
+  return isAdmin ? admin : student;
 }

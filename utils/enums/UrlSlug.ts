@@ -19,6 +19,7 @@ export enum UrlSlugType {
   SUBSCRIPTIONS = "/subscriptions",
   PROFILE = "/profile",
   PAYMENT_DETAILS = "/payment-details",
+  
   ADD_PDF_PAPERS = "/add-pdf-papers",
   ADD_NOTES = "/add-notes",
   LMS_SETTINGS = "/lms-settings",

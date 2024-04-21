@@ -34,9 +34,9 @@ const initialValues: FormValues = {
   password: "",
 };
 
-export const metadata: Metadata = {
-  title: "Log in",
-};
+// export const metadata: Metadata = {
+//   title: "Log in",
+// };
 
 export default function LoginPage() {
   const router = useRouter();

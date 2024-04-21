@@ -55,6 +55,7 @@ export const Navbar = ({ open, handleDrawerOpen }: NavbarProps) => {
   const dispatch = useAppDispatch();
 
   const [role, setRole] = useState<UserRole>();
+  const [fullName, setFullName] = useState<string>("");
 
   const { userDetails } = useAppSelector((state: RootState) => state.auth);
 
@@ -74,6 +75,7 @@ export const Navbar = ({ open, handleDrawerOpen }: NavbarProps) => {
     };
 
     setRole(getHighestRole());
+    setFullName(`${userDetails?.firstname} ${userDetails?.lastname}`);
   }, [userDetails]);
 
   return (
@@ -96,22 +98,19 @@ export const Navbar = ({ open, handleDrawerOpen }: NavbarProps) => {
             sx={{
               marginRight: 5,
               ...(open && { display: "none" }),
+              color: "primary.main",
             }}
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div"></Typography>
+          {/* <Typography variant="h6" noWrap component="div"></Typography> */}
         </Box>
         <Box sx={{}} display={"flex"} alignItems={"center"} gap={2}>
-          <Stack spacing={0} >
-            <Typography variant="button" display="block">
-              {userDetails?.firstname} {userDetails?.lastname}
-            </Typography>
-            <Chip label={role} size="small" variant="outlined"/>
+          <Stack spacing={0}>
+            <Typography display="block">{fullName}</Typography>
+            <Chip label={role} size="small" variant="outlined" />
           </Stack>
-          <IconButton sx={{ p: 0 }}>
-            <Avatar alt="Remy Sharp" src="/displayPhoto.jpg" variant="square"/>
-          </IconButton>
+          <Image src={Logo} alt="Logo" height={40} className="p-1" />
         </Box>
       </Toolbar>
     </AppBar>

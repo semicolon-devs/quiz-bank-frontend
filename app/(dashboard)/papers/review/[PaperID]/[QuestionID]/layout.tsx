@@ -128,7 +128,7 @@ export default function PaperTemplate({
             title={`Review answers : ${
               !loadingQPaper ? QPaperName : "Loading..."
             } - ${QPaperId}`}
-            backBtn
+            
           />
           <div className="border-b border-blue-100 flex justify-between items-center"></div>
           <div className="flex">

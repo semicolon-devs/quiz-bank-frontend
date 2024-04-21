@@ -81,7 +81,7 @@ export default function ManageUsersPage() {
         .finally(() => {
           setLoading(false);
           setPaperAdded(false);
-          setDeletePaper(false)
+          setDeletePaper(false);
         });
     };
 
@@ -118,12 +118,11 @@ export default function ManageUsersPage() {
       return paper.title.includes(tableSearch);
     });
 
-  const generateDirectLink = (fileId : string) => {
+  const generateDirectLink = (fileId: string) => {
     // Assuming there's a function or API call to generate direct link using fileId
     // Replace this with your actual implementation
     return `https://drive.google.com/uc?id=${fileId}`;
   };
-
 
   const getFileIdFromGoogleDriveUrl = (url: string) => {
     const regex: RegExp =
@@ -198,14 +197,15 @@ export default function ManageUsersPage() {
                       {row.title}
                     </div>
                     <div className={table().rowItem({ className: "p-2" })}>
-                      
-                      <button className="bg-green-100 hover:bg-green-200 rounded-md px-4 py-1" 
-                      ><a href={generateDirectLink(row.fileId)} target="_blank" rel="noopener noreferrer">
-                       File Download Link
-                      
-                    </a>
-                             
-                            </button>
+                      <button className="bg-green-100 hover:bg-green-200 rounded-md px-4 py-1">
+                        <a
+                          href={generateDirectLink(row.fileId)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          File Download Link
+                        </a>
+                      </button>
                     </div>
 
                     <div className={table().rowItem({ className: "gap-3" })}>

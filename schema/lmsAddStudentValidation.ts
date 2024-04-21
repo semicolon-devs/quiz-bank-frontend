@@ -3,7 +3,13 @@ import * as yup from "yup";
 import { PaperType } from "@/utils/enums";
 
 export const lmsAddStudentValidation = yup.object().shape({
-  name: yup
+  firstname: yup
+    .string()
+    .min(2, "Name must be minimum 2 characters")
+    .max(100, "Name must not be more than 100 characters")
+    .required("Name is required"),
+  
+    lastname: yup
     .string()
     .min(2, "Name must be minimum 2 characters")
     .max(100, "Name must not be more than 100 characters")
