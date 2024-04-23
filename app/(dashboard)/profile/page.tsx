@@ -4,13 +4,12 @@ import { useState } from "react";
 
 import { useFormik } from "formik";
 import * as yup from "yup";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
-
-import { RootState, useAppSelector } from "@/store";
-
-import SectionTitle from "@/components/sectionTitle";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import Grid from "@mui/material/Unstable_Grid2"; // Grid version 2
@@ -20,6 +19,18 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import EditIcon from "@mui/icons-material/Edit";
 import LockResetIcon from "@mui/icons-material/LockReset";
+import FormHelperText from "@mui/material/FormHelperText";
+import { IconButton, Input, InputAdornment } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+
+import { RootState, useAppSelector } from "@/store";
+
+import SectionTitle from "@/components/sectionTitle";
+
+import { BASE_URL } from "@/config/apiConfig";
+import { UrlSlugType } from "@/utils/enums/UrlSlug";
+import { clearUserDetails } from "@/store/authSlice";
+import { clearAuthToken, getAccess } from "@/helpers/token";
 
 const customStyles = {
   paper: {
@@ -45,7 +56,7 @@ const updatePasswordValidationSchema = yup.object({
     .required("Password is required"),
   confirmPassword: yup
     .string()
-    .oneOf([yup.ref("password")], "Passwords must match")
+    .oneOf([yup.ref("newPassword")], "Passwords must match")
     .required("Confirm Password is required"),
 });
 
@@ -54,18 +65,82 @@ export default function ProfilePage() {
     useState<boolean>(false);
   const [passwordFieldsEditable, setPasswordFieldsEditable] =
     useState<boolean>(false);
+  const [showPasswords, setShowPasswords] = useState<boolean>(false);
+
+  const handleClickShowPasswords = () => setShowPasswords((show) => !show);
+
+  const handleMouseDownPasswords = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
+  };
 
   const { userDetails } = useAppSelector((state: RootState) => state.auth);
 
+  const router = useRouter();
+
+  const updateUserDetails = (values: {
+    firstname: string;
+    lastname: string;
+    email: string;
+  }) => {
+    const axiosConfig = {
+      method: "PATCH",
+      url: `${BASE_URL}auth`,
+      data: {
+        firstname: values.firstname,
+        lastname: values.lastname,
+        email: values.email,
+      },
+    };
+    axios(axiosConfig)
+      .then((response) => {
+        toast.success("Profile details were updated successfully");
+        clearUserDetails();
+        clearAuthToken();
+        router.push(UrlSlugType.LOGIN);
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message);
+      })
+      .finally(() => {});
+  };
+
+  const updatePassword = (values: {
+    currentPassword: string;
+    newPassword: string;
+    confirmPassword: string;
+  }) => {
+    const axiosConfig = {
+      method: "POST",
+      url: `${BASE_URL}auth/reset-password`,
+      headers: {
+        Authorization: `Bearer ${getAccess()}`,
+      },
+      data: {
+        password: values.currentPassword,
+        newPassword: values.newPassword,
+      },
+    };
+    axios(axiosConfig)
+      .then((response) => {
+        toast.success("Password was updated successfully");
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message);
+      })
+      .finally(() => {});
+  };
+
   const userDetailsFormik = useFormik({
     initialValues: {
-      firstname: userDetails?.firstname,
-      lastname: userDetails?.lastname,
-      email: userDetails?.email,
+      firstname: userDetails?.firstname ?? "",
+      lastname: userDetails?.lastname ?? "",
+      email: userDetails?.email ?? "",
     },
     validationSchema: userDetailsValidationSchema,
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      updateUserDetails(values);
     },
   });
 
@@ -77,7 +152,7 @@ export default function ProfilePage() {
     },
     validationSchema: updatePasswordValidationSchema,
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      updatePassword(values);
     },
   });
 
@@ -85,10 +160,10 @@ export default function ProfilePage() {
     <>
       <SectionTitle title="Profile Settings" />
       <Grid container spacing={2}>
-        <Grid xs={6}>
+        <Grid xs={6} xl={12}>
           <Paper sx={customStyles.paper}>
-            <Grid container spacing={2} justifyContent="flex-end">
-              <Grid xs={12} display={"flex"} justifyContent={"end"}>
+            <Grid container spacing={1} justifyContent="flex-end">
+              <Grid xs={12} display={"flex"} justifyContent={"end"} gap={2}>
                 <Button
                   variant="outlined"
                   startIcon={<EditIcon />}
@@ -96,7 +171,16 @@ export default function ProfilePage() {
                   disabled={userDetailsFieldsEditable}
                   onClick={() => setUserDetailsFieldsEditable(true)}
                 >
-                  Edit
+                  Edit profile details
+                </Button>
+                <Button
+                  variant="outlined"
+                  startIcon={<LockResetIcon />}
+                  size="small"
+                  disabled={passwordFieldsEditable}
+                  onClick={() => setPasswordFieldsEditable(true)}
+                >
+                  Update password
                 </Button>
               </Grid>
               <Grid xs={3}>
@@ -125,8 +209,6 @@ export default function ProfilePage() {
                   disabled={!userDetailsFieldsEditable}
                 />
               </Grid>
-            </Grid>
-            <Grid container spacing={2}>
               <Grid xs={3}>
                 <Typography variant="overline" display="block" gutterBottom>
                   Last Name
@@ -153,8 +235,6 @@ export default function ProfilePage() {
                   disabled={!userDetailsFieldsEditable}
                 />
               </Grid>
-            </Grid>
-            <Grid container spacing={2}>
               <Grid xs={3}>
                 <Typography variant="overline" display="block" gutterBottom>
                   Email
@@ -181,129 +261,166 @@ export default function ProfilePage() {
                   disabled={!userDetailsFieldsEditable}
                 />
               </Grid>
+              {userDetailsFieldsEditable && (
+                <>
+                  <Grid xs={12}>
+                    <Typography
+                      variant="caption"
+                      display="block"
+                      align="right"
+                      sx={{ fontStyle: "italic", color: "#C5100D" }}
+                    >
+                      Once changes are saved, you will be redirected to the
+                      login page
+                    </Typography>
+                  </Grid>
+                  <Grid xs={6}>
+                    <Button
+                      fullWidth
+                      variant="outlined"
+                      onClick={() => setUserDetailsFieldsEditable(false)}
+                    >
+                      cancel
+                    </Button>
+                  </Grid>
+                  <Grid xs={6}>
+                    <Button
+                      fullWidth
+                      variant="contained"
+                      onClick={userDetailsFormik.submitForm}
+                    >
+                      Save changes
+                    </Button>
+                  </Grid>
+                </>
+              )}
             </Grid>
-            {userDetailsFieldsEditable && (
-              <Grid container spacing={2} mt={2}>
-                <Grid xs={6}>
-                  <Button
-                    fullWidth
-                    variant="outlined"
-                    onClick={() => setUserDetailsFieldsEditable(false)}
-                  >
-                    cancel
-                  </Button>
-                </Grid>
-                <Grid xs={6}>
-                  <Button
-                    fullWidth
-                    variant="contained"
-                    onClick={userDetailsFormik.submitForm}
-                  >
-                    Save changes
-                  </Button>
-                </Grid>
-              </Grid>
-            )}
           </Paper>
         </Grid>
-        <Grid xs={6}>
-          <Paper sx={customStyles.paper}>
-            <Grid container spacing={2} justifyContent="flex-end">
-              <Grid xs={12} display={"flex"} justifyContent={"end"}>
-                <Button
-                  variant="outlined"
-                  startIcon={<LockResetIcon />}
-                  size="small"
-                  disabled={passwordFieldsEditable}
-                  onClick={() => setPasswordFieldsEditable(true)}
-                >
-                  Update password
-                </Button>
+        <Grid xs={6} xl={12}>
+          {passwordFieldsEditable && (
+            <Paper sx={customStyles.paper}>
+              <Grid container spacing={2} justifyContent="flex-end">
+                <Grid xs={3}>
+                  <Typography variant="overline" display="block" gutterBottom>
+                    Current password
+                  </Typography>
+                </Grid>
+                <Grid xs={9}>
+                  <Input
+                    id="currentPassword"
+                    name="currentPassword"
+                    type={showPasswords ? "text" : "password"}
+                    fullWidth
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPasswords}
+                          onMouseDown={handleMouseDownPasswords}
+                        >
+                          {showPasswords ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                    value={updatePasswordFormik.values.currentPassword}
+                    onChange={updatePasswordFormik.handleChange}
+                    onBlur={updatePasswordFormik.handleBlur}
+                    error={
+                      updatePasswordFormik.touched.currentPassword &&
+                      Boolean(updatePasswordFormik.errors.currentPassword)
+                    }
+                    disabled={!passwordFieldsEditable}
+                  />
+                  {updatePasswordFormik.touched.currentPassword &&
+                    updatePasswordFormik.errors.currentPassword && (
+                      <FormHelperText sx={{ color: "red" }}>
+                        {updatePasswordFormik.errors.currentPassword}
+                      </FormHelperText>
+                    )}
+                </Grid>
               </Grid>
-              <Grid xs={3}>
-                <Typography variant="overline" display="block" gutterBottom>
-                  Current password
-                </Typography>
+              <Grid container spacing={2}>
+                <Grid xs={3}>
+                  <Typography variant="overline" display="block" gutterBottom>
+                    New password
+                  </Typography>
+                </Grid>
+                <Grid xs={9}>
+                  <Input
+                    id="newPassword"
+                    name="newPassword"
+                    type={showPasswords ? "text" : "password"}
+                    fullWidth
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPasswords}
+                          onMouseDown={handleMouseDownPasswords}
+                        >
+                          {showPasswords ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                    value={updatePasswordFormik.values.newPassword}
+                    onChange={updatePasswordFormik.handleChange}
+                    onBlur={updatePasswordFormik.handleBlur}
+                    error={
+                      updatePasswordFormik.touched.newPassword &&
+                      Boolean(updatePasswordFormik.errors.newPassword)
+                    }
+                    disabled={!passwordFieldsEditable}
+                  />
+                  {updatePasswordFormik.touched.newPassword &&
+                    updatePasswordFormik.errors.newPassword && (
+                      <FormHelperText sx={{ color: "red" }}>
+                        {updatePasswordFormik.errors.newPassword}
+                      </FormHelperText>
+                    )}
+                </Grid>
               </Grid>
-              <Grid xs={9}>
-                <TextField
-                  variant="standard"
-                  fullWidth
-                  id="currentPassword"
-                  name="currentPassword"
-                  // label="First name"
-                  value={updatePasswordFormik.values.currentPassword}
-                  onChange={updatePasswordFormik.handleChange}
-                  onBlur={updatePasswordFormik.handleBlur}
-                  error={
-                    updatePasswordFormik.touched.currentPassword &&
-                    Boolean(updatePasswordFormik.errors.currentPassword)
-                  }
-                  helperText={
-                    updatePasswordFormik.touched.currentPassword &&
-                    updatePasswordFormik.errors.currentPassword
-                  }
-                  disabled={!passwordFieldsEditable}
-                />
+              <Grid container spacing={2}>
+                <Grid xs={3}>
+                  <Typography variant="overline" display="block" gutterBottom>
+                    Confirm password
+                  </Typography>
+                </Grid>
+                <Grid xs={9}>
+                  <Input
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    type={showPasswords ? "text" : "password"}
+                    fullWidth
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPasswords}
+                          onMouseDown={handleMouseDownPasswords}
+                        >
+                          {showPasswords ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                    value={updatePasswordFormik.values.confirmPassword}
+                    onChange={updatePasswordFormik.handleChange}
+                    onBlur={updatePasswordFormik.handleBlur}
+                    error={
+                      updatePasswordFormik.touched.confirmPassword &&
+                      Boolean(updatePasswordFormik.errors.confirmPassword)
+                    }
+                    disabled={!passwordFieldsEditable}
+                  />
+                  {updatePasswordFormik.touched.confirmPassword &&
+                    updatePasswordFormik.errors.confirmPassword && (
+                      <FormHelperText sx={{ color: "red" }}>
+                        {updatePasswordFormik.errors.confirmPassword}
+                      </FormHelperText>
+                    )}
+                </Grid>
               </Grid>
-            </Grid>
-            <Grid container spacing={2}>
-              <Grid xs={3}>
-                <Typography variant="overline" display="block" gutterBottom>
-                  New password
-                </Typography>
-              </Grid>
-              <Grid xs={9}>
-                <TextField
-                  variant="standard"
-                  fullWidth
-                  id="newPassword"
-                  name="newPassword"
-                  // label="Last name"
-                  value={updatePasswordFormik.values.newPassword}
-                  onChange={updatePasswordFormik.handleChange}
-                  onBlur={updatePasswordFormik.handleBlur}
-                  error={
-                    updatePasswordFormik.touched.newPassword &&
-                    Boolean(updatePasswordFormik.errors.newPassword)
-                  }
-                  helperText={
-                    updatePasswordFormik.touched.newPassword &&
-                    updatePasswordFormik.errors.newPassword
-                  }
-                  disabled={!passwordFieldsEditable}
-                />
-              </Grid>
-            </Grid>
-            <Grid container spacing={2}>
-              <Grid xs={3}>
-                <Typography variant="overline" display="block" gutterBottom>
-                  Confirm password
-                </Typography>
-              </Grid>
-              <Grid xs={9}>
-                <TextField
-                  variant="standard"
-                  fullWidth
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  // label="Last name"
-                  value={updatePasswordFormik.values.confirmPassword}
-                  onChange={updatePasswordFormik.handleChange}
-                  onBlur={updatePasswordFormik.handleBlur}
-                  error={
-                    updatePasswordFormik.touched.confirmPassword &&
-                    Boolean(updatePasswordFormik.errors.confirmPassword)
-                  }
-                  helperText={
-                    updatePasswordFormik.touched.confirmPassword &&
-                    updatePasswordFormik.errors.confirmPassword
-                  }
-                  disabled={!passwordFieldsEditable}
-                />
-              </Grid>
-            </Grid>
-            {passwordFieldsEditable && (
+
               <Grid container spacing={2} mt={2}>
                 <Grid xs={6}>
                   <Button
@@ -324,8 +441,8 @@ export default function ProfilePage() {
                   </Button>
                 </Grid>
               </Grid>
-            )}
-          </Paper>
+            </Paper>
+          )}
         </Grid>
       </Grid>
     </>
