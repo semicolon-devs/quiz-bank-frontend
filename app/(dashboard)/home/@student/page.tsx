@@ -260,7 +260,7 @@ useEffect(() => {
         </div>
       </div> */}
 
-      <div className="">
+      <div className="mb-4 max-w-full p-5">
         <SectionSubTitle title={"Marks"} />
         <div >
           <MarksCardLMS marks = {marks}/>
