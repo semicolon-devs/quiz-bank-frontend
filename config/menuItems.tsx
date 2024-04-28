@@ -3,14 +3,20 @@ import { UserRole } from "@/utils/enums";
 import { MenuItems } from "@/types";
 
 import HomeIcon from "@mui/icons-material/Home";
+import FolderIcon from "@mui/icons-material/Folder";
 import FilePresentIcon from "@mui/icons-material/FilePresent";
-import GroupIcon from "@mui/icons-material/Group";
-import PostAddIcon from "@mui/icons-material/PostAdd";
 import LibraryAddIcon from "@mui/icons-material/LibraryAdd";
+import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import SettingsIcon from "@mui/icons-material/Settings";
-import NoteAddIcon from "@mui/icons-material/NoteAdd";
-import FolderIcon from "@mui/icons-material/Folder";
+import WidgetsIcon from "@mui/icons-material/Widgets";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import PaymentIcon from "@mui/icons-material/Payment";
+import GroupIcon from "@mui/icons-material/Group";
+import PostAddIcon from "@mui/icons-material/PostAdd";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 
 export const generalMenuItems = (): MenuItems[] => {
   return [
@@ -29,13 +35,13 @@ export const generalMenuItems = (): MenuItems[] => {
     // {
     //   name: "quiz",
     //   path: UrlSlugType.PAPERS,
-    //   icon: <FilePresentIcon />,
+    //   icon: <CheckCircleIcon />,
     //   users: [UserRole.USER],
     // },
     // {
     //   name: "pdf-papers",
     //   path: UrlSlugType.PDF_PAPERS,
-    //   icon: <FilePresentIcon />,
+    //   icon: <InsertDriveFileIcon />,
     //   users: [UserRole.USER],
     // },
     // {
@@ -47,7 +53,7 @@ export const generalMenuItems = (): MenuItems[] => {
     // {
     //   name: "manage questions",
     //   path: UrlSlugType.MANAGE_QUESTIONS,
-    //   icon: <FilePresentIcon />,
+    //   icon: <LibraryBooksIcon />,
     //   users: [UserRole.ADMIN, UserRole.MODERATOR],
     // },
     // {
@@ -89,19 +95,19 @@ export const generalMenuItems = (): MenuItems[] => {
     // {
     //   name: "subscriptions",
     //   path: UrlSlugType.SUBSCRIPTIONS,
-    //   icon: <SubscriptionIcon />,
+    //   icon: <WidgetsIcon />,
     //   users: [UserRole.ADMIN],
     // },
     // {
     //   name: "profile",
     //   path: UrlSlugType.PROFILE,
-    //   icon: <ProfileIcon />,
+    //   icon: <ManageAccountsIcon />,
     //   users: [UserRole.ADMIN, UserRole.MODERATOR, UserRole.USER],
     // },
     // {
     //   name: "payment details",
     //   path: UrlSlugType.PAYMENT_DETAILS,
-    //   icon: <ProfileIcon />,
+    //   icon: <PaymentIcon />,
     //   users: [UserRole.USER],
     // },
   ];
@@ -118,13 +124,13 @@ export const qBankMenuItems = (): MenuItems[] => {
     {
       name: "quiz",
       path: UrlSlugType.PAPERS,
-      icon: <FilePresentIcon />,
+      icon: <CheckCircleIcon />,
       users: [UserRole.USER],
     },
     {
       name: "manage questions",
       path: UrlSlugType.MANAGE_QUESTIONS,
-      icon: <FilePresentIcon />,
+      icon: <LibraryBooksIcon />,
       users: [UserRole.ADMIN, UserRole.MODERATOR],
     },
     {
@@ -147,7 +153,7 @@ export const lmsMenuItems = (): MenuItems[] => {
     {
       name: "PDF-papers",
       path: UrlSlugType.PDF_PAPERS,
-      icon: <FilePresentIcon />,
+      icon: <InsertDriveFileIcon />,
       users: [UserRole.USER],
     },
     {
@@ -157,7 +163,7 @@ export const lmsMenuItems = (): MenuItems[] => {
       users: [UserRole.USER],
     },
     {
-      name: "add pdf papers",
+      name: "add PDF papers",
       path: UrlSlugType.ADD_PDF_PAPERS,
       icon: <NoteAddIcon />,
       users: [UserRole.ADMIN, UserRole.MODERATOR],
@@ -179,6 +185,17 @@ export const lmsMenuItems = (): MenuItems[] => {
       path: UrlSlugType.LMS_SETTINGS,
       icon: <SettingsIcon />,
       users: [UserRole.ADMIN],
+    },
+  ];
+};
+
+export const profileItems = (): MenuItems[] => {
+  return [
+    {
+      name: "profile",
+      path: UrlSlugType.PROFILE,
+      icon: <ManageAccountsIcon />,
+      users: [UserRole.ADMIN, UserRole.MODERATOR, UserRole.USER],
     },
   ];
 };
