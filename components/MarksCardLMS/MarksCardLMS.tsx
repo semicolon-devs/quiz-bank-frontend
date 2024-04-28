@@ -10,7 +10,10 @@ type Props = {
 
 interface UserMark {
   _id: string;
-  paperId: string;
+  paperId : {
+    _id:string;
+    title:string;
+  }
   userId: string;
   reading: number;
   logicalAndProblemSolving: number;
@@ -49,7 +52,7 @@ const MarksCardLMS = ({ marks }: Props) => {
                 />
               </svg>
 
-              {mark.paperId}
+              {mark.paperId.title}
             </div>
           </AccordionSummary>
           <AccordionDetails>

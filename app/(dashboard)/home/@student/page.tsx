@@ -77,7 +77,10 @@ const headers = [
 
 interface UserMark {
   _id: string;
-  paperId: string;
+  paperId : {
+    _id:string;
+    title:string;
+  }
   userId: string;
   reading: number;
   logicalAndProblemSolving: number;
@@ -257,7 +260,7 @@ useEffect(() => {
         </div>
       </div> */}
 
-      <div className="">
+      <div className="mb-4 max-w-full p-5">
         <SectionSubTitle title={"Marks"} />
         <div >
           <MarksCardLMS marks = {marks}/>
