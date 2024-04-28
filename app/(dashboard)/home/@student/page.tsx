@@ -77,7 +77,10 @@ const headers = [
 
 interface UserMark {
   _id: string;
-  paperId: string;
+  paperId : {
+    _id:string;
+    title:string;
+  }
   userId: string;
   reading: number;
   logicalAndProblemSolving: number;

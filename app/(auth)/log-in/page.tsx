@@ -168,7 +168,7 @@ export default function LoginPage() {
         Don&apos;t have an account?{" "}
         <NextLink
           className="capitalize font-semibold text-blue-500"
-          href={UrlSlugType.REGISTER}
+          href="https://studymedicineitaly.com/application/"
         >
           register
         </NextLink>
