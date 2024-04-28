@@ -21,6 +21,7 @@ import SemicolonDevs from "@/public/devs.png";
 import {
   generalMenuItems,
   lmsMenuItems,
+  profileItems,
   qBankMenuItems,
 } from "@/config/menuItems";
 
@@ -236,6 +237,44 @@ export const Sidebar = ({ open, handleDrawerClose }: Props) => {
       <Divider sx={customStyles.divider} />
       <List sx={customStyles.list}>
         {lmsMenuItems()
+          .filter((route: any) => route.users.some((u: string) => u === role))
+          .map((item, index) => (
+            <ListItem
+              key={item.path}
+              disablePadding
+              sx={{ display: "block" }}
+              onClick={() => router.push(item.path)}
+            >
+              <ListItemButton
+                sx={{
+                  ...customStyles.listItemButton,
+                  justifyContent: open ? "initial" : "center",
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    ...customStyles.icon,
+                    ...customStyles.listItemIcon,
+                    mr: open ? 3 : "auto",
+                  }}
+                >
+                  {item.icon}
+                </ListItemIcon>
+                <ListItemText
+                  primary={item.name}
+                  sx={{
+                    ...customStyles.text,
+                    opacity: open ? 1 : 0,
+                    textTransform: "capitalize",
+                  }}
+                />
+              </ListItemButton>
+            </ListItem>
+          ))}
+      </List>
+      <Divider sx={customStyles.divider} />
+      <List sx={customStyles.list}>
+        {profileItems()
           .filter((route: any) => route.users.some((u: string) => u === role))
           .map((item, index) => (
             <ListItem
