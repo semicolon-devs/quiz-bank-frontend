@@ -91,37 +91,7 @@ export default function PaperDetailsPage({
                 </div>
               )}
             </div>
-            <div className="flex flex-col gap-2">
-              <div className="bg-white p-3 rounded-xl shadow">
-                <p className="text-blue-600 capitalize text-xl font-medium">
-                  Previous Attempts
-                </p>
-              </div>
-              <div className="bg-blue-50 p-3 rounded-xl shadow flex items-center justify-between">
-                <div className="">
-                  <p className="text-blue-600 font-medium">
-                    {new Date("2023-03-03").toLocaleString()}
-                  </p>
-                </div>
-                <div className="w-1/5">
-                  <p className="text-blue-600 text-xl font-semibold text-end">
-                    12/20
-                  </p>
-                </div>
-              </div>
-              <div className="bg-blue-50 p-3 rounded-xl shadow flex items-center justify-between">
-                <div className="">
-                  <p className="text-blue-600 font-medium">
-                    {new Date("2023-05-03").toLocaleString()}
-                  </p>
-                </div>
-                <div className="w-1/5">
-                  <p className="text-blue-600 text-xl font-semibold text-end">
-                    18/20
-                  </p>
-                </div>
-              </div>
-            </div>
+            
           </div>
         </div>
       ) : (

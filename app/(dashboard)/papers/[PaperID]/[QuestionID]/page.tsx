@@ -110,7 +110,7 @@ export default function PaperQuestionPage({
     axios(axiosConfig)
       .then((response) => {
         toast.success(
-          `Answers ${getTrueIndexes()} has been submitted to Question no ${
+          `Answers has been submitted to Question no ${
             params.QuestionID
           }`
         );

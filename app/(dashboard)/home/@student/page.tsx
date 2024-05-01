@@ -167,8 +167,8 @@ useEffect(() => {
   return (
     <div className="p-5">
       <SectionTitle title={"Student Dashboard"} />
-      <div className="mb-4 max-w-full p-5">
-        <div className="flex justify-between items-center">
+      <div className="mb-2 max-w-full p-5">
+        {/* <div className="flex justify-between items-center">
           <SectionSubTitle title={"Quizes"} />
           <div
             className="flex gap-2 transition duration-700 items-center cursor-pointer"
@@ -177,7 +177,7 @@ useEffect(() => {
             <p className="text-blue-600 text-sm font-medium">View all</p>
             <RightArrowIcon classes={"w-2.5 h-2.5 text-blue-600"} />
           </div>
-        </div>
+        </div> */}
         <div className="w-full grid grid-cols-5 gap-3">
           {paperList &&
             paperList.slice(0, 5).map((paper) => (
@@ -261,7 +261,7 @@ useEffect(() => {
       </div> */}
 
       <div className="mb-4 max-w-full p-5">
-        <SectionSubTitle title={"Marks"} />
+        <SectionSubTitle title={"Model Paper Marks"} />
         <div >
           <MarksCardLMS marks = {marks}/>
         </div>
