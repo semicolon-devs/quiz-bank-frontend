@@ -16,56 +16,6 @@ import { getAccess } from "@/helpers/token";
 import { BASE_URL } from "@/config/apiConfig";
 import { UrlSlugType } from "@/utils/enums/UrlSlug";
 
-const rows = [
-  {
-    key: "1",
-    quiz_no: "45756",
-    quiz_name: "Bio Chemistry quiz",
-    score: "-",
-    questions_completed: "10/12",
-    status: "in progress",
-  },
-  {
-    key: "2",
-    quiz_no: "35687",
-    quiz_name: "Calculus quiz",
-    score: "75/100",
-    questions_completed: "12/12",
-    status: "completed",
-  },
-  {
-    key: "3",
-    quiz_no: "23456",
-    quiz_name: "Genetics quiz",
-    score: "99/100",
-    questions_completed: "12/12",
-    status: "completed",
-  },
-  {
-    key: "4",
-    quiz_no: "45756",
-    quiz_name: "Bio Chemistry quiz",
-    score: "-",
-    questions_completed: "10/12",
-    status: "in progress",
-  },
-  {
-    key: "5",
-    quiz_no: "35687",
-    quiz_name: "Calculus quiz",
-    score: "75/100",
-    questions_completed: "12/12",
-    status: "completed",
-  },
-  {
-    key: "6",
-    quiz_no: "23456",
-    quiz_name: "Genetics quiz",
-    score: "99/100",
-    questions_completed: "12/12",
-    status: "completed",
-  },
-];
 
 const headers = [
   "QUIZ NO",
@@ -126,7 +76,7 @@ useEffect(() => {
     axios(axiosConfig)
       .then((response) => {
         setMarks(response.data);
-        // console.log(response);
+        console.log(response);
         // console.log(userDetails?._id)
       })
       .catch((err) => {
@@ -178,7 +128,7 @@ useEffect(() => {
             <RightArrowIcon classes={"w-2.5 h-2.5 text-blue-600"} />
           </div>
         </div> */}
-        <div className="w-full grid grid-cols-5 gap-3">
+        {/* <div className="w-full grid grid-cols-5 gap-3">
           {paperList &&
             paperList.slice(0, 5).map((paper) => (
               <div
@@ -202,7 +152,7 @@ useEffect(() => {
                 </button>
               </div>
             ))}
-        </div>
+        </div> */}
       </div>
       {/* <SectionSubTitle title="Stats" />
       <div className="grid grid-cols-3 gap-3">

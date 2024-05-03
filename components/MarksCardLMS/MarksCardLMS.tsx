@@ -52,7 +52,7 @@ const MarksCardLMS = ({ marks }: Props) => {
                 />
               </svg>
 
-              {mark && mark.paperId.title}
+              {mark && mark.paperId && mark.paperId.title}
             </div>
           </AccordionSummary>
           <AccordionDetails>

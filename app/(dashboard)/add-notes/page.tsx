@@ -49,9 +49,9 @@ export default function ManageUsersPage() {
       case "not_specified":
         return "Not Specified"
       case "reading_skills":
-        return "Reading Skills and General Knowledge";
-      case "logical_reasoning":
-        return "Logical Reasoning";
+        return "Reading Skills";
+      case "generel_knowledge":
+        return "General Knowledge";
       case "problem_solving":
         return "Problem Solving";
       case "biology":
