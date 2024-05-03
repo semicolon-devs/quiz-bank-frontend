@@ -46,12 +46,12 @@ export default function ManageUsersPage() {
 
   const formatSubjectLabel = (subject: string) => {
     switch (subject) {
-      case "not_specified":
-        return "Not Specified"
       case "reading_skills":
         return "Reading Skills";
-      case "generel_knowledge":
+      case "general_knowledge":
         return "General Knowledge";
+      case "logical_reasoning":
+        return "Logical Reasoning";
       case "problem_solving":
         return "Problem Solving";
       case "biology":
@@ -62,6 +62,8 @@ export default function ManageUsersPage() {
         return "Physics";
       case "maths":
         return "Maths";
+      case "not_specified":
+        return "Not Specified"; // Added case for new subject
       default:
         return "Not Specified";
     }

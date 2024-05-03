@@ -70,7 +70,7 @@ const Notes = () => {
         subjects.forEach(subject => {
           notesGroupedBySubject[subject] = notes.filter((note: { subject: string; }) => note.subject === subject);
         });
-        
+
         setNotesBySubject(notesGroupedBySubject);
       } catch (error) {
         console.error("Error fetching notes:", error);
