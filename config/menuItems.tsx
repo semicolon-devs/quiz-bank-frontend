@@ -151,7 +151,7 @@ export const qBankMenuItems = (): MenuItems[] => {
 export const lmsMenuItems = (): MenuItems[] => {
   return [
     {
-      name: "PDF-papers",
+      name: "Model papers",
       path: UrlSlugType.PDF_PAPERS,
       icon: <InsertDriveFileIcon />,
       users: [UserRole.USER],
@@ -163,7 +163,7 @@ export const lmsMenuItems = (): MenuItems[] => {
       users: [UserRole.USER],
     },
     {
-      name: "add PDF papers",
+      name: "add Model papers",
       path: UrlSlugType.ADD_PDF_PAPERS,
       icon: <NoteAddIcon />,
       users: [UserRole.ADMIN, UserRole.MODERATOR],
@@ -195,7 +195,7 @@ export const profileItems = (): MenuItems[] => {
       name: "profile",
       path: UrlSlugType.PROFILE,
       icon: <ManageAccountsIcon />,
-      users: [UserRole.ADMIN, UserRole.MODERATOR, UserRole.USER],
+      users: [UserRole.ADMIN, UserRole.MODERATOR],
     },
   ];
 };

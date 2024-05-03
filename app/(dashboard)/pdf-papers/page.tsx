@@ -63,7 +63,7 @@ export default function PapersPage() {
 
   return (
     <div className="p-5">
-      <SectionTitle title="Download Papers as PDF" />
+      <SectionTitle title="Download Model Papers as PDF" />
 
       <div className="w-full grid grid-cols-3 gap-4 p-10">
         {paperList &&

@@ -32,7 +32,8 @@ interface FormValues {
 
 const subjectOptions = [
   { value: "not_specified", label: "Not Specified" },
-  { value: "reading_skills", label: "Reading Skills and General Knowledge" },
+  { value: "reading_skills", label: "Reading Skills" },
+  { value: "general_knowledge", label:"General Knowledge"},
   { value: "logical_reasoning", label: "Logical Reasoning" },
   { value: "problem_solving", label: "Problem Solving" },
   { value: "biology", label: "Biology" },
