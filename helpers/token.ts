@@ -15,7 +15,8 @@ export const setAuthToken = (token: string) =>
   Cookies.set("session", token, {
     path: "/",
     domain,
-    expires: 1 / 48, // 30 mins
+    //expires: 1 / 48, // 30 mins
+    expires: 24, // 30 mins
   });
 
 export const setRefreshToken = (refreshToken: string) =>

@@ -44,7 +44,10 @@ interface papers {
 
 interface UserMark {
   _id: string;
-  paperId: string;
+  paperId: {
+    _id: string;
+    title: string;
+  };
   userId: string;
   reading: number;
   logicalAndProblemSolving: number;
@@ -67,6 +70,7 @@ const GradesModal = (props: any) => {
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [numberOfPages, setNumberOfPages] = useState<number>(1);
   const [userMarks, setUserMarks] = useState<UserMark[]>();
+  const [dataloaded, SetDataLoaded] = useState<boolean>(false);
   const [initialValues, setInitialValues] = useState<FormValues>({
     paperTitle: activePaper,
     reading: 0,
@@ -81,14 +85,17 @@ const GradesModal = (props: any) => {
     total: 0,
   });
 
+  const loadingCompleted = () => {
+    SetDataLoaded(true);
+  };
+
   const filterPapersByUserMarks = () => {
     if (!papers || !userMarks) return [];
     // Extract paper IDs from user marks
-    const markedPaperIds = userMarks.map(mark => mark.paperId);
+    const markedPaperIds = userMarks.map((mark) => mark.paperId._id);
     // Filter papers based on whether their ID is in markedPaperIds
-    return papers.filter(paper => markedPaperIds.includes(paper._id));
+    return papers.filter((paper) => markedPaperIds.includes(paper._id));
   };
-  
 
   //get user's All marks
   useEffect(() => {
@@ -136,10 +143,10 @@ const GradesModal = (props: any) => {
       };
       axios(axiosConfig)
         .then((response) => {
-          
           console.log("Papers" + response.data);
           setPapers(response.data);
-          setActivePaper(response.data[0]._id)
+          setActivePaper(response.data[0]._id);
+          loadingCompleted();
           setNumberOfPages(
             Math.ceil(
               response?.data?.pagination?.totalPapers /
@@ -162,16 +169,17 @@ const GradesModal = (props: any) => {
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}lms/marks/${props.id}/${activePaper}`,
-        
+
         headers: {
           Authorization: `Bearer ${getAccess()}`,
         },
       };
       axios(axiosConfig)
         .then((response) => {
-          // console.log("Marks");
-          // console.log(response.data)
+          console.log("Marks");
+          console.log(response.data);
           setGrades(response.data);
+
           // console.log(grades)
         })
         .catch((err) => {
@@ -217,7 +225,6 @@ const GradesModal = (props: any) => {
         Authorization: `Bearer ${getAccess()}`,
       },
       data: {
-        
         reading: values.reading,
         logicalAndProblemSolving: values.logicalAndProblemSolving,
         biology: values.biology,
@@ -235,6 +242,7 @@ const GradesModal = (props: any) => {
         console.log(response);
         if (response.status === 200) {
           props.added();
+          alert("Grades Updated");
           closeModal();
         } else {
           alert("Unexpected status code: " + response.status);
@@ -279,8 +287,39 @@ const GradesModal = (props: any) => {
     <>
       <div className="" onClick={openModal}>
         <button className={table().featuresButton()}>
-          <GradesIcon classes={"w-4 h-4 text-white"} />
-          <p className="">Manage Grades</p>
+          {dataloaded ? (
+            <>
+              <GradesIcon classes={"w-4 h-4 text-white"} />
+              <p className="">Manage Grades</p>
+            </>
+          ) : (
+            <svg
+              version="1.1"
+              id="L9"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlnsXlink="http://www.w3.org/1999/xlink"
+              x="0px"
+              y="0px"
+              viewBox="0 0 100 100"
+              xmlSpace="preserve"
+              className="animate-spin h-7 w-7 text-blue-600"
+            >
+              <path
+                fill="#fff"
+                d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50"
+              >
+                <animateTransform
+                  attributeName="transform"
+                  attributeType="XML"
+                  type="rotate"
+                  dur="1s"
+                  from="0 50 50"
+                  to="360 50 50"
+                  repeatCount="indefinite"
+                />
+              </path>
+            </svg>
+          )}
         </button>
       </div>
 
@@ -368,9 +407,9 @@ const GradesModal = (props: any) => {
                                     : ""
                                 }`}
                               >
-                                 <option key="1" value="">
-                                    Select Paper
-                                  </option>
+                                <option key="1" value="">
+                                  Select Paper
+                                </option>
                                 {/* Render options based on filtered papers */}
                                 {filterPapersByUserMarks().map((option) => (
                                   <option key={option._id} value={option._id}>
@@ -612,7 +651,9 @@ const GradesModal = (props: any) => {
                           <button type="submit" className={form().button()}>
                             <p className="">Add/Update Marks</p>
                           </button>
+                          <p className="text-red-500">Please wait until the model closes automatically after submitting.</p>
                         </form>
+                        
                       )}
                     </Formik>
                   </div>

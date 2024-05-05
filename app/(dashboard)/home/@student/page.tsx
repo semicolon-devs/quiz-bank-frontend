@@ -101,6 +101,7 @@ useEffect(() => {
       };
       axios(axiosConfig)
         .then((response) => {
+          console.log(response.data);
           setPaperList(response.data.result);
         })
         .catch((err) => {
