@@ -184,7 +184,7 @@ export default function AdminDashboardPage() {
               sx={{ fontSize: 60, fontWeight: 800 }}
               color="primary.light"
             >
-              {stats && stats.papers}
+             {stats && stats.quizs}
             </Typography>
             <Typography
               sx={{ fontSize: 16, fontWeight: 500 }}
@@ -209,7 +209,8 @@ export default function AdminDashboardPage() {
               sx={{ fontSize: 60, fontWeight: 800 }}
               color="primary.light"
             >
-              {stats && stats.quizs}
+              
+              {stats && stats.papers}
             </Typography>
             <Typography
               sx={{ fontSize: 16, fontWeight: 500 }}
