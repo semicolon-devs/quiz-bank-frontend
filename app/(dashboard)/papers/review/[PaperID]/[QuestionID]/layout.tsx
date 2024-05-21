@@ -55,7 +55,7 @@ export default function PaperTemplate({
           // console.log(response);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         });
     };
 
@@ -78,7 +78,7 @@ export default function PaperTemplate({
           }
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         })
         .finally(() => {
           setLoadingQBlocks(false);

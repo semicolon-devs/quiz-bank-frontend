@@ -74,7 +74,7 @@ export default function ManageQuestionsPage() {
           );
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         })
         .finally(() => {
           setLoading(false);
@@ -95,11 +95,11 @@ export default function ManageQuestionsPage() {
     };
     axios(axiosConfig)
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         toast.success("Question deleted successfully");
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       })
       .finally(() => {
         setLoading(false);

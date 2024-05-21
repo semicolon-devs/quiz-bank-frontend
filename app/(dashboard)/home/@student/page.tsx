@@ -76,12 +76,12 @@ useEffect(() => {
     axios(axiosConfig)
       .then((response) => {
         setMarks(response.data);
-        console.log(response);
+        // console.log(response);
         // console.log(userDetails?._id)
       })
       .catch((err) => {
-        console.log("Error in get marks by user");
-        console.log(err);
+        // console.log("Error in get marks by user");
+        // console.log(err);
       })
       .finally(() => {});
   };
@@ -101,11 +101,11 @@ useEffect(() => {
       };
       axios(axiosConfig)
         .then((response) => {
-          console.log(response.data);
+          // console.log(response.data);
           setPaperList(response.data.result);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         })
         .finally(() => {
           setLoading(false);

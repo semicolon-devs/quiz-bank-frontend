@@ -55,11 +55,11 @@ export default function PaperTemplate({
     };
     axios(axiosConfig)
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         router.push(`${UrlSlugType.PAPERS_REVIEW}/${params.PaperID}`);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
   };
 
@@ -83,7 +83,7 @@ export default function PaperTemplate({
           }
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         })
         .finally(() => {
           setLoadingQBlocks(false);
@@ -107,7 +107,7 @@ export default function PaperTemplate({
           setPaperMinutes(response.data.timeInMinutes);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
           setQPaperError(true);
         })
         .finally(() => {

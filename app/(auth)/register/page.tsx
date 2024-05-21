@@ -82,7 +82,7 @@ export default function RegisterPage() {
         router.push(UrlSlugType.LOGIN);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       })
       .finally(() => {
         setLoading(false);

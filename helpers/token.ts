@@ -62,7 +62,7 @@ export const getAccess = () => {
           setRefreshToken(response.data.refreshToken);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         })
         .finally(() => {
           getAccess();

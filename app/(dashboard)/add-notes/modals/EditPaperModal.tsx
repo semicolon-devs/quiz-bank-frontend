@@ -77,11 +77,11 @@ const EditPaperModal = ({ paper }: EditPaperModalProps) => {
     };
     axios(axiosConfig)
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         closeModal();
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       })
       .finally(() => {
         // setLoading(false);

@@ -46,7 +46,7 @@ export default function ManageUsersPage() {
 
   const paperAddedFunc = () => {
     setPaperAdded(true);
-    console.log("user added called");
+    // console.log("user added called");
   };
 
   //get papers
@@ -66,7 +66,7 @@ export default function ManageUsersPage() {
       };
       axios(axiosConfig)
         .then((response) => {
-          console.log(response.data);
+          // console.log(response.data);
           setpapersList(response.data);
           setNumberOfPages(
             Math.ceil(
@@ -76,7 +76,7 @@ export default function ManageUsersPage() {
           );
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         })
         .finally(() => {
           setLoading(false);
@@ -104,7 +104,7 @@ export default function ManageUsersPage() {
         // console.log(response);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       })
       .finally(() => {
         setLoading(false);

@@ -56,7 +56,7 @@ export default function ManageUsersPage() {
   
   const userAddedFunc = () => {
     setUserAdded(true);
-    console.log("user added called");
+    // console.log("user added called");
   };
 
   //get studnets
@@ -85,7 +85,7 @@ export default function ManageUsersPage() {
           // );
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         })
         .finally(() => {
           setLoading(false);
@@ -113,7 +113,7 @@ export default function ManageUsersPage() {
         // console.log(response);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       })
       .finally(() => {
         setLoading(false);

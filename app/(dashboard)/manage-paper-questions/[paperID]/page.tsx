@@ -82,7 +82,7 @@ const ManagePaperQuestionsPage = ({
           setSelectedQuestionsList(response.data.questions);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         })
         .finally(() => {});
     };
@@ -117,7 +117,7 @@ const ManagePaperQuestionsPage = ({
           );
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         })
         .finally(() => {
           setLoading(false);
@@ -138,11 +138,11 @@ const ManagePaperQuestionsPage = ({
     };
     axios(axiosConfig)
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         toast.success("Question succesfully removed from the paper");
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       })
       .finally(() => {
         setLoading(false);
@@ -196,7 +196,7 @@ const ManagePaperQuestionsPage = ({
         toast.success("Question order updated successfully");
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       })
       .finally(() => {
         setLoading(false);

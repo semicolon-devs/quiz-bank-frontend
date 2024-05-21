@@ -110,8 +110,8 @@ const GradesModal = (props: any) => {
       };
       axios(axiosConfig)
         .then((response) => {
-          console.log("get user's All marks");
-          console.log(response.data);
+          // console.log("get user's All marks");
+          // console.log(response.data);
           setUserMarks(response.data);
           setNumberOfPages(
             Math.ceil(
@@ -121,7 +121,7 @@ const GradesModal = (props: any) => {
           );
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         })
         .finally(() => {});
     };
@@ -145,8 +145,8 @@ const GradesModal = (props: any) => {
       };
       axios(axiosConfig)
         .then((response) => {
-          console.log("ALL Papers");
-          console.log(response.data);
+          // console.log("ALL Papers");
+          // console.log(response.data);
           setPapers(response.data);
           loadingCompleted();
           setNumberOfPages(
@@ -157,7 +157,7 @@ const GradesModal = (props: any) => {
           );
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         })
         .finally(() => {});
     };
@@ -181,12 +181,12 @@ const GradesModal = (props: any) => {
       };
       axios(axiosConfig)
         .then((response) => {
-          console.log("get marks by user and paper");
+          // console.log("get marks by user and paper");
           setGrades(response.data);
         })
         .catch((err) => {
-          console.log("Called");
-          console.log(err);
+          // console.log("Called");
+          // console.log(err);
         })
         .finally(() => {});
     };
@@ -217,7 +217,7 @@ const GradesModal = (props: any) => {
 
   //change grades
   const changeGrades = (values: FormValues) => {
-    console.log(values);
+    // console.log(values);
     const axiosConfig = {
       method: "POST",
       url: `${BASE_URL}lms/marks/`,
@@ -245,7 +245,7 @@ const GradesModal = (props: any) => {
     };
     axios(axiosConfig)
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         if (response.status === 201) {
           props.added();
           closeModal();
@@ -258,9 +258,9 @@ const GradesModal = (props: any) => {
         if (error.response) {
           // The request was made and the server responded with a status code
           // that falls out of the range of 2xx
-          console.log(error.response.data);
-          console.log(error.response.status);
-          console.log(error.response.headers);
+          // console.log(error.response.data);
+          // console.log(error.response.status);
+          // console.log(error.response.headers);
           if (error.response.status === 500) {
             alert("Duplicate Student emails found!!");
           } else {
@@ -268,11 +268,11 @@ const GradesModal = (props: any) => {
           }
         } else if (error.request) {
           // The request was made but no response was received
-          console.log(error.request);
+          // console.log(error.request);
           alert("No response received from the server");
         } else {
           // Something happened in setting up the request that triggered an Error
-          console.log("Error", error.message);
+          // console.log("Error", error.message);
           alert("An error occurred: " + error.message);
         }
       })
@@ -401,10 +401,10 @@ const GradesModal = (props: any) => {
                                 as="select"
                                 value={activePaper}
                                 onChange={(e: any) => {
-                                  console.log(
-                                    "Selected value:",
-                                    e.target.value
-                                  );
+                                  // console.log(
+                                  //   "Selected value:",
+                                  //   e.target.value
+                                  // );
                                   setActivePaper(e.target.value);
                                 }}
                                 className={`${form().input()} ${

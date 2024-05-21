@@ -97,7 +97,7 @@ export default function AddQuestionPage() {
           setCourses(response.data);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         })
         .finally(() => {
           setLoading(false);
@@ -167,12 +167,12 @@ export default function AddQuestionPage() {
       };
       axios(axiosConfig)
         .then((response) => {
-          console.log(response);
+          // console.log(response);
           toast.success("Question was added successfully");
           router.push(UrlSlugType.MANAGE_QUESTIONS);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         })
         .finally(() => {
           setLoading(false);

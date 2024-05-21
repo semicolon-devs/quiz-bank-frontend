@@ -40,11 +40,11 @@ export default function PaperDetailsPage({
       };
       axios(axiosConfig)
         .then((response) => {
-          console.log(response);
+          // console.log(response);
           setHasFinished(response.data);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         });
     };
 
@@ -58,11 +58,11 @@ export default function PaperDetailsPage({
       };
       axios(axiosConfig)
         .then((response) => {
-          console.log(response);
+          // console.log(response);
           setCorrectAnswers(response.data.totalMarks);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         });
     };
 
@@ -79,7 +79,7 @@ export default function PaperDetailsPage({
           setPaperInfo(response.data);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         });
     };
 
@@ -93,11 +93,11 @@ export default function PaperDetailsPage({
       };
       axios(axiosConfig)
         .then((response) => {
-          console.log(response);
+          // console.log(response);
           setTotalQuestions(response.data.totalQuestions);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         });
     };
 

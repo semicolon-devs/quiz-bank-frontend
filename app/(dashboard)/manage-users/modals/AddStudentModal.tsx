@@ -42,7 +42,7 @@ const AddStudentModal = (props: { added: () => void }) => {
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
 
   const addStudent = (values: FormValues) => {
-    console.log("clicked user add button");
+    // console.log("clicked user add button");
     const axiosConfig = {
       method: "POST",
       url: `${BASE_URL}auth/register-lms-user`,
@@ -58,8 +58,8 @@ const AddStudentModal = (props: { added: () => void }) => {
     };
     axios(axiosConfig)
       .then((response) => {
-        console.log(response);
-        console.log("LMS USER ADDED")
+        // console.log(response);
+        // console.log("LMS USER ADDED")
         if (response.status === 201) {
           props.added();
           closeModal();
@@ -71,9 +71,9 @@ const AddStudentModal = (props: { added: () => void }) => {
         if (error.response) {
           // The request was made and the server responded with a status code
           // that falls out of the range of 2xx
-          console.log(error.response.data);
-          console.log(error.response.status);
-          console.log(error.response.headers);
+          // console.log(error.response.data);
+          // console.log(error.response.status);
+          // console.log(error.response.headers);
           if (error.response.status === 500) {
             alert("Duplicate Student emails found!!");
           } else {
@@ -81,11 +81,11 @@ const AddStudentModal = (props: { added: () => void }) => {
           }
         } else if (error.request) {
           // The request was made but no response was received
-          console.log(error.request);
+          // console.log(error.request);
           alert("No response received from the server");
         } else {
           // Something happened in setting up the request that triggered an Error
-          console.log("Error", error.message);
+          // console.log("Error", error.message);
           alert("An error occurred: " + error.message);
         }
       })

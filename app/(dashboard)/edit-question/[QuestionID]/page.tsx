@@ -105,7 +105,7 @@ export default function EditQuestionPage({
       };
       axios(axiosConfig)
         .then((response) => {
-          console.log(response);
+          // console.log(response);
           setDifficultyLevelSelected(response.data.difficulty);
           setSubjectSelected(response.data.subject);
           setSubjectCategorySelected(response.data.subCategory);
@@ -117,7 +117,7 @@ export default function EditQuestionPage({
           handleSetAnswerList(answers, correctAnswer);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         });
     };
 
@@ -140,7 +140,7 @@ export default function EditQuestionPage({
           setCourses(response.data);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         })
         .finally(() => {
           setLoading(false);
@@ -214,7 +214,7 @@ export default function EditQuestionPage({
           router.push(UrlSlugType.MANAGE_QUESTIONS);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         })
         .finally(() => {
           setLoading(false);

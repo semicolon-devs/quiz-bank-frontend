@@ -57,7 +57,7 @@ export default function PaperQuestionPage({
           }
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         })
         .finally(() => {
           setLoading(false);
@@ -121,7 +121,7 @@ export default function PaperQuestionPage({
         );
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       })
       .finally(() => {
         setLoading(false);

@@ -75,7 +75,7 @@ export default function AddPDFPapers() {
           setBatch(response.data.batch);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         })
         .finally(() => {
           setLoading(false);
@@ -108,7 +108,7 @@ export default function AddPDFPapers() {
     };
     axios(axiosConfig)
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         if (response.status === 200) {
           alert("Settings Updated");
         } else {
@@ -116,7 +116,7 @@ export default function AddPDFPapers() {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       })
       .finally(() => {
         // setLoading(false);
@@ -136,7 +136,7 @@ export default function AddPDFPapers() {
     };
     axios(axiosConfig)
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         if (response.status === 200) {
           alert("Deleted");
         } else {
@@ -144,7 +144,7 @@ export default function AddPDFPapers() {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       })
       .finally(() => {
         // setLoading(false);

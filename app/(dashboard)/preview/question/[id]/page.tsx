@@ -65,7 +65,7 @@ export default function Page({ params }: { params: { id: string } }) {
           handleSetAnswersSelected(correctAnswer);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         })
         .finally(() => {
           setLoading(false);

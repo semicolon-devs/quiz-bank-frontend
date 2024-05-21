@@ -63,7 +63,7 @@ export default function PaperQuestionPage({
             setSubmittedAnswers(response.data.answer.answer);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         })
         .finally(() => {
           setLoading(false);
@@ -85,7 +85,7 @@ export default function PaperQuestionPage({
           setExplanation(response.data.explaination);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         })
         .finally(() => {
           setLoading(false);
@@ -106,7 +106,7 @@ export default function PaperQuestionPage({
           setCorrectAnswersArray(response.data.answers);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         })
         .finally(() => {});
     };
