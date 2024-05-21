@@ -31,24 +31,32 @@ import { PaperType } from "@/utils/enums";
 
 import { UserDetails } from "@/types";
 
-const headers = ["Student Name", "Email", "Passowrd", "Add Grades","Change Grades", "Actions"];
+const headers = [
+  "Student Name",
+  "Email",
+  "Passowrd",
+  "Add Grades",
+  "Change Grades",
+  "Actions",
+];
 
 export default function ManageUsersPage() {
   const [loading, setLoading] = useState<boolean>(false);
   const [studentList, setStudentList] = useState<UserDetails[]>([]);
-   const [pageNumber, setPageNumber] = useState<number>(1);
+  const [pageNumber, setPageNumber] = useState<number>(1);
   const [numberOfPages, setNumberOfPages] = useState<number>(1);
   const [tableSearch, setTableSearch] = useState<string>("");
   const [modalShowPaper, setModalShowPaper] = useState<UserDetails>();
-   const [pageSize, setPageSize] = useState<number>(entriesArray[1]);
+  const [pageSize, setPageSize] = useState<number>(entriesArray[1]);
   const [deleteUser, setDeleteUser] = useState<boolean>(false);
   const [userAdded, setUserAdded] = useState<boolean>(false);
 
   const router = useRouter();
 
+  
   const userAddedFunc = () => {
     setUserAdded(true);
-    console.log("user added called")
+    console.log("user added called");
   };
 
   //get studnets
@@ -87,8 +95,8 @@ export default function ManageUsersPage() {
     };
 
     getLMSUsers();
-  // }, [pageNumber, pageSize, userAdded ,deleteUser]);
-  }, [ userAdded ,deleteUser]);
+    // }, [pageNumber, pageSize, userAdded ,deleteUser]);
+  }, [userAdded, deleteUser]);
 
   //delete student
   const deleteStudent = (_id: string) => {
@@ -118,8 +126,6 @@ export default function ManageUsersPage() {
     studentList.filter((paper) => {
       return paper.firstname.includes(tableSearch);
     });
-
- 
 
   return (
     <div>
@@ -183,32 +189,30 @@ export default function ManageUsersPage() {
                     >
                       {row.email}
                     </div>
-                    <div
-                      className={table().rowItem({ className: "" })}
-                    >
+                    <div className={table().rowItem({ className: "" })}>
                       {row.key}
                     </div>
 
                     <div className={table().rowItem({ className: "" })}>
-                      <GradesAddModel name={row.firstname} id={row._id} added={userAddedFunc}  />
-                      
+                      <GradesAddModel
+                        name={row.firstname}
+                        id={row._id}
+                        added={userAddedFunc}
+                        
+                      />
                     </div>
 
                     <div className={table().rowItem({ className: "" })}>
-                      <GradesChangeModel name={row.firstname} id={row._id} added={userAddedFunc}  />
-                      
+                      <GradesChangeModel
+                        name={row.firstname}
+                        id={row._id}
+                        added={userAddedFunc}
+                      />
                     </div>
 
                     <div className={table().rowItem({ className: "" })}>
-                      {/* <div
-                        className="p-1 cursor-pointer"
-                        onClick={() =>
-                          router.push(
-                            `${UrlSlugType.PREVIEW_QUESTION}/${row._id}`
-                          )
-                        }
-                      >
-                        <EyeOpenIcon classes={"w-4 h-5 text-blue-600"} />
+                      {/* <div className="p-1 cursor-pointer">
+                        
                       </div> */}
 
                       <div className="cursor-pointer">
@@ -235,8 +239,6 @@ export default function ManageUsersPage() {
                             from the system?
                           </p>
                         </Modal>
-                        
-
                       </div>
                     </div>
                   </div>

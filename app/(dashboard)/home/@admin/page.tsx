@@ -1,13 +1,61 @@
 "use client";
 
 import SectionTitle from "@/components/sectionTitle";
+import { BASE_URL } from "@/config/apiConfig";
+import { getAccess } from "@/helpers/token";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
+import axios from "axios";
+import { useEffect, useState } from "react";
+
+
+interface Stats {
+  quizs: number;
+  users: number;
+  lmsUsers: number;
+  notes: number;
+  papers: number;
+  _id: string;
+}
+
 
 export default function AdminDashboardPage() {
+
+  const [loading, setLoading] = useState<boolean>(false);
+  const [stats, setStats] = useState<Stats>();
+
+  useEffect(() => {
+    const getQPapers = async () => {
+      setLoading(true);
+      const axiosConfig = {
+        method: "GET",
+        url: `${BASE_URL}lms/settings/dashboard`,
+        headers: {
+          Authorization: `Bearer ${getAccess()}`,
+        },
+      };
+      axios(axiosConfig)
+        .then((response) => {
+          console.log(response.data);
+          setStats(response.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    };
+  
+    getQPapers();
+  }, []);
+
+
+
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
@@ -86,7 +134,7 @@ export default function AdminDashboardPage() {
               sx={{ fontSize: 60, fontWeight: 800 }}
               color="primary.light"
             >
-              62
+              {stats && stats.lmsUsers}
             </Typography>
             <Typography
               sx={{ fontSize: 16, fontWeight: 500 }}
@@ -111,7 +159,7 @@ export default function AdminDashboardPage() {
               sx={{ fontSize: 60, fontWeight: 800 }}
               color="primary.light"
             >
-              12
+              {stats && stats.notes}
             </Typography>
             <Typography
               sx={{ fontSize: 16, fontWeight: 500 }}
@@ -136,7 +184,7 @@ export default function AdminDashboardPage() {
               sx={{ fontSize: 60, fontWeight: 800 }}
               color="primary.light"
             >
-              10
+             {stats && stats.quizs}
             </Typography>
             <Typography
               sx={{ fontSize: 16, fontWeight: 500 }}
@@ -161,7 +209,8 @@ export default function AdminDashboardPage() {
               sx={{ fontSize: 60, fontWeight: 800 }}
               color="primary.light"
             >
-              22
+              
+              {stats && stats.papers}
             </Typography>
             <Typography
               sx={{ fontSize: 16, fontWeight: 500 }}

@@ -93,7 +93,7 @@ export default function RegisterPage() {
     values: FormValues,
     { setSubmitting, resetForm }: FormikHelpers<FormValues>
   ) => {
-    register(values);
+    //register(values);
     setSubmitting(false);
   };
 

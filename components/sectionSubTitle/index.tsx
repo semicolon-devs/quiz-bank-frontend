@@ -1,3 +1,4 @@
+import { Typography } from "@mui/material";
 import React from "react";
 
 type Props = {
@@ -6,9 +7,14 @@ type Props = {
 
 const SectionSubTitle = ({ title }: Props) => {
   return (
-    <h4 className="text-xl text-blue-700 font-semibold mb-3 capitalize">
+    <Typography
+      variant="h6"
+      textTransform={"capitalize"}
+      gutterBottom
+      // suppressHydrationWarning
+    >
       {title}
-    </h4>
+    </Typography>
   );
 };
 
