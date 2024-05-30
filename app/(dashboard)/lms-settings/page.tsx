@@ -62,11 +62,14 @@ export default function AddPDFPapers() {
   useEffect(() => {
     const getSettings = async () => {
       setLoading(true);
+
+      const accessToken = await getAccess();
+
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}lms/settings/admin`,
         headers: {
-          Authorization: `Bearer ${getAccess()}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
       axios(axiosConfig)
@@ -94,12 +97,14 @@ export default function AddPDFPapers() {
     }));
   }, [driveLink, batch]);
 
-  const changeLMSSettings = (values: FormValues) => {
+  const changeLMSSettings = async (values: FormValues) => {
+    const accessToken = await getAccess();
+
     const axiosConfig = {
       method: "PATCH",
       url: `${BASE_URL}lms/settings`,
       headers: {
-        Authorization: `Bearer ${getAccess()}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       data: {
         driveLink: values.driveLink,
@@ -123,12 +128,14 @@ export default function AddPDFPapers() {
       });
   };
 
-  const deleteALL = (values: FormValues) => {
+  const deleteALL = async (values: FormValues) => {
+    const accessToken = await getAccess();
+
     const axiosConfig = {
       method: "POST",
       url: `${BASE_URL}lms/delete-all`,
       headers: {
-        Authorization: `Bearer ${getAccess()}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       data: {
         newBatch: values.newBatch,

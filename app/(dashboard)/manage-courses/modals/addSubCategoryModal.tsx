@@ -43,13 +43,16 @@ const AddSubCategoryModal = ({ subject }: Props) => {
     setIsOpen(true);
   }
 
-  const addNewSubjectCategory = (values: FormValues) => {
+  const addNewSubjectCategory = async (values: FormValues) => {
     setLoading(true);
+
+    const accessToken = await getAccess();
+
     const axiosConfig = {
       method: "POST",
       url: `${BASE_URL}subjects/courses/${subject._id}`,
       headers: {
-        Authorization: `Bearer ${getAccess()}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       data: {
         subCategory: values.subjectCategory,

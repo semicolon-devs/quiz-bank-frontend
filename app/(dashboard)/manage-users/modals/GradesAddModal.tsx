@@ -101,11 +101,13 @@ const GradesModal = (props: any) => {
   //get user's All marks
   useEffect(() => {
     const getUserMarks = async () => {
+      const accessToken = await getAccess();
+
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}lms/marks/${props.id}`,
         headers: {
-          Authorization: `Bearer ${getAccess()}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
       axios(axiosConfig)
@@ -132,6 +134,8 @@ const GradesModal = (props: any) => {
   //get papers
   useEffect(() => {
     const getPapers = async () => {
+      const accessToken = await getAccess();
+
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}lms/papers`,
@@ -140,7 +144,7 @@ const GradesModal = (props: any) => {
           limit: 100,
         },
         headers: {
-          Authorization: `Bearer ${getAccess()}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
       axios(axiosConfig)
@@ -163,11 +167,13 @@ const GradesModal = (props: any) => {
     };
 
     getPapers();
-  }, [activePaper, pageNumber , isOpenModal]);
+  }, [activePaper, pageNumber, isOpenModal]);
 
   //get grades by user and paper
   useEffect(() => {
     const getSettings = async () => {
+      const accessToken = await getAccess();
+
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}lms/marks/`,
@@ -176,7 +182,7 @@ const GradesModal = (props: any) => {
           paperId: activePaper,
         },
         headers: {
-          Authorization: `Bearer ${getAccess()}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
       axios(axiosConfig)
@@ -216,8 +222,9 @@ const GradesModal = (props: any) => {
   }, [grades]);
 
   //change grades
-  const changeGrades = (values: FormValues) => {
-    // console.log(values);
+  const changeGrades = async (values: FormValues) => {
+    const accessToken = await getAccess();
+
     const axiosConfig = {
       method: "POST",
       url: `${BASE_URL}lms/marks/`,
@@ -226,7 +233,7 @@ const GradesModal = (props: any) => {
       //   paperId: activePaper,
       // },
       headers: {
-        Authorization: `Bearer ${getAccess()}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       data: {
         userId: props.id,
@@ -655,7 +662,10 @@ const GradesModal = (props: any) => {
                           <button type="submit" className={form().button()}>
                             <p className="">Add Marks</p>
                           </button>
-                          <p className="text-red-500">Please wait until the model closes automatically after submitting.</p>
+                          <p className="text-red-500">
+                            Please wait until the model closes automatically
+                            after submitting.
+                          </p>
                         </form>
                       )}
                     </Formik>

@@ -53,6 +53,9 @@ export default function ManageUsersPage() {
   useEffect(() => {
     const getPapers = async () => {
       setLoading(true);
+
+      const accessToken = await getAccess();
+
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}lms/papers`,
@@ -61,7 +64,7 @@ export default function ManageUsersPage() {
           limit: pageSize,
         },
         headers: {
-          Authorization: `Bearer ${getAccess()}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
       axios(axiosConfig)
@@ -89,13 +92,16 @@ export default function ManageUsersPage() {
   }, [pageNumber, pageSize, paperAdded, deletePaperV]);
 
   //delete student
-  const deletePaper = (_id: string) => {
+  const deletePaper = async (_id: string) => {
     setLoading(true);
+
+    const accessToken = await getAccess();
+
     const axiosConfig = {
       method: "DELETE",
       url: `${BASE_URL}lms/papers/${_id}`,
       headers: {
-        Authorization: `Bearer ${getAccess()}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     };
     axios(axiosConfig)

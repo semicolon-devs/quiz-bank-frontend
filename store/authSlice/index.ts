@@ -10,22 +10,26 @@ export interface IAuthState {
   userDetails: UserDetails | undefined;
 }
 
-export const fetchUserDetails = createAsyncThunk("auth/userDetails", () => {
-  const axiosConfig = {
-    method: "GET",
-    url: `${BASE_URL}auth/user-details`,
-    headers: {
-      Authorization: `Bearer ${getAccess()}`,
-    },
-  };
+export const fetchUserDetails = createAsyncThunk(
+  "auth/userDetails",
+  async () => {
+    const accessToken = await getAccess();
+    const axiosConfig = {
+      method: "GET",
+      url: `${BASE_URL}auth/user-details`,
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
 
-  const res = axios(axiosConfig)
-    .then((response: AxiosResponse<UserDetails>) => response.data)
-    .catch((err) => {
-      throw err;
-    });
-  return res;
-});
+    const res = axios(axiosConfig)
+      .then((response: AxiosResponse<UserDetails>) => response.data)
+      .catch((err) => {
+        throw err;
+      });
+    return res;
+  }
+);
 
 const initialState: IAuthState = {
   userDetails: undefined,

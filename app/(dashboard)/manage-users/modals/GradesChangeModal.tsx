@@ -100,11 +100,13 @@ const GradesModal = (props: any) => {
   //get user's All marks
   useEffect(() => {
     const getUserMarks = async () => {
+      const accessToken = await getAccess();
+
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}lms/marks/${props.id}`,
         headers: {
-          Authorization: `Bearer ${getAccess()}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
       axios(axiosConfig)
@@ -130,6 +132,8 @@ const GradesModal = (props: any) => {
   //get papers
   useEffect(() => {
     const getPapers = async () => {
+      const accessToken = await getAccess();
+
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}lms/papers`,
@@ -138,7 +142,7 @@ const GradesModal = (props: any) => {
           limit: 100,
         },
         headers: {
-          Authorization: `Bearer ${getAccess()}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
       axios(axiosConfig)
@@ -166,12 +170,14 @@ const GradesModal = (props: any) => {
   // get grades by user and paper
   useEffect(() => {
     const getSettings = async () => {
+      const accessToken = await getAccess();
+
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}lms/marks/${props.id}/${activePaper}`,
 
         headers: {
-          Authorization: `Bearer ${getAccess()}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
       axios(axiosConfig)
@@ -212,8 +218,9 @@ const GradesModal = (props: any) => {
   }, [grades, activePaper]);
 
   //change Marks
-  const changeMarks = (values: FormValues) => {
-    // console.log(values);
+  const changeMarks = async (values: FormValues) => {
+    const accessToken = await getAccess();
+
     const axiosConfig = {
       method: "PATCH",
       url: `${BASE_URL}lms/marks/${props.id}/${activePaper}`,
@@ -222,7 +229,7 @@ const GradesModal = (props: any) => {
       //   paperId: activePaper,
       // },
       headers: {
-        Authorization: `Bearer ${getAccess()}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       data: {
         reading: values.reading,

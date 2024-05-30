@@ -31,9 +31,8 @@ interface FormValues {
 }
 
 const initialValues: FormValues = {
-
   firstname: "",
-  lastname:"",
+  lastname: "",
   email: "",
   password: "",
 };
@@ -41,17 +40,18 @@ const initialValues: FormValues = {
 const AddStudentModal = (props: { added: () => void }) => {
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
 
-  const addStudent = (values: FormValues) => {
-    // console.log("clicked user add button");
+  const addStudent = async (values: FormValues) => {
+    const accessToken = await getAccess();
+    
     const axiosConfig = {
       method: "POST",
       url: `${BASE_URL}auth/register-lms-user`,
       headers: {
-        Authorization: `Bearer ${getAccess()}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       data: {
         firstname: values.firstname,
-        lastname:values.lastname,
+        lastname: values.lastname,
         email: values.email,
         password: values.password,
       },
@@ -171,7 +171,10 @@ const AddStudentModal = (props: { added: () => void }) => {
                           className={form().innerForm()}
                         >
                           <div className={form().formDiv()}>
-                            <label htmlFor="firstname" className={form().label()}>
+                            <label
+                              htmlFor="firstname"
+                              className={form().label()}
+                            >
                               Studnet First Name
                             </label>
                             <Field
@@ -191,7 +194,10 @@ const AddStudentModal = (props: { added: () => void }) => {
                           </div>
 
                           <div className={form().formDiv()}>
-                            <label htmlFor="lastname" className={form().label()}>
+                            <label
+                              htmlFor="lastname"
+                              className={form().label()}
+                            >
                               Studnet Last Name
                             </label>
                             <Field

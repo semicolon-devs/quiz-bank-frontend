@@ -66,11 +66,13 @@ export default function StudentDashboardPage() {
 //get marks by user
 useEffect(() => {
   const getMarks = async () => {
+    const accessToken = await getAccess();
+
     const axiosConfig = {
       method: "GET",
       url: `${BASE_URL}lms/marks/${userDetails?._id}`,
       headers: {
-        Authorization: `Bearer ${getAccess()}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     };
     axios(axiosConfig)
@@ -92,11 +94,14 @@ useEffect(() => {
   useEffect(() => {
     const getQPapers = async () => {
       setLoading(true);
+
+      const accessToken = await getAccess();
+
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}papers`,
         headers: {
-          Authorization: `Bearer ${getAccess()}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
       axios(axiosConfig)

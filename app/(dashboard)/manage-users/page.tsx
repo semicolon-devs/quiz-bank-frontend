@@ -53,7 +53,6 @@ export default function ManageUsersPage() {
 
   const router = useRouter();
 
-  
   const userAddedFunc = () => {
     setUserAdded(true);
     // console.log("user added called");
@@ -63,6 +62,9 @@ export default function ManageUsersPage() {
   useEffect(() => {
     const getLMSUsers = async () => {
       setLoading(true);
+
+      const accessToken = await getAccess();
+
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}auth/all-lms-users`,
@@ -71,7 +73,7 @@ export default function ManageUsersPage() {
         //   limit: pageSize,
         // },
         headers: {
-          Authorization: `Bearer ${getAccess()}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
       axios(axiosConfig)
@@ -99,13 +101,16 @@ export default function ManageUsersPage() {
   }, [userAdded, deleteUser]);
 
   //delete student
-  const deleteStudent = (_id: string) => {
+  const deleteStudent = async (_id: string) => {
     setLoading(true);
+
+    const accessToken = await getAccess();
+
     const axiosConfig = {
       method: "DELETE",
       url: `${BASE_URL}auth/${_id}`,
       headers: {
-        Authorization: `Bearer ${getAccess()}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     };
     axios(axiosConfig)
@@ -198,7 +203,6 @@ export default function ManageUsersPage() {
                         name={row.firstname}
                         id={row._id}
                         added={userAddedFunc}
-                        
                       />
                     </div>
 

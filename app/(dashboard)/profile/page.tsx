@@ -106,16 +106,18 @@ export default function ProfilePage() {
       .finally(() => {});
   };
 
-  const updatePassword = (values: {
+  const updatePassword = async (values: {
     currentPassword: string;
     newPassword: string;
     confirmPassword: string;
   }) => {
+    const accessToken = await getAccess();
+
     const axiosConfig = {
       method: "POST",
       url: `${BASE_URL}auth/reset-password`,
       headers: {
-        Authorization: `Bearer ${getAccess()}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       data: {
         password: values.currentPassword,

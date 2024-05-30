@@ -70,12 +70,14 @@ const AddNoteModal = (props: any) => {
 
   
 
-  const AddPDFPaper = (values: FormValues) => {
+  const AddPDFPaper = async (values: FormValues) => {
+    const accessToken = await getAccess();
+
     const axiosConfig = {
       method: "POST",
       url: `${BASE_URL}lms/notes`,
       headers: {
-        Authorization: `Bearer ${getAccess()}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       data: {
         title: values.title,

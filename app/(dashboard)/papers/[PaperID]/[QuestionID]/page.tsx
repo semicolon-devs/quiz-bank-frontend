@@ -40,13 +40,16 @@ export default function PaperQuestionPage({
   const { userDetails } = useAppSelector((state: RootState) => state.auth);
 
   useEffect(() => {
-    const getQuestion = () => {
+    const getQuestion = async () => {
       setLoading(true);
+
+      const accessToken = await getAccess();
+
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}papers/${params.PaperID}/${params.QuestionID}`,
         headers: {
-          Authorization: `Bearer ${getAccess()}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
       axios(axiosConfig)
@@ -91,13 +94,16 @@ export default function PaperQuestionPage({
     return trueIndexes;
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setLoading(true);
+
+    const accessToken = await getAccess();
+
     const axiosConfig = {
       method: "POST",
       url: `${BASE_URL}answers/submit`,
       headers: {
-        Authorization: `Bearer ${getAccess()}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       data: {
         userId: userDetails?._id,

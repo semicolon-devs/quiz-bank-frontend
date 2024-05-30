@@ -43,7 +43,7 @@ export default function Page({ params }: { params: { id: string } }) {
   const router = useRouter();
 
   useEffect(() => {
-    const getQuestion = () => {
+    const getQuestion = async () => {
       const handleSetAnswersSelected = (correctAnswer: number[]) => {
         setAnswersSelected((prevAnswerList) =>
           prevAnswerList.map((answer, index) => correctAnswer.includes(index))
@@ -51,11 +51,14 @@ export default function Page({ params }: { params: { id: string } }) {
       };
 
       setLoading(true);
+
+      const accessToken = await getAccess();
+
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}questions/${params.id}`,
         headers: {
-          Authorization: `Bearer ${getAccess()}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
       axios(axiosConfig)

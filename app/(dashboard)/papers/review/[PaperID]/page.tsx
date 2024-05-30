@@ -30,12 +30,15 @@ export default function PaperDetailsPage({
   const { userDetails } = useAppSelector((state: RootState) => state.auth);
 
   useEffect(() => {
-    const hasFinishedQuiz = () => {
+    const hasFinishedQuiz = async () => {
+
+      const accessToken = await getAccess();
+
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}answers/has-finished/${userDetails?._id}/${params.PaperID}`,
         headers: {
-          Authorization: `Bearer ${getAccess()}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
       axios(axiosConfig)
@@ -48,12 +51,14 @@ export default function PaperDetailsPage({
         });
     };
 
-    const getMarks = () => {
+    const getMarks = async () => {
+      const accessToken = await getAccess();
+
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}answers/marks/${userDetails?._id}/${params.PaperID}`,
         headers: {
-          Authorization: `Bearer ${getAccess()}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
       axios(axiosConfig)
@@ -66,12 +71,14 @@ export default function PaperDetailsPage({
         });
     };
 
-    const getQuizInfo = () => {
+    const getQuizInfo = async () => {
+      const accessToken = await getAccess();
+
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}papers/${params.PaperID}/info`,
         headers: {
-          Authorization: `Bearer ${getAccess()}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
       axios(axiosConfig)
@@ -83,12 +90,14 @@ export default function PaperDetailsPage({
         });
     };
 
-    const getQuizTotalQuestions = () => {
+    const getQuizTotalQuestions = async () => {
+      const accessToken = await getAccess();
+
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}answers/status/${userDetails?._id}/${params.PaperID}`,
         headers: {
-          Authorization: `Bearer ${getAccess()}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
       axios(axiosConfig)
