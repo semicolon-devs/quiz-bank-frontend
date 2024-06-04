@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { UserRole } from "./utils/enums";
 
-const userDetails = store.getState().auth.userDetails;
+// const userDetails = store.getState().auth.userDetails;
 
 const protectedRoutes = [
   "/add-question",
@@ -20,11 +20,11 @@ const protectedRoutes = [
 ];
 
 export default function middleware(req: NextRequest) {
-  if (
-    !userDetails?.roles.includes(UserRole.ADMIN) &&
-    protectedRoutes.includes(req.nextUrl.pathname)
-  ) {
-    const absoluteURL = new URL("/", req.nextUrl.origin);
-    return NextResponse.redirect(absoluteURL.toString());
-  }
+  // if (
+  //   !userDetails?.roles.includes(UserRole.ADMIN) &&
+  //   protectedRoutes.includes(req.nextUrl.pathname)
+  // ) {
+  //   const absoluteURL = new URL("/", req.nextUrl.origin);
+  //   return NextResponse.redirect(absoluteURL.toString());
+  // }
 }
