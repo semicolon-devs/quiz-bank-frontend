@@ -68,12 +68,13 @@ const ManagePaperQuestionsPage = ({
   const router = useRouter();
 
   useEffect(() => {
-    const getPaper = () => {
+    const getPaper = async () => {
+      const accessToken = await getAccess();
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}papers/admin/${params.paperID}`,
         headers: {
-          Authorization: `Bearer ${getAccess()}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
       axios(axiosConfig)
@@ -82,7 +83,7 @@ const ManagePaperQuestionsPage = ({
           setSelectedQuestionsList(response.data.questions);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         })
         .finally(() => {});
     };
@@ -91,8 +92,11 @@ const ManagePaperQuestionsPage = ({
   }, [params.paperID]);
 
   useEffect(() => {
-    const getQuestions = () => {
+    const getQuestions = async () => {
       setLoading(true);
+
+      const accessToken = await getAccess();
+
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}questions/filter`,
@@ -103,7 +107,7 @@ const ManagePaperQuestionsPage = ({
           // module: "Mendelian Genetics",
         },
         headers: {
-          Authorization: `Bearer ${getAccess()}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
       axios(axiosConfig)
@@ -117,7 +121,7 @@ const ManagePaperQuestionsPage = ({
           );
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         })
         .finally(() => {
           setLoading(false);
@@ -127,35 +131,41 @@ const ManagePaperQuestionsPage = ({
     getQuestions();
   }, [pageNumber, pageSize]);
 
-  const removeQuestion = (questionID: string) => {
+  const removeQuestion = async (questionID: string) => {
     setLoading(true);
+
+    const accessToken = await getAccess();
+
     const axiosConfig = {
       method: "DELETE",
       url: `${BASE_URL}papers/${params.paperID}/${questionID}`,
       headers: {
-        Authorization: `Bearer ${getAccess()}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     };
     axios(axiosConfig)
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         toast.success("Question succesfully removed from the paper");
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       })
       .finally(() => {
         setLoading(false);
       });
   };
 
-  const addQuestion = (questionID: string) => {
+  const addQuestion = async (questionID: string) => {
     setLoading(true);
+
+    const accessToken = await getAccess();
+
     const axiosConfig = {
       method: "POST",
       url: `${BASE_URL}papers/add/${params.paperID}`,
       headers: {
-        Authorization: `Bearer ${getAccess()}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       data: {
         questionIdArray: [questionID],
@@ -175,17 +185,20 @@ const ManagePaperQuestionsPage = ({
       });
   };
 
-  const updateQuestionOrder = () => {
+  const updateQuestionOrder = async () => {
     const selectedQuestionIdArray = selectedQuestionsList
       .filter((question) => question._id)
       .map((question) => question._id);
 
     setLoading(true);
+
+    const accessToken = await getAccess();
+
     const axiosConfig = {
       method: "PATCH",
       url: `${BASE_URL}papers/update-questions/${params.paperID}`,
       headers: {
-        Authorization: `Bearer ${getAccess()}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       data: {
         questionIdArray: selectedQuestionIdArray,
@@ -196,7 +209,7 @@ const ManagePaperQuestionsPage = ({
         toast.success("Question order updated successfully");
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       })
       .finally(() => {
         setLoading(false);
@@ -217,7 +230,6 @@ const ManagePaperQuestionsPage = ({
             ? `${paper?.name} : ${paper?.paperId}`
             : "Loading..."
         }
-        
       />
       <SectionSubTitle
         title={`Added questions : count ${paper?.questions.length}`}

@@ -40,12 +40,14 @@ export default function PaperTemplate({
 
   const { userDetails } = useAppSelector((state: RootState) => state.auth);
 
-  const handleCompleteQuiz = () => {
+  const handleCompleteQuiz = async () => {
+    const accessToken = await getAccess();
+
     const axiosConfig = {
       method: "POST",
       url: `${BASE_URL}answers/finish`,
       headers: {
-        Authorization: `Bearer ${getAccess()}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       data: {
         userId: userDetails?._id,
@@ -55,23 +57,26 @@ export default function PaperTemplate({
     };
     axios(axiosConfig)
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         router.push(`${UrlSlugType.PAPERS_REVIEW}/${params.PaperID}`);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
   };
 
   useEffect(() => {
-    const getQuestionBlocks = () => {
+    const getQuestionBlocks = async () => {
       setLoadingQBlocks(true);
       const userID = userDetails?._id;
+
+      const accessToken = await getAccess();
+
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}answers/status/${userID}/${params.PaperID}`,
         headers: {
-          Authorization: `Bearer ${getAccess()}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
       axios(axiosConfig)
@@ -83,21 +88,24 @@ export default function PaperTemplate({
           }
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         })
         .finally(() => {
           setLoadingQBlocks(false);
         });
     };
 
-    const getQPaperInfo = () => {
+    const getQPaperInfo = async () => {
       setLoadingQPaper(true);
       setQPaperError(false);
+
+      const accessToken = await getAccess();
+
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}papers/${params.PaperID}/info`,
         headers: {
-          Authorization: `Bearer ${getAccess()}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
       axios(axiosConfig)
@@ -107,7 +115,7 @@ export default function PaperTemplate({
           setPaperMinutes(response.data.timeInMinutes);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
           setQPaperError(true);
         })
         .finally(() => {

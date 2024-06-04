@@ -47,13 +47,16 @@ export default function PaperQuestionPage({
   const { userDetails } = useAppSelector((state: RootState) => state.auth);
 
   useEffect(() => {
-    const getQuestion = () => {
+    const getQuestion = async () => {
       setLoading(true);
+
+      const accessToken = await getAccess();
+
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}papers/${params.PaperID}/${params.QuestionID}`,
         headers: {
-          Authorization: `Bearer ${getAccess()}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
       axios(axiosConfig)
@@ -63,20 +66,23 @@ export default function PaperQuestionPage({
             setSubmittedAnswers(response.data.answer.answer);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         })
         .finally(() => {
           setLoading(false);
         });
     };
 
-    const getAnswer = () => {
+    const getAnswer = async () => {
       setLoading(true);
+
+      const accessToken = await getAccess();
+
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}papers/answer/${params.PaperID}/${params.QuestionID}`,
         headers: {
-          Authorization: `Bearer ${getAccess()}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
       axios(axiosConfig)
@@ -85,20 +91,23 @@ export default function PaperQuestionPage({
           setExplanation(response.data.explaination);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         })
         .finally(() => {
           setLoading(false);
         });
     };
 
-    const getQuestionBlockSubmitted = () => {
+    const getQuestionBlockSubmitted = async () => {
       const userID = userDetails?._id;
+
+      const accessToken = await getAccess();
+
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}answers/answers-status/${userID}/${params.PaperID}`,
         headers: {
-          Authorization: `Bearer ${getAccess()}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
       axios(axiosConfig)
@@ -106,7 +115,7 @@ export default function PaperQuestionPage({
           setCorrectAnswersArray(response.data.answers);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         })
         .finally(() => {});
     };

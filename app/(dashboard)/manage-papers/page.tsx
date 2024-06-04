@@ -52,6 +52,8 @@ export default function ManagePapersPage() {
   useEffect(() => {
     const getPapers = async () => {
       setLoading(true);
+      const accessToken = await getAccess();
+
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}papers/admin`,
@@ -62,7 +64,7 @@ export default function ManagePapersPage() {
           // module: "Mendelian Genetics",
         },
         headers: {
-          Authorization: `Bearer ${getAccess()}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
       axios(axiosConfig)
@@ -76,7 +78,7 @@ export default function ManagePapersPage() {
           );
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         })
         .finally(() => {
           setLoading(false);
@@ -86,13 +88,16 @@ export default function ManagePapersPage() {
     getPapers();
   }, [pageNumber, pageSize]);
 
-  const deletePaper = (id: string) => {
+  const deletePaper = async (id: string) => {
     setLoading(true);
+
+    const accessToken = await getAccess();
+
     const axiosConfig = {
       method: "DELETE",
       url: `${BASE_URL}papers/${id}`,
       headers: {
-        Authorization: `Bearer ${getAccess()}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     };
     axios(axiosConfig)
@@ -100,7 +105,7 @@ export default function ManagePapersPage() {
         // console.log(response);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       })
       .finally(() => {
         setLoading(false);

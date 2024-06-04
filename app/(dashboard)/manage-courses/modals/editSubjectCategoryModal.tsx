@@ -44,13 +44,16 @@ const EditSubjectModal = ({ subjectCategory }: Props) => {
     setIsOpen(true);
   }
 
-  const editSubjectCategory = (values: FormValues) => {
+  const editSubjectCategory = async (values: FormValues) => {
     setLoading(true);
+
+    const accessToken = await getAccess();
+
     const axiosConfig = {
       method: "PATCH",
       url: `${BASE_URL}subjects/courses/${subjectCategory._id}`,
       headers: {
-        Authorization: `Bearer ${getAccess()}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       data: {
         name: values.subjectCategory,

@@ -40,13 +40,16 @@ const AddSubjectModal = (props: Props) => {
     setIsOpen(true);
   }
 
-  const addNewSubject = (values: FormValues) => {
+  const addNewSubject = async (values: FormValues) => {
     setLoading(true);
+
+    const accessToken = await getAccess();
+
     const axiosConfig = {
       method: "POST",
       url: `${BASE_URL}subjects`,
       headers: {
-        Authorization: `Bearer ${getAccess()}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       data: {
         name: values.subject,

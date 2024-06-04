@@ -45,13 +45,16 @@ const EditSubjectModal = ({ module }: Props) => {
     setIsOpen(true);
   }
 
-  const editModule = (values: FormValues) => {
+  const editModule = async (values: FormValues) => {
     setLoading(true);
+
+    const accessToken = await getAccess();
+
     const axiosConfig = {
       method: "PATCH",
       url: `${BASE_URL}subjects/module/${module._id}`,
       headers: {
-        Authorization: `Bearer ${getAccess()}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       data: {
         name: values.module,

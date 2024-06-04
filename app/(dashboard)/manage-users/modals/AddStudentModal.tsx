@@ -31,9 +31,8 @@ interface FormValues {
 }
 
 const initialValues: FormValues = {
-
   firstname: "",
-  lastname:"",
+  lastname: "",
   email: "",
   password: "",
 };
@@ -41,25 +40,26 @@ const initialValues: FormValues = {
 const AddStudentModal = (props: { added: () => void }) => {
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
 
-  const addStudent = (values: FormValues) => {
-    console.log("clicked user add button");
+  const addStudent = async (values: FormValues) => {
+    const accessToken = await getAccess();
+    
     const axiosConfig = {
       method: "POST",
       url: `${BASE_URL}auth/register-lms-user`,
       headers: {
-        Authorization: `Bearer ${getAccess()}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       data: {
         firstname: values.firstname,
-        lastname:values.lastname,
+        lastname: values.lastname,
         email: values.email,
         password: values.password,
       },
     };
     axios(axiosConfig)
       .then((response) => {
-        console.log(response);
-        console.log("LMS USER ADDED")
+        // console.log(response);
+        // console.log("LMS USER ADDED")
         if (response.status === 201) {
           props.added();
           closeModal();
@@ -71,9 +71,9 @@ const AddStudentModal = (props: { added: () => void }) => {
         if (error.response) {
           // The request was made and the server responded with a status code
           // that falls out of the range of 2xx
-          console.log(error.response.data);
-          console.log(error.response.status);
-          console.log(error.response.headers);
+          // console.log(error.response.data);
+          // console.log(error.response.status);
+          // console.log(error.response.headers);
           if (error.response.status === 500) {
             alert("Duplicate Student emails found!!");
           } else {
@@ -81,11 +81,11 @@ const AddStudentModal = (props: { added: () => void }) => {
           }
         } else if (error.request) {
           // The request was made but no response was received
-          console.log(error.request);
+          // console.log(error.request);
           alert("No response received from the server");
         } else {
           // Something happened in setting up the request that triggered an Error
-          console.log("Error", error.message);
+          // console.log("Error", error.message);
           alert("An error occurred: " + error.message);
         }
       })
@@ -171,7 +171,10 @@ const AddStudentModal = (props: { added: () => void }) => {
                           className={form().innerForm()}
                         >
                           <div className={form().formDiv()}>
-                            <label htmlFor="firstname" className={form().label()}>
+                            <label
+                              htmlFor="firstname"
+                              className={form().label()}
+                            >
                               Studnet First Name
                             </label>
                             <Field
@@ -191,7 +194,10 @@ const AddStudentModal = (props: { added: () => void }) => {
                           </div>
 
                           <div className={form().formDiv()}>
-                            <label htmlFor="lastname" className={form().label()}>
+                            <label
+                              htmlFor="lastname"
+                              className={form().label()}
+                            >
                               Studnet Last Name
                             </label>
                             <Field

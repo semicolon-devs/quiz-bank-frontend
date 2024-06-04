@@ -24,11 +24,14 @@ export default function PaperDetailsPage({
   useEffect(() => {
     const getQPapers = async () => {
       setLoading(true);
+
+      const accessToken = await getAccess();
+
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}papers/${params.PaperID}`,
         headers: {
-          Authorization: `Bearer ${getAccess()}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
       axios(axiosConfig)
@@ -36,7 +39,7 @@ export default function PaperDetailsPage({
           setPaper(response.data[0]);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         })
         .finally(() => {
           setLoading(false);

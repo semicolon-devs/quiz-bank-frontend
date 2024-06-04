@@ -42,12 +42,13 @@ const initialValues: FormValues = {
 const AddPaperModal = () => {
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
 
-  const addPaper = (values: FormValues) => {
+  const addPaper = async (values: FormValues) => {
+    const accessToken = await getAccess();
     const axiosConfig = {
       method: "POST",
       url: `${BASE_URL}papers`,
       headers: {
-        Authorization: `Bearer ${getAccess()}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       data: {
         paperId: values.code,
@@ -59,11 +60,11 @@ const AddPaperModal = () => {
     };
     axios(axiosConfig)
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         closeModal();
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       })
       .finally(() => {
         // setLoading(false);

@@ -66,22 +66,24 @@ export default function StudentDashboardPage() {
 //get marks by user
 useEffect(() => {
   const getMarks = async () => {
+    const accessToken = await getAccess();
+
     const axiosConfig = {
       method: "GET",
       url: `${BASE_URL}lms/marks/${userDetails?._id}`,
       headers: {
-        Authorization: `Bearer ${getAccess()}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     };
     axios(axiosConfig)
       .then((response) => {
         setMarks(response.data);
-        console.log(response);
+        // console.log(response);
         // console.log(userDetails?._id)
       })
       .catch((err) => {
-        console.log("Error in get marks by user");
-        console.log(err);
+        // console.log("Error in get marks by user");
+        // console.log(err);
       })
       .finally(() => {});
   };
@@ -92,20 +94,23 @@ useEffect(() => {
   useEffect(() => {
     const getQPapers = async () => {
       setLoading(true);
+
+      const accessToken = await getAccess();
+
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}papers`,
         headers: {
-          Authorization: `Bearer ${getAccess()}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
       axios(axiosConfig)
         .then((response) => {
-          console.log(response.data);
+          // console.log(response.data);
           setPaperList(response.data.result);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         })
         .finally(() => {
           setLoading(false);

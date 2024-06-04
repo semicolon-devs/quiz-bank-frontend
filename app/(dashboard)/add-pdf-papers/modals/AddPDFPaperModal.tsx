@@ -33,7 +33,7 @@ const initialValues: FormValues = {
   fileId: "",
 };
 
-const AddPDFPaperModal = (props :any) => {
+const AddPDFPaperModal = (props: any) => {
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
 
   const getFileIdFromGoogleDriveUrl = (url: string) => {
@@ -52,13 +52,14 @@ const AddPDFPaperModal = (props :any) => {
     }
   };
 
-  const AddPDFPaper = (values: FormValues) => {
-    
+  const AddPDFPaper = async (values: FormValues) => {
+    const accessToken = await getAccess();
+
     const axiosConfig = {
       method: "POST",
       url: `${BASE_URL}lms/papers`,
       headers: {
-        Authorization: `Bearer ${getAccess()}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       data: {
         title: values.title,
@@ -67,7 +68,7 @@ const AddPDFPaperModal = (props :any) => {
     };
     axios(axiosConfig)
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         if (response.status === 201) {
           props.added();
           closeModal();
@@ -79,25 +80,23 @@ const AddPDFPaperModal = (props :any) => {
         if (error.response) {
           // The request was made and the server responded with a status code
           // that falls out of the range of 2xx
-          console.log(error.response.data);
-          console.log(error.response.status);
-          console.log(error.response.headers);
+          // console.log(error.response.data);
+          // console.log(error.response.status);
+          // console.log(error.response.headers);
           if (error.response.status === 500) {
             alert("Duplicate Papers found!!");
-          } else if(error.response.status === 401){
+          } else if (error.response.status === 401) {
             alert("Enter Valid Google Drive Link");
-          } 
-          
-          else {
+          } else {
             alert("Error: " + error.response.status);
           }
         } else if (error.request) {
           // The request was made but no response was received
-          console.log(error.request);
+          // console.log(error.request);
           alert("No response received from the server");
         } else {
           // Something happened in setting up the request that triggered an Error
-          console.log("Error", error.message);
+          // console.log("Error", error.message);
           alert("An error occurred: " + error.message);
         }
       })

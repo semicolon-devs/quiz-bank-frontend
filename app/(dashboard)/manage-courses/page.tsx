@@ -52,13 +52,16 @@ export default function ManageCoursesPage() {
   };
 
   useEffect(() => {
-    const getCourses = () => {
+    const getCourses = async () => {
       setLoading(true);
+
+      const accessToken = await getAccess();
+
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}subjects`,
         headers: {
-          Authorization: `Bearer ${getAccess()}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
       axios(axiosConfig)
@@ -66,7 +69,7 @@ export default function ManageCoursesPage() {
           setCourses(response.data);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         })
         .finally(() => {
           setLoading(false);
@@ -75,28 +78,31 @@ export default function ManageCoursesPage() {
     getCourses();
   }, []);
 
-  const deleteSubject = (id: string) => {
+  const deleteSubject = async (id: string) => {
     setLoading(true);
+
+    const accessToken = await getAccess();
+
     const axiosConfig = {
       method: "DELETE",
       url: `${BASE_URL}subjects/${id}`,
       headers: {
-        Authorization: `Bearer ${getAccess()}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     };
     axios(axiosConfig)
       .then((response) => {
-        console.log(response);
+        // console.log(response);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       })
       .finally(() => {
         setLoading(false);
       });
   };
 
-  const deleteSubjectCategory = ({
+  const deleteSubjectCategory = async ({
     subjectId,
     subCategoryId,
   }: {
@@ -104,26 +110,29 @@ export default function ManageCoursesPage() {
     subCategoryId: string;
   }) => {
     setLoading(true);
+
+    const accessToken = await getAccess();
+
     const axiosConfig = {
       method: "DELETE",
       url: `${BASE_URL}subjects/courses/${subjectId}/${subCategoryId}`,
       headers: {
-        Authorization: `Bearer ${getAccess()}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     };
     axios(axiosConfig)
       .then((response) => {
-        console.log(response);
+        // console.log(response);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       })
       .finally(() => {
         setLoading(false);
       });
   };
 
-  const deleteModule = ({
+  const deleteModule = async ({
     subCategoryId,
     moduleId,
   }: {
@@ -131,19 +140,22 @@ export default function ManageCoursesPage() {
     moduleId: string;
   }) => {
     setLoading(true);
+
+    const accessToken = await getAccess();
+
     const axiosConfig = {
       method: "DELETE",
       url: `${BASE_URL}subjects/module/${subCategoryId}/${moduleId}`,
       headers: {
-        Authorization: `Bearer ${getAccess()}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     };
     axios(axiosConfig)
       .then((response) => {
-        console.log(response);
+        // console.log(response);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       })
       .finally(() => {
         setLoading(false);

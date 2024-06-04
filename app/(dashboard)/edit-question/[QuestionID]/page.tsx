@@ -95,17 +95,19 @@ export default function EditQuestionPage({
       );
     };
 
-    const getQuestion = () => {
+    const getQuestion = async () => {
+      const accessToken = await getAccess();
+
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}questions/${params.QuestionID}`,
         headers: {
-          Authorization: `Bearer ${getAccess()}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
       axios(axiosConfig)
         .then((response) => {
-          console.log(response);
+          // console.log(response);
           setDifficultyLevelSelected(response.data.difficulty);
           setSubjectSelected(response.data.subject);
           setSubjectCategorySelected(response.data.subCategory);
@@ -117,7 +119,7 @@ export default function EditQuestionPage({
           handleSetAnswerList(answers, correctAnswer);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         });
     };
 
@@ -126,13 +128,16 @@ export default function EditQuestionPage({
 
   // get all courses
   useEffect(() => {
-    const getCourses = () => {
+    const getCourses = async () => {
       setLoading(true);
+
+      const accessToken = await getAccess();
+
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}subjects`,
         headers: {
-          Authorization: `Bearer ${getAccess()}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
       axios(axiosConfig)
@@ -140,7 +145,7 @@ export default function EditQuestionPage({
           setCourses(response.data);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         })
         .finally(() => {
           setLoading(false);
@@ -151,7 +156,7 @@ export default function EditQuestionPage({
   }, []);
 
   // edit new quetion
-  const handleEditQuestionButtonClick = () => {
+  const handleEditQuestionButtonClick = async () => {
     const getCorrectAnswer = () => {
       const correctAnswerArr: number[] = [];
       answerList.map((answer, index) => {
@@ -184,6 +189,9 @@ export default function EditQuestionPage({
       toast.error("Please add content for answer explanation");
     } else {
       setLoading(true);
+
+      const accessToken = await getAccess();
+
       const axiosConfig = {
         method: "PATCH",
         url: `${BASE_URL}questions/${params.QuestionID}`,
@@ -205,7 +213,7 @@ export default function EditQuestionPage({
           difficulty: difficultyLevelSelected,
         },
         headers: {
-          Authorization: `Bearer ${getAccess()}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
       axios(axiosConfig)
@@ -214,7 +222,7 @@ export default function EditQuestionPage({
           router.push(UrlSlugType.MANAGE_QUESTIONS);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         })
         .finally(() => {
           setLoading(false);
