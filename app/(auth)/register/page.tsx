@@ -82,7 +82,7 @@ export default function RegisterPage() {
         router.push(UrlSlugType.LOGIN);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       })
       .finally(() => {
         setLoading(false);
@@ -93,7 +93,7 @@ export default function RegisterPage() {
     values: FormValues,
     { setSubmitting, resetForm }: FormikHelpers<FormValues>
   ) => {
-    register(values);
+    //register(values);
     setSubmitting(false);
   };
 

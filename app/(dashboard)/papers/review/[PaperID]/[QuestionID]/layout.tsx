@@ -42,12 +42,14 @@ export default function PaperTemplate({
   const { userDetails } = useAppSelector((state: RootState) => state.auth);
 
   useEffect(() => {
-    const hasFinishedQuiz = () => {
+    const hasFinishedQuiz = async () => {
+      const accessToken = await getAccess();
+
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}answers/has-finished/${userDetails?._id}/${params.PaperID}`,
         headers: {
-          Authorization: `Bearer ${getAccess()}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
       axios(axiosConfig)
@@ -55,18 +57,21 @@ export default function PaperTemplate({
           // console.log(response);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         });
     };
 
-    const getQuestionBlockSubmitted = () => {
+    const getQuestionBlockSubmitted = async () => {
       setLoadingQBlocks(true);
       const userID = userDetails?._id;
+
+      const accessToken = await getAccess();
+
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}answers/answers-status/${userID}/${params.PaperID}`,
         headers: {
-          Authorization: `Bearer ${getAccess()}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
       axios(axiosConfig)
@@ -78,21 +83,24 @@ export default function PaperTemplate({
           }
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         })
         .finally(() => {
           setLoadingQBlocks(false);
         });
     };
 
-    const getQPaperInfo = () => {
+    const getQPaperInfo = async () => {
       setLoadingQPaper(true);
       setQPaperError(false);
+
+      const accessToken = await getAccess();
+
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}papers/${params.PaperID}/info`,
         headers: {
-          Authorization: `Bearer ${getAccess()}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
       axios(axiosConfig)

@@ -60,12 +60,14 @@ const EditPaperModal = ({ paper }: EditPaperModalProps) => {
     initialValues.time = paper && paper.timeInMinutes;
   }, [paper]);
 
-  const editPaper = (values: FormValues) => {
+  const editPaper = async (values: FormValues) => {
+    const accessToken = await getAccess();
+
     const axiosConfig = {
       method: "PATCH",
       url: `${BASE_URL}papers/${paper._id}`,
       headers: {
-        Authorization: `Bearer ${getAccess()}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       data: {
         paperId: values.code,
@@ -77,11 +79,11 @@ const EditPaperModal = ({ paper }: EditPaperModalProps) => {
     };
     axios(axiosConfig)
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         closeModal();
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       })
       .finally(() => {
         // setLoading(false);

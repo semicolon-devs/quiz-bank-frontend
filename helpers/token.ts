@@ -15,8 +15,7 @@ export const setAuthToken = (token: string) =>
   Cookies.set("session", token, {
     path: "/",
     domain,
-    //expires: 1 / 48, // 30 mins
-    expires: 24, // 30 mins
+    expires: 1 / 48, // 30 mins
   });
 
 export const setRefreshToken = (refreshToken: string) =>
@@ -38,35 +37,30 @@ export const clearAuthToken = () => {
   });
 };
 
-export const getAccess = () => {
+export const getAccess = async () => {
   const authToken = getAuthToken();
 
   if (!authToken) {
     const refreshToken = getRefreshToken();
     if (!refreshToken) {
-      // navigate to unAuthorized page or login page here
-      // this point means user not logged in or both tokens expired
       window.location.href = UrlSlugType.LOGIN;
     } else {
-      const axiosConfig = {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${refreshToken}`,
-        },
-        url: `${BASE_URL}auth/refresh-token`,
-      };
+      try {
+        const axiosConfig = {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${refreshToken}`,
+          },
+          url: `${BASE_URL}auth/refresh-token`,
+        };
 
-      axios(axiosConfig)
-        .then((response) => {
-          setAuthToken(response.data.accessToken);
-          setRefreshToken(response.data.refreshToken);
-        })
-        .catch((err) => {
-          console.log(err);
-        })
-        .finally(() => {
-          getAccess();
-        });
+        const response = await axios(axiosConfig);
+        setAuthToken(response.data.accessToken);
+        setRefreshToken(response.data.refreshToken);
+        return response.data.accessToken;
+      } catch (error) {
+        console.error("Error refreshing token:", error);
+      }
     }
   } else {
     return authToken;

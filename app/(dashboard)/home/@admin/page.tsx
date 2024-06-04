@@ -11,7 +11,6 @@ import Typography from "@mui/material/Typography";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-
 interface Stats {
   quizs: number;
   users: number;
@@ -21,40 +20,37 @@ interface Stats {
   _id: string;
 }
 
-
 export default function AdminDashboardPage() {
-
   const [loading, setLoading] = useState<boolean>(false);
   const [stats, setStats] = useState<Stats>();
 
   useEffect(() => {
     const getQPapers = async () => {
       setLoading(true);
+
+      const accessToken = await getAccess();
+
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}lms/settings/dashboard`,
         headers: {
-          Authorization: `Bearer ${getAccess()}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
       axios(axiosConfig)
         .then((response) => {
-          console.log(response.data);
           setStats(response.data);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         })
         .finally(() => {
           setLoading(false);
         });
     };
-  
+
     getQPapers();
   }, []);
-
-
-
 
   return (
     <Grid container spacing={2}>
@@ -184,7 +180,7 @@ export default function AdminDashboardPage() {
               sx={{ fontSize: 60, fontWeight: 800 }}
               color="primary.light"
             >
-             {stats && stats.quizs}
+              {stats && stats.quizs}
             </Typography>
             <Typography
               sx={{ fontSize: 16, fontWeight: 500 }}
@@ -209,7 +205,6 @@ export default function AdminDashboardPage() {
               sx={{ fontSize: 60, fontWeight: 800 }}
               color="primary.light"
             >
-              
               {stats && stats.papers}
             </Typography>
             <Typography

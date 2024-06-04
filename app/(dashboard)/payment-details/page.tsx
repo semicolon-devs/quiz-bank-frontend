@@ -1,7 +1,6 @@
 "use client"
 
 import SectionTitle from "@/components/sectionTitle";
-import { getAccess } from "@/helpers/token";
 
 export default function ProfilePage() {
   return (

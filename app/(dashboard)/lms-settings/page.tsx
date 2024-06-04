@@ -62,11 +62,14 @@ export default function AddPDFPapers() {
   useEffect(() => {
     const getSettings = async () => {
       setLoading(true);
+
+      const accessToken = await getAccess();
+
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}lms/settings/admin`,
         headers: {
-          Authorization: `Bearer ${getAccess()}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
       axios(axiosConfig)
@@ -75,7 +78,7 @@ export default function AddPDFPapers() {
           setBatch(response.data.batch);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         })
         .finally(() => {
           setLoading(false);
@@ -94,12 +97,14 @@ export default function AddPDFPapers() {
     }));
   }, [driveLink, batch]);
 
-  const changeLMSSettings = (values: FormValues) => {
+  const changeLMSSettings = async (values: FormValues) => {
+    const accessToken = await getAccess();
+
     const axiosConfig = {
       method: "PATCH",
       url: `${BASE_URL}lms/settings`,
       headers: {
-        Authorization: `Bearer ${getAccess()}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       data: {
         driveLink: values.driveLink,
@@ -108,7 +113,7 @@ export default function AddPDFPapers() {
     };
     axios(axiosConfig)
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         if (response.status === 200) {
           alert("Settings Updated");
         } else {
@@ -116,19 +121,21 @@ export default function AddPDFPapers() {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       })
       .finally(() => {
         // setLoading(false);
       });
   };
 
-  const deleteALL = (values: FormValues) => {
+  const deleteALL = async (values: FormValues) => {
+    const accessToken = await getAccess();
+
     const axiosConfig = {
       method: "POST",
       url: `${BASE_URL}lms/delete-all`,
       headers: {
-        Authorization: `Bearer ${getAccess()}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       data: {
         newBatch: values.newBatch,
@@ -136,7 +143,7 @@ export default function AddPDFPapers() {
     };
     axios(axiosConfig)
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         if (response.status === 200) {
           alert("Deleted");
         } else {
@@ -144,7 +151,7 @@ export default function AddPDFPapers() {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       })
       .finally(() => {
         // setLoading(false);

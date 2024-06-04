@@ -27,20 +27,23 @@ export default function PapersPage() {
   useEffect(() => {
     const getQPapers = async () => {
       setLoading(true);
+
+      const accessToken = await getAccess();
+
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}lms/papers`,
         headers: {
-          Authorization: `Bearer ${getAccess()}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
       axios(axiosConfig)
         .then((response) => {
-          console.log(response.data);
+          // console.log(response.data);
           setPaperList(response.data);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         })
         .finally(() => {
           setLoading(false);
@@ -70,11 +73,11 @@ export default function PapersPage() {
           paperList.map((paper) => (
             <div className="flex" key={paper._id}>
               <div
-                className="bg-white rounded-xl overflow-hidden shadow w-full p-4 flex flex-col justify-between p-5"
+                className="bg-white rounded-xl overflow-hidden shadow w-full flex flex-col justify-between p-5"
                 
               >
                 <div className=" items-center justify-between">
-                  <p className="text-xl font-semibold leading-6  py-3">
+                  <p className="text-xl font-semibold leading-6 py-3">
                     {paper.title}
                   </p>
                   <button

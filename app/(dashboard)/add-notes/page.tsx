@@ -67,17 +67,20 @@ export default function ManageUsersPage() {
       default:
         return "Not Specified";
     }
-  }
+  };
 
   const paperAddedFunc = () => {
     setPaperAdded(true);
-    console.log("user added called");
+    // console.log("user added called");
   };
 
   //get papers
   useEffect(() => {
     const getPapers = async () => {
       setLoading(true);
+
+      const accessToken = await getAccess();
+
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}lms/notes`,
@@ -86,12 +89,12 @@ export default function ManageUsersPage() {
           limit: pageSize,
         },
         headers: {
-          Authorization: `Bearer ${getAccess()}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
       axios(axiosConfig)
         .then((response) => {
-          console.log(response.data);
+          // console.log(response.data);
           setpapersList(response.data);
           setNumberOfPages(
             Math.ceil(
@@ -101,7 +104,7 @@ export default function ManageUsersPage() {
           );
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         })
         .finally(() => {
           setLoading(false);
@@ -114,13 +117,16 @@ export default function ManageUsersPage() {
   }, [pageNumber, pageSize, paperAdded, deleteNoteV]);
 
   //delete student
-  const deleteNote = (_id: string) => {
+  const deleteNote = async (_id: string) => {
     setLoading(true);
+
+    const accessToken = await getAccess();
+
     const axiosConfig = {
       method: "DELETE",
       url: `${BASE_URL}lms/notes/${_id}`,
       headers: {
-        Authorization: `Bearer ${getAccess()}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     };
     axios(axiosConfig)
@@ -129,7 +135,7 @@ export default function ManageUsersPage() {
         // console.log(response);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       })
       .finally(() => {
         setLoading(false);

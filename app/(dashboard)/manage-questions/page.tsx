@@ -48,8 +48,11 @@ export default function ManageQuestionsPage() {
   const router = useRouter();
 
   useEffect(() => {
-    const getQuestions = () => {
+    const getQuestions = async () => {
       setLoading(true);
+
+      const accessToken = await getAccess();
+
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}questions/filter`,
@@ -60,7 +63,7 @@ export default function ManageQuestionsPage() {
           // module: "Mendelian Genetics",
         },
         headers: {
-          Authorization: `Bearer ${getAccess()}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
       axios(axiosConfig)
@@ -74,7 +77,7 @@ export default function ManageQuestionsPage() {
           );
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         })
         .finally(() => {
           setLoading(false);
@@ -84,22 +87,25 @@ export default function ManageQuestionsPage() {
     getQuestions();
   }, [pageNumber, pageSize]);
 
-  const deleteQuestion = (id: string) => {
+  const deleteQuestion = async (id: string) => {
     setLoading(true);
+
+    const accessToken = await getAccess();
+
     const axiosConfig = {
       method: "DELETE",
       url: `${BASE_URL}questions/${id}`,
       headers: {
-        Authorization: `Bearer ${getAccess()}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     };
     axios(axiosConfig)
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         toast.success("Question deleted successfully");
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       })
       .finally(() => {
         setLoading(false);

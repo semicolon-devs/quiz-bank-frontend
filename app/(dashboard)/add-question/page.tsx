@@ -83,13 +83,16 @@ export default function AddQuestionPage() {
 
   // get all courses
   useEffect(() => {
-    const getCourses = () => {
+    const getCourses = async () => {
       setLoading(true);
+
+      const accessToken = await getAccess();
+
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}subjects`,
         headers: {
-          Authorization: `Bearer ${getAccess()}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
       axios(axiosConfig)
@@ -97,7 +100,7 @@ export default function AddQuestionPage() {
           setCourses(response.data);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         })
         .finally(() => {
           setLoading(false);
@@ -108,7 +111,7 @@ export default function AddQuestionPage() {
   }, []);
 
   // add new quetion
-  const handleAddQuestionButtonClick = () => {
+  const handleAddQuestionButtonClick = async () => {
     const getCorrectAnswer = () => {
       const correctAnswerArr: number[] = [];
       answerList.map((answer, index) => {
@@ -141,6 +144,9 @@ export default function AddQuestionPage() {
       toast.error("Please add content for answer explanation");
     } else {
       setLoading(true);
+
+      const accessToken = await getAccess();
+
       const axiosConfig = {
         method: "POST",
         url: `${BASE_URL}questions`,
@@ -162,17 +168,17 @@ export default function AddQuestionPage() {
           difficulty: difficultyLevelSelected,
         },
         headers: {
-          Authorization: `Bearer ${getAccess()}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
       axios(axiosConfig)
         .then((response) => {
-          console.log(response);
+          // console.log(response);
           toast.success("Question was added successfully");
           router.push(UrlSlugType.MANAGE_QUESTIONS);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         })
         .finally(() => {
           setLoading(false);
