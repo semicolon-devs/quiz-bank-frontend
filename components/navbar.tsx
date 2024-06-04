@@ -12,6 +12,7 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
+import toast from "react-hot-toast";
 
 import { SearchIcon } from "@/components/icons";
 import { UserRole } from "@/utils/enums";
@@ -21,6 +22,8 @@ import { fetchUserDetails } from "@/store/authSlice";
 import Logo from "@/public/smit_logo.webp";
 import Image from "next/image";
 import Chip from "@mui/material/Chip";
+import { usePathname, useRouter } from "next/navigation";
+import { adminProtectedRoutes } from "@/utils/constants";
 
 const drawerWidth = 240;
 
@@ -53,6 +56,8 @@ type NavbarProps = {
 
 export const Navbar = ({ open, handleDrawerOpen }: NavbarProps) => {
   const dispatch = useAppDispatch();
+  const pathname = usePathname();
+  const router = useRouter();
 
   const [role, setRole] = useState<UserRole>();
   const [fullName, setFullName] = useState<string>("");
@@ -77,6 +82,13 @@ export const Navbar = ({ open, handleDrawerOpen }: NavbarProps) => {
     setRole(getHighestRole());
     setFullName(`${userDetails?.firstname} ${userDetails?.lastname}`);
   }, [userDetails]);
+
+  useEffect(() => {
+    if (!(role === UserRole.ADMIN) && adminProtectedRoutes.includes(pathname)) {
+      toast.error("Restricted page. Redirecting back to homepage.");
+      router.push("/home");
+    }
+  }, [pathname, role, router]);
 
   return (
     <AppBar
