@@ -69,31 +69,29 @@ export default function PapersPage() {
       <SectionTitle title="Download Model Papers as PDF" />
 
       <div className="w-full grid grid-cols-3 gap-4 p-10">
-        {paperList &&
-          paperList.map((paper) => (
-            <div className="flex" key={paper._id}>
-              <div
-                className="bg-white rounded-xl overflow-hidden shadow w-full flex flex-col justify-between p-5"
-                
-              >
-                <div className=" items-center justify-between">
-                  <p className="text-xl font-semibold leading-6 py-3">
-                    {paper.title}
-                  </p>
-                  <button
-                    className="bg-green-600 hover:bg-green-700 rounded-lg px-4 py-1 w-max flex gap-2 items-center justify-center"
-                    onClick={() =>
-                      openInNewTab(generateDirectLink(paper.fileId))
-                    }
-                  >
-                    <p className="text-white text-base">Download</p>
-                  </button>
-                </div>
-                
-              </div>
-              
-            </div>
-          ))}
+      {paperList &&
+  [...paperList].reverse().map((paper) => (
+    <div className="flex" key={paper._id}>
+      <div
+        className="bg-white rounded-xl overflow-hidden shadow w-full flex flex-col justify-between p-5"
+      >
+        <div className="items-center justify-between">
+          <p className="text-xl font-semibold leading-6 py-3">
+            {paper.title}
+          </p>
+          <button
+            className="bg-green-600 hover:bg-green-700 rounded-lg px-4 py-1 w-max flex gap-2 items-center justify-center"
+            onClick={() =>
+              openInNewTab(generateDirectLink(paper.fileId))
+            }
+          >
+            <p className="text-white text-base">Download</p>
+          </button>
+        </div>
+      </div>
+    </div>
+  ))}
+
       </div>
     </div>
   );

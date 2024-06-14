@@ -1,36 +1,22 @@
-"use client";
-
+"use client"
+// pages/studentDashboardPage.tsx
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import MarksCardLMS from "@/components/MarksCardLMS/MarksCardLMS"
+import MarksCardLMS from "@/components/MarksCardLMS/MarksCardLMS";
 import SectionTitle from "@/components/sectionTitle";
 import SectionSubTitle from "@/components/sectionSubTitle";
-import { RootState, useAppDispatch, useAppSelector } from "@/store";
-
-import { table } from "@/variants/table";
-
-import { RightArrowWithTailIcon, RightArrowIcon } from "@/components/icons";
-
+import { RootState, useAppSelector } from "@/store";
 import { getAccess } from "@/helpers/token";
 import { BASE_URL } from "@/config/apiConfig";
-import { UrlSlugType } from "@/utils/enums/UrlSlug";
-
-
-const headers = [
-  "QUIZ NO",
-  "QUIZ NAME",
-  "SCORE",
-  "QUESTIONS COMPLETED",
-  "STATUS",
-];
+import MarksChart from "@/components/charts/Charts";
 
 interface UserMark {
   _id: string;
-  paperId : {
-    _id:string;
-    title:string;
-  }
+  paperId: {
+    _id: string;
+    title: string;
+  };
   userId: string;
   reading: number;
   logicalAndProblemSolving: number;
@@ -63,40 +49,33 @@ export default function StudentDashboardPage() {
   const router = useRouter();
   const { userDetails } = useAppSelector((state: RootState) => state.auth);
 
-//get marks by user
-useEffect(() => {
-  const getMarks = async () => {
-    const accessToken = await getAccess();
-
-    const axiosConfig = {
-      method: "GET",
-      url: `${BASE_URL}lms/marks/${userDetails?._id}`,
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
+  useEffect(() => {
+    const getMarks = async () => {
+      const accessToken = await getAccess();
+      const axiosConfig = {
+        method: "GET",
+        url: `${BASE_URL}lms/marks/${userDetails?._id}`,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      };
+      axios(axiosConfig)
+        .then((response) => {
+          setMarks(response.data);
+        })
+        .catch((err) => {
+          // Handle error
+        })
+        .finally(() => {});
     };
-    axios(axiosConfig)
-      .then((response) => {
-        setMarks(response.data);
-        // console.log(response);
-        // console.log(userDetails?._id)
-      })
-      .catch((err) => {
-        // console.log("Error in get marks by user");
-        // console.log(err);
-      })
-      .finally(() => {});
-  };
 
-  getMarks();
-}, [userDetails?._id]);
+    getMarks();
+  }, [userDetails?._id]);
 
   useEffect(() => {
     const getQPapers = async () => {
       setLoading(true);
-
       const accessToken = await getAccess();
-
       const axiosConfig = {
         method: "GET",
         url: `${BASE_URL}papers`,
@@ -106,11 +85,10 @@ useEffect(() => {
       };
       axios(axiosConfig)
         .then((response) => {
-          // console.log(response.data);
           setPaperList(response.data.result);
         })
         .catch((err) => {
-          // console.log(err);
+          // Handle error
         })
         .finally(() => {
           setLoading(false);
@@ -123,13 +101,17 @@ useEffect(() => {
   return (
     <div className="p-5">
       <SectionTitle title={"Student Dashboard"} />
-      
+      <div className="mb-4 max-w-full p-5">
+        <SectionSubTitle title={"Marks Chart"} />
+        <MarksChart marks={marks} />
+      </div>
       <div className="mb-4 max-w-full p-5">
         <SectionSubTitle title={"Model Paper Marks"} />
-        <div >
-          <MarksCardLMS marks = {marks}/>
+        <div>
+          <MarksCardLMS marks={marks} />
         </div>
       </div>
+      
     </div>
   );
 }
