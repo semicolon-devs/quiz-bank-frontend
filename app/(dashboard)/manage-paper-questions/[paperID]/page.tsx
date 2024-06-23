@@ -131,14 +131,14 @@ const ManagePaperQuestionsPage = ({
     getQuestions();
   }, [pageNumber, pageSize]);
 
-  const removeQuestion = async (questionID: string) => {
+  const removeQuestion = async (question: Question) => {
     setLoading(true);
 
     const accessToken = await getAccess();
 
     const axiosConfig = {
       method: "DELETE",
-      url: `${BASE_URL}papers/${params.paperID}/${questionID}`,
+      url: `${BASE_URL}papers/${params.paperID}/${question._id}`,
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -146,6 +146,10 @@ const ManagePaperQuestionsPage = ({
     axios(axiosConfig)
       .then((response) => {
         // console.log(response);
+        setSelectedQuestionsList((prev) => {
+          const updatedList = prev.filter((q) => !(q._id === question._id));
+          return updatedList;
+        });
         toast.success("Question succesfully removed from the paper");
       })
       .catch((err) => {
@@ -156,7 +160,7 @@ const ManagePaperQuestionsPage = ({
       });
   };
 
-  const addQuestion = async (questionID: string) => {
+  const addQuestion = async (question: Question) => {
     setLoading(true);
 
     const accessToken = await getAccess();
@@ -168,17 +172,18 @@ const ManagePaperQuestionsPage = ({
         Authorization: `Bearer ${accessToken}`,
       },
       data: {
-        questionIdArray: [questionID],
+        questionIdArray: [question._id],
       },
     };
     axios(axiosConfig)
       .then((response) => {
+        setSelectedQuestionsList((prev) => [...prev, question]);
         toast.success("Question added to the paper successfully");
       })
       .catch((err) => {
-        err.response.data.message ===
-          "Duplicate id, 65bc78b5bf33faf33d699199 already exists in question list" &&
-          toast.error("Question already added to the paper");
+        // err.response.data.message ===
+        // "Duplicate id, 65bc78b5bf33faf33d699199 already exists in question list" &&
+        toast.error("Question already added to the paper");
       })
       .finally(() => {
         setLoading(false);
@@ -303,7 +308,7 @@ const ManagePaperQuestionsPage = ({
                       </div>
                     }
                     modalTitle={"Alert !"}
-                    handleSubmit={() => removeQuestion(row._id)}
+                    handleSubmit={() => removeQuestion(row)}
                     submitBtn={
                       <div className="flex outline-none justify-center rounded-md bg-red-100 px-4 py-2 hover:bg-red-200">
                         <p className="capitalize text-sm font-medium text-red-900">
@@ -408,7 +413,7 @@ const ManagePaperQuestionsPage = ({
                           </div>
                         }
                         modalTitle={"Add question"}
-                        handleSubmit={() => addQuestion(row._id)}
+                        handleSubmit={() => addQuestion(row)}
                         submitBtn={
                           <div className="flex outline-none justify-center rounded-md bg-green-100 px-4 py-2 hover:bg-green-200">
                             <p className="capitalize text-sm font-medium text-green-900">
