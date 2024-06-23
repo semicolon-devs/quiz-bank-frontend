@@ -45,7 +45,7 @@ const selectedQuestionsHeaders = [
   "actions",
 ];
 
-const pageSizeArray = [5, 10, 20];
+const pageSizeArray = [5, 10, 20,100,500,1000];
 
 type Props = {};
 
