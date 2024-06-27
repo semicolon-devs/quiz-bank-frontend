@@ -125,7 +125,8 @@ export default function PaperDetailsPage({
         </p>
       </div>
       <div className="w-full h-full flex items-center justify-center">
-        {hasFinished ? (
+        {
+        // hasFinished ? (
           <div className="bg-white w-72 h-max flex justify-center items-center flex-col rounded-xl shadow p-3">
             <FilledCheckIcon classes="text-green-500 w-16 h-16 mt-5" />
             <p className="uppercase font-semibold text-sm mt-5">Results</p>
@@ -141,13 +142,14 @@ export default function PaperDetailsPage({
               Review Answers
             </button>
           </div>
-        ) : (
-          <div className="p-5">
-            <p className="uppercase font-bold text-lg">
-              You haven&apos;t taken this quiz
-            </p>
-          </div>
-        )}
+        // ) : (
+        //   <div className="p-5">
+        //     <p className="uppercase font-bold text-lg">
+        //       You haven&apos;t taken this quiz
+        //     </p>
+        //   </div>
+        // )
+      }
       </div>
     </div>
   );
