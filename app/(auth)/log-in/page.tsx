@@ -78,7 +78,7 @@ export default function LoginPage() {
         router.push(UrlSlugType.HOME);
       })
       .catch((err) => {
-        setError("incorrect email or password. please try again");
+        setError("Incorrect email or password. Please try again.");
       })
       .finally(() => {
         setLoading(false);
@@ -152,6 +152,8 @@ export default function LoginPage() {
                   component="div"
                 />
               </div>
+
+              {error && <div className="text-red-500 mb-4">{error}</div>}
 
               <button
                 type="submit"

@@ -133,9 +133,9 @@ const ManagePaperQuestionsPage = ({
 
   const removeQuestion = async (question: Question) => {
     setLoading(true);
-
+  
     const accessToken = await getAccess();
-
+  
     const axiosConfig = {
       method: "DELETE",
       url: `${BASE_URL}papers/${params.paperID}/${question._id}`,
@@ -162,9 +162,9 @@ const ManagePaperQuestionsPage = ({
 
   const addQuestion = async (question: Question) => {
     setLoading(true);
-
+  
     const accessToken = await getAccess();
-
+  
     const axiosConfig = {
       method: "POST",
       url: `${BASE_URL}papers/add/${params.paperID}`,
