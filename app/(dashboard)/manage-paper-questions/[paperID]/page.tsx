@@ -133,9 +133,9 @@ const ManagePaperQuestionsPage = ({
 
   const removeQuestion = async (questionID: string) => {
     setLoading(true);
-
+  
     const accessToken = await getAccess();
-
+  
     const axiosConfig = {
       method: "DELETE",
       url: `${BASE_URL}papers/${params.paperID}/${questionID}`,
@@ -145,8 +145,11 @@ const ManagePaperQuestionsPage = ({
     };
     axios(axiosConfig)
       .then((response) => {
-        // console.log(response);
-        toast.success("Question succesfully removed from the paper");
+        // Update the state to refresh the added question list
+        setSelectedQuestionsList((prevList) =>
+          prevList.filter((question) => question._id !== questionID)
+        );
+        toast.success("Question successfully removed from the paper");
       })
       .catch((err) => {
         // console.log(err);
@@ -158,9 +161,9 @@ const ManagePaperQuestionsPage = ({
 
   const addQuestion = async (questionID: string) => {
     setLoading(true);
-
+  
     const accessToken = await getAccess();
-
+  
     const axiosConfig = {
       method: "POST",
       url: `${BASE_URL}papers/add/${params.paperID}`,
@@ -173,12 +176,23 @@ const ManagePaperQuestionsPage = ({
     };
     axios(axiosConfig)
       .then((response) => {
-        toast.success("Question added to the paper successfully");
+        // Find the new question in the allQuestionsList
+        const newQuestion = allQuestionsList.find((question) => question._id === questionID);
+        
+        // Ensure newQuestion is not undefined
+        if (newQuestion) {
+          setSelectedQuestionsList((prevList) => [...prevList, newQuestion]);
+          toast.success("Question added to the paper successfully");
+        } else {
+          toast.error("Failed to add the question to the paper");
+        }
       })
       .catch((err) => {
-        err.response.data.message ===
-          "Duplicate id, 65bc78b5bf33faf33d699199 already exists in question list" &&
+        if (err.response.data.message === "Duplicate id, 65bc78b5bf33faf33d699199 already exists in question list") {
           toast.error("Question already added to the paper");
+        } else {
+          toast.error("Failed to add the question to the paper");
+        }
       })
       .finally(() => {
         setLoading(false);
